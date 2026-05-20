@@ -1,932 +1,949 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.4">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>vesma.d training — Caljan Conveyor Operations</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#E63325;--red-dark:#c42318;
+  --red-dim:rgba(230,51,37,0.09);--red-border:rgba(230,51,37,0.28);
+  --black:#111;--text:#1f1f1f;--text-mid:#3d3d3d;--text-light:#595959;
+  --gray-100:#e0e0e0;--gray-50:#f4f4f4;--white:#fff;
+  --amber-dim:rgba(180,100,0,0.08);--amber-border:rgba(160,90,0,0.28);
+  --green:#146b3a;--green-dim:rgba(20,107,58,0.08);--green-border:rgba(20,107,58,0.28);
+  --blue:#174fa0;--blue-dim:rgba(23,79,160,0.07);--blue-border:rgba(23,79,160,0.28);
+  --r:10px;--r-sm:6px;
+  --sh:0 1px 4px rgba(0,0,0,0.08);--sh-md:0 2px 14px rgba(0,0,0,0.11);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Open Sans',sans-serif;font-size:17px;line-height:1.65;background:var(--gray-50);color:var(--text);-webkit-font-smoothing:antialiased;}
+h1,h2,h3,.brand,.sec-title{font-family:'Montserrat',sans-serif;}
+
+/* LOCK */
+#lock{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem;background:var(--white);}
+.lk{background:var(--white);border:1px solid var(--gray-100);border-radius:16px;padding:2.5rem 2rem;width:100%;max-width:420px;text-align:center;box-shadow:var(--sh-md);}
+.lk-ico{width:52px;height:52px;background:var(--red);border-radius:13px;margin:0 auto 1.2rem;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.lk h1{font-size:1.4rem;font-weight:700;color:var(--black);margin-bottom:.4rem;}
+.lk p{color:var(--text-light);font-size:1rem;line-height:1.6;margin-bottom:1.5rem;}
+.lk-inp{width:100%;background:var(--gray-50);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.8rem 1rem;color:var(--black);font-family:monospace;font-size:1.1rem;letter-spacing:.14em;text-align:center;outline:none;transition:border-color .2s;margin-bottom:.8rem;}
+.lk-inp:focus{border-color:var(--red);}
+.lk-inp.shake{animation:shake .3s ease;border-color:var(--red);}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.err{color:var(--red);font-size:.9rem;font-weight:600;margin-bottom:.7rem;display:none;}
+.btn-main{background:var(--red);color:var(--white);border:none;border-radius:var(--r-sm);padding:.85rem 1.5rem;font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;width:100%;transition:background .2s;letter-spacing:.03em;}
+.btn-main:hover{background:var(--red-dark);}
+
+/* TOPBAR */
+#course{display:none;}
+.topbar{background:var(--white);border-bottom:2px solid var(--red);position:sticky;top:0;z-index:100;padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--sh);}
+.brand{font-family:'Montserrat',sans-serif;font-weight:700;font-size:1rem;color:var(--black);}
+.brand span{color:var(--red);}
+.tb-pill{font-size:.75rem;font-weight:600;color:var(--red);background:var(--red-dim);border:1px solid var(--red-border);border-radius:100px;padding:.2rem .8rem;}
+
+/* HERO */
+.hero{background:var(--white);border-bottom:1px solid var(--gray-100);padding:3.25rem 1.5rem 2.5rem;text-align:center;}
+.chip{display:inline-block;border:1px solid var(--red-border);background:var(--red-dim);color:var(--red);font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.28rem .9rem;border-radius:100px;margin-bottom:1.1rem;font-family:'Montserrat',sans-serif;}
+.hero h1{font-size:clamp(1.8rem,4.5vw,2.7rem);font-weight:700;line-height:1.2;max-width:600px;margin:0 auto .9rem;color:var(--black);}
+.hero h1 em{font-style:normal;color:var(--red);}
+.hero-lead{color:var(--text-light);font-size:1rem;max-width:500px;margin:0 auto;line-height:1.65;}
+
+/* LAYOUT */
+.wrap{max-width:820px;margin:0 auto;padding:2.25rem 1.5rem;}
+.sec-label{font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:700;color:var(--red);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.55rem;}
+.sec-title{font-size:1.4rem;font-weight:700;color:var(--black);margin-bottom:.55rem;}
+.sec-body{color:var(--text-light);font-size:1rem;line-height:1.65;margin-bottom:1.35rem;}
+hr{border:none;border-top:1px solid var(--gray-100);margin:0;}
+
+/* IMAGE GUIDE */
+.img-guide{background:var(--blue-dim);border:1px solid var(--blue-border);border-radius:var(--r-sm);padding:.9rem 1.1rem;font-size:.93rem;line-height:1.65;color:var(--blue);margin-bottom:1.5rem;display:flex;gap:.75rem;align-items:flex-start;}
+.img-guide code{font-family:monospace;font-size:.8rem;background:rgba(23,79,160,.1);padding:.1rem .35rem;border-radius:3px;}
+
+/* ASSUMPTIONS */
+.agrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem;}
+.acard{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r);padding:1.25rem;box-shadow:var(--sh);transition:border-color .2s;}
+.acard:hover{border-color:var(--red-border);}
+.anum{font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:700;color:var(--red);letter-spacing:.08em;margin-bottom:.45rem;}
+.acard h3{font-family:'Montserrat',sans-serif;font-size:.93rem;font-weight:700;margin-bottom:.35rem;color:var(--black);}
+.acard p{font-size:.91rem;color:var(--text-mid);line-height:1.58;}
+.atag{display:inline-block;margin-top:.7rem;background:var(--amber-dim);border:1px solid var(--amber-border);color:#6b3d00;font-size:.78rem;font-weight:600;padding:.18rem .55rem;border-radius:4px;}
+
+/* OBJECTIVES */
+.olist{display:flex;flex-direction:column;gap:.6rem;}
+.orow{display:flex;gap:.85rem;align-items:flex-start;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);padding:.9rem 1.1rem;box-shadow:var(--sh);transition:border-color .2s;}
+.orow:hover{border-color:var(--red-border);}
+.oico{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;margin-top:1px;}
+.ir{background:var(--red-dim);}.ig{background:var(--green-dim);}.ib{background:var(--blue-dim);}
+.orow strong{font-family:'Montserrat',sans-serif;font-size:.93rem;font-weight:700;display:block;margin-bottom:.2rem;color:var(--black);}
+.orow span{font-size:.91rem;color:var(--text-mid);line-height:1.55;}
+.obox{margin-top:1.35rem;background:var(--green-dim);border:1px solid var(--green-border);border-radius:var(--r);padding:1.35rem;text-align:center;}
+.obox h3{font-family:'Montserrat',sans-serif;font-size:.97rem;font-weight:700;color:var(--green);margin-bottom:.35rem;}
+.obox p{font-size:.91rem;color:var(--text-mid);line-height:1.58;}
+
+/* MODULE CARDS — equal height headers */
+.mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem;}
+.mcard{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r);overflow:hidden;cursor:pointer;box-shadow:var(--sh);transition:border-color .2s,transform .18s;display:flex;flex-direction:column;}
+.mcard:hover{border-color:var(--red-border);transform:translateY(-2px);}
+.mcard.on{border-color:var(--red);}
+.mtop{background:var(--red-dim);border-bottom:1px solid var(--red-border);padding:1rem 1.15rem;display:flex;align-items:flex-start;gap:.65rem;min-height:78px;}
+.mnum{width:32px;height:32px;min-width:32px;background:var(--red);color:var(--white);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:.8rem;font-weight:700;flex-shrink:0;margin-top:1px;}
+.mtop h3{font-family:'Montserrat',sans-serif;font-size:.9rem;font-weight:700;line-height:1.32;color:var(--black);}
+.mbody{padding:1rem 1.15rem;flex:1;}
+.mbody p{font-size:.9rem;color:var(--text-mid);line-height:1.55;margin-bottom:.75rem;}
+.prow{display:flex;flex-wrap:wrap;gap:.3rem;}
+.tp{background:var(--gray-50);border:1px solid var(--gray-100);border-radius:4px;padding:.15rem .48rem;font-size:.74rem;color:var(--text-light);}
+#mnotice{display:none;margin-top:1.1rem;background:var(--blue-dim);border:1px solid var(--blue-border);border-radius:var(--r-sm);padding:.9rem 1.1rem;font-size:.93rem;color:var(--blue);font-weight:600;}
+
+/* SCENARIO */
+.scen{display:none;margin-top:2rem;}
+.scen.on{display:block;}
+.dots{display:flex;gap:7px;margin-bottom:1.35rem;flex-wrap:wrap;align-items:center;}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--gray-100);cursor:pointer;transition:background .2s,transform .2s;border:1px solid var(--gray-100);}
+.dot.on{background:var(--red);border-color:var(--red);transform:scale(1.3);}
+.slide{display:none;}
+.slide.on{display:block;animation:fu .3s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.stag{font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:700;color:var(--red);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.45rem;}
+.slide h2{font-size:1.25rem;font-weight:700;color:var(--black);margin-bottom:.8rem;}
+
+/* Two-column layout */
+.si{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;align-items:start;}
+.si.single{grid-template-columns:1fr;}
+@media(max-width:580px){.si{grid-template-columns:1fr;}}
+
+/* narrative — tighter */
+.narr{background:var(--white);border-left:4px solid var(--red);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.85rem 1.1rem;margin-bottom:.8rem;font-size:.95rem;line-height:1.6;color:var(--text);box-shadow:var(--sh);}
+.narr strong{color:var(--black);font-weight:700;}
+
+/* task instruction box */
+.task-box{background:var(--blue-dim);border:1px solid var(--blue-border);border-radius:var(--r-sm);padding:.75rem 1rem;margin-bottom:.75rem;font-size:.9rem;font-weight:600;color:var(--blue);display:flex;gap:.6rem;align-items:flex-start;}
+
+/* warning */
+.warn{background:var(--amber-dim);border:1px solid var(--amber-border);border-radius:var(--r-sm);padding:.75rem .95rem;font-size:.91rem;line-height:1.55;color:#4a2800;display:flex;gap:.65rem;align-items:flex-start;margin-bottom:.8rem;}
+.warn strong{color:#321c00;}
+
+/* photo */
+.photo-block{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);overflow:hidden;margin-bottom:.8rem;box-shadow:var(--sh);}
+.photo-block img{width:100%;display:block;}
+.photo-ph{background:var(--gray-50);padding:1.5rem 1rem;text-align:center;color:var(--text-light);font-size:.88rem;line-height:1.55;}
+.photo-ph .pi{font-size:1.6rem;display:block;margin-bottom:.35rem;}
+.photo-ph code{font-family:monospace;font-size:.78rem;color:var(--red);background:var(--red-dim);padding:.1rem .35rem;border-radius:3px;}
+
+/* quiz */
+.ql{font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:700;color:var(--red);letter-spacing:.08em;text-transform:uppercase;margin:.1rem 0 .5rem;}
+.qt{font-size:.95rem;color:var(--text);margin-bottom:.65rem;line-height:1.52;font-weight:600;}
+.opts{display:flex;flex-direction:column;gap:.45rem;}
+.opt{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.75rem .95rem;cursor:pointer;font-size:.93rem;line-height:1.48;color:var(--text);transition:all .2s;display:flex;gap:.65rem;align-items:flex-start;box-shadow:var(--sh);}
+.opt:hover:not(.off):not(.ok):not(.no){border-color:var(--red-border);background:var(--red-dim);}
+.opt.ok{border-color:var(--green);background:var(--green-dim);color:var(--green);pointer-events:none;}
+.opt.no{border-color:var(--red);background:var(--red-dim);color:var(--red-dark);}
+.opt.off{pointer-events:none;opacity:.4;}
+.ol{width:21px;height:21px;border:2px solid var(--gray-100);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.74rem;font-weight:700;font-family:'Montserrat',sans-serif;flex-shrink:0;margin-top:1px;color:var(--text-light);}
+.fb{margin-top:.55rem;padding:.75rem .95rem;border-radius:var(--r-sm);font-size:.91rem;line-height:1.52;display:none;font-weight:600;}
+.fb.show{display:block;}
+.fb.ok{background:var(--green-dim);color:var(--green);border:1px solid var(--green-border);}
+.fb.no{background:var(--red-dim);color:var(--red-dark);border:1px solid var(--red-border);}
+.retry-btn{margin-top:.5rem;background:var(--white);border:2px solid var(--red);border-radius:var(--r-sm);padding:.48rem 1rem;color:var(--red);font-family:'Montserrat',sans-serif;font-size:.83rem;font-weight:700;cursor:pointer;transition:all .2s;display:none;}
+.retry-btn:hover{background:var(--red);color:var(--white);}
+.retry-btn.show{display:inline-block;}
+
+/* PPE */
+.ppe-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:.55rem;margin:.65rem 0;}
+.ppe{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.75rem .4rem;text-align:center;cursor:pointer;transition:all .2s;box-shadow:var(--sh);}
+.ppe:hover:not(.ok):not(.no){border-color:var(--red-border);}
+.pi2{font-size:1.5rem;display:block;margin-bottom:.28rem;}
+.pl{font-size:.82rem;color:var(--text-mid);font-weight:600;}
+.ppe.ok{border-color:var(--green);background:var(--green-dim);}
+.ppe.ok .pl{color:var(--green);}
+.ppe.no{border-color:var(--red);background:var(--red-dim);}
+.ppe.no .pl{color:var(--red-dark);}
+
+/* drag-drop */
+.seq-wrap{margin:.65rem 0;}
+.seq-item{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.65rem .9rem;margin-bottom:.4rem;font-size:.93rem;color:var(--text);cursor:grab;display:flex;align-items:center;gap:.65rem;box-shadow:var(--sh);transition:border-color .2s;user-select:none;}
+.seq-item:active{cursor:grabbing;}
+.seq-item.dragging{opacity:.35;border-color:var(--red);}
+.seq-item.drag-over{border-color:var(--blue);background:var(--blue-dim);}
+.seq-item.correct{border-color:var(--green);background:var(--green-dim);color:var(--green);cursor:default;}
+.seq-item.wrong{border-color:var(--red);background:var(--red-dim);}
+.seq-handle{color:var(--gray-100);font-size:.95rem;flex-shrink:0;}
+.seq-num{width:24px;height:24px;border-radius:50%;background:var(--red-dim);color:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:.73rem;font-weight:700;flex-shrink:0;}
+.seq-num.ok{background:var(--green-dim);color:var(--green);}
+.btn-confirm{background:var(--red);color:var(--white);border:none;border-radius:var(--r-sm);padding:.58rem 1.25rem;font-family:'Montserrat',sans-serif;font-size:.86rem;font-weight:700;cursor:pointer;transition:background .2s;margin-top:.45rem;}
+.btn-confirm:hover{background:var(--red-dark);}
+.seq-fb{margin-top:.55rem;padding:.75rem .95rem;border-radius:var(--r-sm);font-size:.91rem;font-weight:600;display:none;}
+.seq-fb.show{display:block;}
+.seq-fb.ok{background:var(--green-dim);color:var(--green);border:1px solid var(--green-border);}
+.seq-fb.no{background:var(--red-dim);color:var(--red-dark);border:1px solid var(--red-border);}
+
+/* steps */
+.steps{display:flex;flex-direction:column;gap:.45rem;margin:.65rem 0;}
+.sr{display:flex;gap:.75rem;align-items:center;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);padding:.7rem .95rem;font-size:.93rem;color:var(--text);box-shadow:var(--sh);}
+.sn{width:24px;height:24px;border-radius:50%;background:var(--red-dim);color:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:700;flex-shrink:0;}
+
+/* checklist */
+.ck-l{display:flex;flex-direction:column;gap:.4rem;margin:.65rem 0;}
+.ck{display:flex;gap:.65rem;align-items:center;font-size:.93rem;cursor:pointer;padding:.35rem 0;color:var(--text);}
+.ckb{width:20px;height:20px;border:2px solid var(--gray-100);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;transition:all .2s;color:transparent;}
+.ck.checked .ckb{background:var(--green);border-color:var(--green);color:var(--white);}
+
+/* COMPLETE slide — clean, not ragged */
+.complete-wrap{max-width:540px;margin:0 auto;text-align:center;padding:1rem 0;}
+.complete-icon{font-size:3rem;margin-bottom:.75rem;}
+.complete-title{font-family:'Montserrat',sans-serif;font-size:1.6rem;font-weight:700;color:var(--black);margin-bottom:.5rem;}
+.complete-sub{font-size:1rem;color:var(--text-mid);line-height:1.6;margin-bottom:1.5rem;}
+.complete-summary{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r);padding:1.25rem 1.5rem;text-align:left;margin-bottom:1.25rem;box-shadow:var(--sh);}
+.complete-summary h3{font-family:'Montserrat',sans-serif;font-size:.88rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.65rem;}
+.complete-summary li{font-size:.93rem;color:var(--text-mid);line-height:1.55;margin-bottom:.35rem;padding-left:.25rem;}
+.complete-summary ul{padding-left:1.1rem;}
+.btn-restart{background:var(--red);color:var(--white);border:none;border-radius:var(--r-sm);padding:.8rem 2rem;font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:background .2s;letter-spacing:.03em;}
+.btn-restart:hover{background:var(--red-dark);}
+.btn-review{background:var(--white);color:var(--red);border:2px solid var(--red);border-radius:var(--r-sm);padding:.75rem 1.5rem;font-family:'Montserrat',sans-serif;font-size:.93rem;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.03em;margin-right:.75rem;}
+.btn-review:hover{background:var(--red-dim);}
+
+/* module complete box */
+.mcomp{background:var(--green-dim);border:1px solid var(--green-border);border-radius:var(--r);padding:1.25rem;text-align:center;margin-top:1rem;}
+.mcomp h3{font-family:'Montserrat',sans-serif;color:var(--green);font-size:.97rem;font-weight:700;margin-bottom:.3rem;}
+.mcomp p{font-size:.91rem;color:var(--text-mid);line-height:1.55;}
+
+/* bridge */
+.bridge{background:var(--white);border:1px solid var(--red-border);border-top:3px solid var(--red);border-radius:var(--r);padding:1.4rem;text-align:center;margin-top:.9rem;box-shadow:var(--sh-md);}
+.bridge h3{font-family:'Montserrat',sans-serif;font-size:.97rem;font-weight:700;color:var(--black);margin-bottom:.45rem;}
+.bridge p{font-size:.91rem;color:var(--text-mid);line-height:1.6;margin-bottom:1rem;}
+.btn-bridge{background:var(--red);color:var(--white);border:none;border-radius:var(--r-sm);padding:.65rem 1.5rem;font-family:'Montserrat',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:background .2s;}
+.btn-bridge:hover{background:var(--red-dark);}
+
+/* controls */
+.ctrl{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;padding-top:1.1rem;border-top:1px solid var(--gray-100);}
+.bnav{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.55rem 1.05rem;color:var(--text);font-family:'Montserrat',sans-serif;font-size:.86rem;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:var(--sh);}
+.bnav:hover{background:var(--gray-50);}
+.bnav:disabled{opacity:.3;pointer-events:none;}
+.bnav.fwd{background:var(--red);border-color:var(--red);color:var(--white);}
+.bnav.fwd:hover{background:var(--red-dark);}
+.sct{font-size:.86rem;color:var(--text-light);font-weight:600;}
+
+footer{border-top:1px solid var(--gray-100);background:var(--white);padding:1.35rem 2rem;text-align:center;font-size:.85rem;color:var(--text-light);}
+</style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1">&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1">&lt;title&gt;vesma.d training — Caljan Conveyor Operations&lt;/title&gt;</p>
-<p class="p1">&lt;link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&amp;family=Open+Sans:wght@400;600&amp;display=swap" rel="stylesheet"&gt;</p>
-<p class="p1">&lt;style&gt;</p>
-<p class="p1">:root{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--red:#E63325;--red-dark:#c42318;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--red-dim:rgba(230,51,37,0.09);--red-border:rgba(230,51,37,0.28);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--black:#111;--text:#1f1f1f;--text-mid:#3d3d3d;--text-light:#595959;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--gray-100:#e0e0e0;--gray-50:#f4f4f4;--white:#fff;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--amber-dim:rgba(180,100,0,0.08);--amber-border:rgba(160,90,0,0.28);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--green:#146b3a;--green-dim:rgba(20,107,58,0.08);--green-border:rgba(20,107,58,0.28);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--blue:#174fa0;--blue-dim:rgba(23,79,160,0.07);--blue-border:rgba(23,79,160,0.28);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--r:10px;--r-sm:6px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--sh:0 1px 4px rgba(0,0,0,0.08);--sh-md:0 2px 14px rgba(0,0,0,0.11);</p>
-<p class="p1">}</p>
-<p class="p1">*{box-sizing:border-box;margin:0;padding:0;}</p>
-<p class="p1">body{font-family:'Open Sans',sans-serif;font-size:17px;line-height:1.65;background:var(--gray-50);color:var(--text);-webkit-font-smoothing:antialiased;}</p>
-<p class="p1">h1,h2,h3,.brand,.sec-title{font-family:'Montserrat',sans-serif;}</p>
-<p class="p2"><br></p>
-<p class="p1">/* LOCK */</p>
-<p class="p1">#lock{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem;background:var(--white);}</p>
-<p class="p1">.lk{background:var(--white);border:1px solid var(--gray-100);border-radius:16px;padding:2.5rem 2rem;width:100%;max-width:420px;text-align:center;box-shadow:var(--sh-md);}</p>
-<p class="p1">.lk-ico{width:52px;height:52px;background:var(--red);border-radius:13px;margin:0 auto 1.2rem;display:flex;align-items:center;justify-content:center;font-size:22px;}</p>
-<p class="p1">.lk h1{font-size:1.4rem;font-weight:700;color:var(--black);margin-bottom:.4rem;}</p>
-<p class="p1">.lk p{color:var(--text-light);font-size:1rem;line-height:1.6;margin-bottom:1.5rem;}</p>
-<p class="p1">.lk-inp{width:100%;background:var(--gray-50);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.8rem 1rem;color:var(--black);font-family:monospace;font-size:1.1rem;letter-spacing:.14em;text-align:center;outline:none;transition:border-color .2s;margin-bottom:.8rem;}</p>
-<p class="p1">.lk-inp:focus{border-color:var(--red);}</p>
-<p class="p1">.lk-inp.shake{animation:shake .3s ease;border-color:var(--red);}</p>
-<p class="p1">@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}</p>
-<p class="p1">.err{color:var(--red);font-size:.9rem;font-weight:600;margin-bottom:.7rem;display:none;}</p>
-<p class="p1">.btn-main{background:var(--red);color:var(--white);border:none;border-radius:var(--r-sm);padding:.85rem 1.5rem;font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;width:100%;transition:background .2s;letter-spacing:.03em;}</p>
-<p class="p1">.btn-main:hover{background:var(--red-dark);}</p>
-<p class="p2"><br></p>
-<p class="p1">/* TOPBAR */</p>
-<p class="p1">#course{display:none;}</p>
-<p class="p1">.topbar{background:var(--white);border-bottom:2px solid var(--red);position:sticky;top:0;z-index:100;padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--sh);}</p>
-<p class="p1">.brand{font-family:'Montserrat',sans-serif;font-weight:700;font-size:1rem;color:var(--black);}</p>
-<p class="p1">.brand span{color:var(--red);}</p>
-<p class="p1">.tb-pill{font-size:.75rem;font-weight:600;color:var(--red);background:var(--red-dim);border:1px solid var(--red-border);border-radius:100px;padding:.2rem .8rem;}</p>
-<p class="p2"><br></p>
-<p class="p1">/* HERO */</p>
-<p class="p1">.hero{background:var(--white);border-bottom:1px solid var(--gray-100);padding:3.25rem 1.5rem 2.5rem;text-align:center;}</p>
-<p class="p1">.chip{display:inline-block;border:1px solid var(--red-border);background:var(--red-dim);color:var(--red);font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.28rem .9rem;border-radius:100px;margin-bottom:1.1rem;font-family:'Montserrat',sans-serif;}</p>
-<p class="p1">.hero h1{font-size:clamp(1.8rem,4.5vw,2.7rem);font-weight:700;line-height:1.2;max-width:600px;margin:0 auto .9rem;color:var(--black);}</p>
-<p class="p1">.hero h1 em{font-style:normal;color:var(--red);}</p>
-<p class="p1">.hero-lead{color:var(--text-light);font-size:1rem;max-width:500px;margin:0 auto;line-height:1.65;}</p>
-<p class="p2"><br></p>
-<p class="p1">/* LAYOUT */</p>
-<p class="p1">.wrap{max-width:820px;margin:0 auto;padding:2.25rem 1.5rem;}</p>
-<p class="p1">.sec-label{font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:700;color:var(--red);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.55rem;}</p>
-<p class="p1">.sec-title{font-size:1.4rem;font-weight:700;color:var(--black);margin-bottom:.55rem;}</p>
-<p class="p1">.sec-body{color:var(--text-light);font-size:1rem;line-height:1.65;margin-bottom:1.35rem;}</p>
-<p class="p1">hr{border:none;border-top:1px solid var(--gray-100);margin:0;}</p>
-<p class="p2"><br></p>
-<p class="p1">/* IMAGE GUIDE */</p>
-<p class="p1">.img-guide{background:var(--blue-dim);border:1px solid var(--blue-border);border-radius:var(--r-sm);padding:.9rem 1.1rem;font-size:.93rem;line-height:1.65;color:var(--blue);margin-bottom:1.5rem;display:flex;gap:.75rem;align-items:flex-start;}</p>
-<p class="p1">.img-guide code{font-family:monospace;font-size:.8rem;background:rgba(23,79,160,.1);padding:.1rem .35rem;border-radius:3px;}</p>
-<p class="p2"><br></p>
-<p class="p1">/* ASSUMPTIONS */</p>
-<p class="p1">.agrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem;}</p>
-<p class="p1">.acard{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r);padding:1.25rem;box-shadow:var(--sh);transition:border-color .2s;}</p>
-<p class="p1">.acard:hover{border-color:var(--red-border);}</p>
-<p class="p1">.anum{font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:700;color:var(--red);letter-spacing:.08em;margin-bottom:.45rem;}</p>
-<p class="p1">.acard h3{font-family:'Montserrat',sans-serif;font-size:.93rem;font-weight:700;margin-bottom:.35rem;color:var(--black);}</p>
-<p class="p1">.acard p{font-size:.91rem;color:var(--text-mid);line-height:1.58;}</p>
-<p class="p1">.atag{display:inline-block;margin-top:.7rem;background:var(--amber-dim);border:1px solid var(--amber-border);color:#6b3d00;font-size:.78rem;font-weight:600;padding:.18rem .55rem;border-radius:4px;}</p>
-<p class="p2"><br></p>
-<p class="p1">/* OBJECTIVES */</p>
-<p class="p1">.olist{display:flex;flex-direction:column;gap:.6rem;}</p>
-<p class="p1">.orow{display:flex;gap:.85rem;align-items:flex-start;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);padding:.9rem 1.1rem;box-shadow:var(--sh);transition:border-color .2s;}</p>
-<p class="p1">.orow:hover{border-color:var(--red-border);}</p>
-<p class="p1">.oico{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;margin-top:1px;}</p>
-<p class="p1">.ir{background:var(--red-dim);}.ig{background:var(--green-dim);}.ib{background:var(--blue-dim);}</p>
-<p class="p1">.orow strong{font-family:'Montserrat',sans-serif;font-size:.93rem;font-weight:700;display:block;margin-bottom:.2rem;color:var(--black);}</p>
-<p class="p1">.orow span{font-size:.91rem;color:var(--text-mid);line-height:1.55;}</p>
-<p class="p1">.obox{margin-top:1.35rem;background:var(--green-dim);border:1px solid var(--green-border);border-radius:var(--r);padding:1.35rem;text-align:center;}</p>
-<p class="p1">.obox h3{font-family:'Montserrat',sans-serif;font-size:.97rem;font-weight:700;color:var(--green);margin-bottom:.35rem;}</p>
-<p class="p1">.obox p{font-size:.91rem;color:var(--text-mid);line-height:1.58;}</p>
-<p class="p2"><br></p>
-<p class="p1">/* MODULE CARDS */</p>
-<p class="p1">.mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem;}</p>
-<p class="p1">.mcard{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r);overflow:hidden;cursor:pointer;box-shadow:var(--sh);transition:border-color .2s,transform .18s;display:flex;flex-direction:column;}</p>
-<p class="p1">.mcard:hover{border-color:var(--red-border);transform:translateY(-2px);}</p>
-<p class="p1">.mcard.on{border-color:var(--red);}</p>
-<p class="p1">.mtop{background:var(--red-dim);border-bottom:1px solid var(--red-border);padding:1rem 1.15rem;display:flex;align-items:flex-start;gap:.65rem;min-height:78px;}</p>
-<p class="p1">.mnum{width:32px;height:32px;min-width:32px;background:var(--red);color:var(--white);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:.8rem;font-weight:700;flex-shrink:0;margin-top:1px;}</p>
-<p class="p1">.mtop h3{font-family:'Montserrat',sans-serif;font-size:.9rem;font-weight:700;line-height:1.32;color:var(--black);}</p>
-<p class="p1">.mbody{padding:1rem 1.15rem;flex:1;}</p>
-<p class="p1">.mbody p{font-size:.9rem;color:var(--text-mid);line-height:1.55;margin-bottom:.75rem;}</p>
-<p class="p1">.prow{display:flex;flex-wrap:wrap;gap:.3rem;}</p>
-<p class="p1">.tp{background:var(--gray-50);border:1px solid var(--gray-100);border-radius:4px;padding:.15rem .48rem;font-size:.74rem;color:var(--text-light);}</p>
-<p class="p1">#mnotice{display:none;margin-top:1.1rem;background:var(--blue-dim);border:1px solid var(--blue-border);border-radius:var(--r-sm);padding:.9rem 1.1rem;font-size:.93rem;color:var(--blue);font-weight:600;}</p>
-<p class="p2"><br></p>
-<p class="p1">/* SCENARIO */</p>
-<p class="p1">.scen{display:none;margin-top:2rem;}</p>
-<p class="p1">.scen.on{display:block;}</p>
-<p class="p1">.dots{display:flex;gap:7px;margin-bottom:1.35rem;flex-wrap:wrap;align-items:center;}</p>
-<p class="p1">.dot{width:9px;height:9px;border-radius:50%;background:var(--gray-100);cursor:pointer;transition:background .2s,transform .2s;border:1px solid var(--gray-100);}</p>
-<p class="p1">.dot.on{background:var(--red);border-color:var(--red);transform:scale(1.3);}</p>
-<p class="p1">.slide{display:none;}</p>
-<p class="p1">.slide.on{display:block;animation:fu .3s ease;}</p>
-<p class="p1">@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}</p>
-<p class="p1">.stag{font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:700;color:var(--red);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.45rem;}</p>
-<p class="p1">.slide h2{font-size:1.25rem;font-weight:700;color:var(--black);margin-bottom:.8rem;}</p>
-<p class="p2"><br></p>
-<p class="p1">/* Two-column layout */</p>
-<p class="p1">.si{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;align-items:start;}</p>
-<p class="p1">.si.single{grid-template-columns:1fr;}</p>
-<p class="p1">@media(max-width:580px){.si{grid-template-columns:1fr;}}</p>
-<p class="p2"><br></p>
-<p class="p1">/* narrative */</p>
-<p class="p1">.narr{background:var(--white);border-left:4px solid var(--red);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.85rem 1.1rem;margin-bottom:.8rem;font-size:.95rem;line-height:1.6;color:var(--text);box-shadow:var(--sh);}</p>
-<p class="p1">.narr strong{color:var(--black);font-weight:700;}</p>
-<p class="p2"><br></p>
-<p class="p1">/* task instruction box */</p>
-<p class="p1">.task-box{background:var(--blue-dim);border:1px solid var(--blue-border);border-radius:var(--r-sm);padding:.75rem 1rem;margin-bottom:.75rem;font-size:.9rem;font-weight:600;color:var(--blue);display:flex;gap:.6rem;align-items:flex-start;}</p>
-<p class="p2"><br></p>
-<p class="p1">/* warning */</p>
-<p class="p1">.warn{background:var(--amber-dim);border:1px solid var(--amber-border);border-radius:var(--r-sm);padding:.75rem .95rem;font-size:.91rem;line-height:1.55;color:#4a2800;display:flex;gap:.65rem;align-items:flex-start;margin-bottom:.8rem;}</p>
-<p class="p1">.warn strong{color:#321c00;}</p>
-<p class="p2"><br></p>
-<p class="p1">/* photo */</p>
-<p class="p1">.photo-block{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);overflow:hidden;margin-bottom:.8rem;box-shadow:var(--sh);}</p>
-<p class="p1">.photo-block img{width:100%;display:block;}</p>
-<p class="p1">.photo-ph{background:var(--gray-50);padding:1.5rem 1rem;text-align:center;color:var(--text-light);font-size:.88rem;line-height:1.55;}</p>
-<p class="p1">.photo-ph .pi{font-size:1.6rem;display:block;margin-bottom:.35rem;}</p>
-<p class="p1">.photo-ph code{font-family:monospace;font-size:.78rem;color:var(--red);background:var(--red-dim);padding:.1rem .35rem;border-radius:3px;}</p>
-<p class="p2"><br></p>
-<p class="p1">/* quiz */</p>
-<p class="p1">.ql{font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:700;color:var(--red);letter-spacing:.08em;text-transform:uppercase;margin:.1rem 0 .5rem;}</p>
-<p class="p1">.qt{font-size:.95rem;color:var(--text);margin-bottom:.65rem;line-height:1.52;font-weight:600;}</p>
-<p class="p1">.opts{display:flex;flex-direction:column;gap:.45rem;}</p>
-<p class="p1">.opt{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.75rem .95rem;cursor:pointer;font-size:.93rem;line-height:1.48;color:var(--text);transition:all .2s;display:flex;gap:.65rem;align-items:flex-start;box-shadow:var(--sh);}</p>
-<p class="p1">.opt:hover:not(.off):not(.ok):not(.no){border-color:var(--red-border);background:var(--red-dim);}</p>
-<p class="p1">.opt.ok{border-color:var(--green);background:var(--green-dim);color:var(--green);pointer-events:none;}</p>
-<p class="p1">.opt.no{border-color:var(--red);background:var(--red-dim);color:var(--red-dark);}</p>
-<p class="p1">.opt.off{pointer-events:none;opacity:.4;}</p>
-<p class="p1">.ol{width:21px;height:21px;border:2px solid var(--gray-100);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.74rem;font-weight:700;font-family:'Montserrat',sans-serif;flex-shrink:0;margin-top:1px;color:var(--text-light);}</p>
-<p class="p1">.fb{margin-top:.55rem;padding:.75rem .95rem;border-radius:var(--r-sm);font-size:.91rem;line-height:1.52;display:none;font-weight:600;}</p>
-<p class="p1">.fb.show{display:block;}</p>
-<p class="p1">.fb.ok{background:var(--green-dim);color:var(--green);border:1px solid var(--green-border);}</p>
-<p class="p1">.fb.no{background:var(--red-dim);color:var(--red-dark);border:1px solid var(--red-border);}</p>
-<p class="p1">.retry-btn{margin-top:.5rem;background:var(--white);border:2px solid var(--red);border-radius:var(--r-sm);padding:.48rem 1rem;color:var(--red);font-family:'Montserrat',sans-serif;font-size:.83rem;font-weight:700;cursor:pointer;transition:all .2s;display:none;}</p>
-<p class="p1">.retry-btn:hover{background:var(--red);color:var(--white);}</p>
-<p class="p1">.retry-btn.show{display:inline-block;}</p>
-<p class="p2"><br></p>
-<p class="p1">/* PPE */</p>
-<p class="p1">.ppe-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:.55rem;margin:.65rem 0;}</p>
-<p class="p1">.ppe{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.75rem .4rem;text-align:center;cursor:pointer;transition:all .2s;box-shadow:var(--sh);}</p>
-<p class="p1">.ppe:hover:not(.ok):not(.no){border-color:var(--red-border);}</p>
-<p class="p1">.pi2{font-size:1.5rem;display:block;margin-bottom:.28rem;}</p>
-<p class="p1">.pl{font-size:.82rem;color:var(--text-mid);font-weight:600;}</p>
-<p class="p1">.ppe.ok{border-color:var(--green);background:var(--green-dim);}</p>
-<p class="p1">.ppe.ok .pl{color:var(--green);}</p>
-<p class="p1">.ppe.no{border-color:var(--red);background:var(--red-dim);}</p>
-<p class="p1">.ppe.no .pl{color:var(--red-dark);}</p>
-<p class="p2"><br></p>
-<p class="p1">/* drag-drop */</p>
-<p class="p1">.seq-wrap{margin:.65rem 0;}</p>
-<p class="p1">.seq-item{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.65rem .9rem;margin-bottom:.4rem;font-size:.93rem;color:var(--text);cursor:grab;display:flex;align-items:center;gap:.65rem;box-shadow:var(--sh);transition:border-color .2s;user-select:none;}</p>
-<p class="p1">.seq-item:active{cursor:grabbing;}</p>
-<p class="p1">.seq-item.dragging{opacity:.35;border-color:var(--red);}</p>
-<p class="p1">.seq-item.drag-over{border-color:var(--blue);background:var(--blue-dim);}</p>
-<p class="p1">.seq-item.correct{border-color:var(--green);background:var(--green-dim);color:var(--green);cursor:default;}</p>
-<p class="p1">.seq-item.wrong{border-color:var(--red);background:var(--red-dim);}</p>
-<p class="p1">.seq-handle{color:var(--gray-100);font-size:.95rem;flex-shrink:0;}</p>
-<p class="p1">.seq-num{width:24px;height:24px;border-radius:50%;background:var(--red-dim);color:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:.73rem;font-weight:700;flex-shrink:0;}</p>
-<p class="p1">.seq-num.ok{background:var(--green-dim);color:var(--green);}</p>
-<p class="p1">.btn-confirm{background:var(--red);color:var(--white);border:none;border-radius:var(--r-sm);padding:.58rem 1.25rem;font-family:'Montserrat',sans-serif;font-size:.86rem;font-weight:700;cursor:pointer;transition:background .2s;margin-top:.45rem;}</p>
-<p class="p1">.btn-confirm:hover{background:var(--red-dark);}</p>
-<p class="p1">.seq-fb{margin-top:.55rem;padding:.75rem .95rem;border-radius:var(--r-sm);font-size:.91rem;font-weight:600;display:none;}</p>
-<p class="p1">.seq-fb.show{display:block;}</p>
-<p class="p1">.seq-fb.ok{background:var(--green-dim);color:var(--green);border:1px solid var(--green-border);}</p>
-<p class="p1">.seq-fb.no{background:var(--red-dim);color:var(--red-dark);border:1px solid var(--red-border);}</p>
-<p class="p2"><br></p>
-<p class="p1">/* steps */</p>
-<p class="p1">.steps{display:flex;flex-direction:column;gap:.45rem;margin:.65rem 0;}</p>
-<p class="p1">.sr{display:flex;gap:.75rem;align-items:center;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);padding:.7rem .95rem;font-size:.93rem;color:var(--text);box-shadow:var(--sh);}</p>
-<p class="p1">.sn{width:24px;height:24px;border-radius:50%;background:var(--red-dim);color:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:700;flex-shrink:0;}</p>
-<p class="p2"><br></p>
-<p class="p1">/* checklist */</p>
-<p class="p1">.ck-l{display:flex;flex-direction:column;gap:.4rem;margin:.65rem 0;}</p>
-<p class="p1">.ck{display:flex;gap:.65rem;align-items:center;font-size:.93rem;cursor:pointer;padding:.35rem 0;color:var(--text);}</p>
-<p class="p1">.ckb{width:20px;height:20px;border:2px solid var(--gray-100);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;transition:all .2s;color:transparent;}</p>
-<p class="p1">.ck.checked .ckb{background:var(--green);border-color:var(--green);color:var(--white);}</p>
-<p class="p2"><br></p>
-<p class="p1">/* COMPLETE slide */</p>
-<p class="p1">.complete-wrap{max-width:540px;margin:0 auto;text-align:center;padding:1rem 0;}</p>
-<p class="p1">.complete-icon{font-size:3rem;margin-bottom:.75rem;}</p>
-<p class="p1">.complete-title{font-family:'Montserrat',sans-serif;font-size:1.6rem;font-weight:700;color:var(--black);margin-bottom:.5rem;}</p>
-<p class="p1">.complete-sub{font-size:1rem;color:var(--text-mid);line-height:1.6;margin-bottom:1.5rem;}</p>
-<p class="p1">.complete-summary{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r);padding:1.25rem 1.5rem;text-align:left;margin-bottom:1.25rem;box-shadow:var(--sh);}</p>
-<p class="p1">.complete-summary h3{font-family:'Montserrat',sans-serif;font-size:.88rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.65rem;}</p>
-<p class="p1">.complete-summary li{font-size:.93rem;color:var(--text-mid);line-height:1.55;margin-bottom:.35rem;padding-left:.25rem;}</p>
-<p class="p1">.complete-summary ul{padding-left:1.1rem;}</p>
-<p class="p1">.btn-restart{background:var(--red);color:var(--white);border:none;border-radius:var(--r-sm);padding:.8rem 2rem;font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:background .2s;letter-spacing:.03em;}</p>
-<p class="p1">.btn-restart:hover{background:var(--red-dark);}</p>
-<p class="p1">.btn-review{background:var(--white);color:var(--red);border:2px solid var(--red);border-radius:var(--r-sm);padding:.75rem 1.5rem;font-family:'Montserrat',sans-serif;font-size:.93rem;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.03em;margin-right:.75rem;}</p>
-<p class="p1">.btn-review:hover{background:var(--red-dim);}</p>
-<p class="p2"><br></p>
-<p class="p1">/* module complete box */</p>
-<p class="p1">.mcomp{background:var(--green-dim);border:1px solid var(--green-border);border-radius:var(--r);padding:1.25rem;text-align:center;margin-top:1rem;}</p>
-<p class="p1">.mcomp h3{font-family:'Montserrat',sans-serif;color:var(--green);font-size:.97rem;font-weight:700;margin-bottom:.3rem;}</p>
-<p class="p1">.mcomp p{font-size:.91rem;color:var(--text-mid);line-height:1.55;}</p>
-<p class="p2"><br></p>
-<p class="p1">/* bridge */</p>
-<p class="p1">.bridge{background:var(--white);border:1px solid var(--red-border);border-top:3px solid var(--red);border-radius:var(--r);padding:1.4rem;text-align:center;margin-top:.9rem;box-shadow:var(--sh-md);}</p>
-<p class="p1">.bridge h3{font-family:'Montserrat',sans-serif;font-size:.97rem;font-weight:700;color:var(--black);margin-bottom:.45rem;}</p>
-<p class="p1">.bridge p{font-size:.91rem;color:var(--text-mid);line-height:1.6;margin-bottom:1rem;}</p>
-<p class="p1">.btn-bridge{background:var(--red);color:var(--white);border:none;border-radius:var(--r-sm);padding:.65rem 1.5rem;font-family:'Montserrat',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:background .2s;}</p>
-<p class="p1">.btn-bridge:hover{background:var(--red-dark);}</p>
-<p class="p2"><br></p>
-<p class="p1">/* controls */</p>
-<p class="p1">.ctrl{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;padding-top:1.1rem;border-top:1px solid var(--gray-100);}</p>
-<p class="p1">.bnav{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.55rem 1.05rem;color:var(--text);font-family:'Montserrat',sans-serif;font-size:.86rem;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:var(--sh);}</p>
-<p class="p1">.bnav:hover{background:var(--gray-50);}</p>
-<p class="p1">.bnav:disabled{opacity:.3;pointer-events:none;}</p>
-<p class="p1">.bnav.fwd{background:var(--red);border-color:var(--red);color:var(--white);}</p>
-<p class="p1">.bnav.fwd:hover{background:var(--red-dark);}</p>
-<p class="p1">.sct{font-size:.86rem;color:var(--text-light);font-weight:600;}</p>
-<p class="p2"><br></p>
-<p class="p1">footer{border-top:1px solid var(--gray-100);background:var(--white);padding:1.35rem 2rem;text-align:center;font-size:.85rem;color:var(--text-light);}</p>
-<p class="p1">&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div id="lock"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="lk"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="lk-ico"&gt;🔒&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;Course Access&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;This training material is protected.&lt;br&gt;Enter the access code to continue.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;input id="pw" type="password" class="lk-inp" placeholder="Access code" maxlength="24"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p class="err" id="err"&gt;Incorrect code. Please try again.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn-main" onclick="unlock()"&gt;Enter Course&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div id="course"&gt;</p>
-<p class="p1">&lt;div class="topbar"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="brand"&gt;vesma.d &lt;span&gt;training&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="tb-pill"&gt;ID PROTOTYPE · 2026&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="hero"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="chip"&gt;Instructional Design · Homework Assignment&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;h1&gt;Finished Conveyor&lt;br&gt;&lt;em&gt;Operations Training&lt;/em&gt;&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;p class="hero-lead"&gt;A three-module interactive learning experience covering lifting, packing, and the critical connection between both processes.&lt;/p&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;hr&gt;</p>
-<p class="p1">&lt;div class="wrap"&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="img-guide"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;span style="flex-shrink:0;font-size:1.1rem;"&gt;🖼️&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div&gt;&lt;strong&gt;For the course author — adding real photos:&lt;/strong&gt; Each placeholder shows a suggested file name. Delete the &lt;code&gt;&amp;lt;div class="photo-ph"&amp;gt;&lt;/code&gt; block and replace with &lt;code&gt;&amp;lt;img src="filename.jpg" alt="..."&amp;gt;&lt;/code&gt; in the same GitHub folder.&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p1">&lt;hr style="margin-bottom:1.75rem;"&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="sec-label"&gt;Design foundation&lt;/div&gt;</p>
-<p class="p1">&lt;div class="sec-title"&gt;Assumptions&lt;/div&gt;</p>
-<p class="p1">&lt;p class="sec-body"&gt;Every learning design rests on assumptions. Naming them makes the design honest — and easier to revise when reality differs.&lt;/p&gt;</p>
-<p class="p1">&lt;div class="agrid"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="acard"&gt;&lt;div class="anum"&gt;ASSUMPTION 01&lt;/div&gt;&lt;h3&gt;Learner identity&lt;/h3&gt;&lt;p&gt;The scenario character is named "Alex" — a short form that works across English, Latvian, Danish and German. In reality, this work is performed by both women and men. The character does not define who the course is for.&lt;/p&gt;&lt;div class="atag"&gt;⚠ To be validated&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="acard"&gt;&lt;div class="anum"&gt;ASSUMPTION 02&lt;/div&gt;&lt;h3&gt;Learning context&lt;/h3&gt;&lt;p&gt;It is unknown whether employees study independently, alongside a mentor, or with a supervisor. This course is designed to work in any of these scenarios — as pre-task preparation or as a complement to on-the-job guidance.&lt;/p&gt;&lt;div class="atag"&gt;⚠ To be validated&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="acard"&gt;&lt;div class="anum"&gt;ASSUMPTION 03&lt;/div&gt;&lt;h3&gt;Ideal course design&lt;/h3&gt;&lt;p&gt;This prototype reflects the best possible version of this course, without limitation by any specific platform's capabilities. Platform constraints (e.g. Hihaho) will be applied in a later stage.&lt;/p&gt;&lt;div class="atag"&gt;⚠ Platform TBD&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;hr&gt;</p>
-<p class="p1">&lt;div class="wrap"&gt;</p>
-<p class="p1">&lt;div class="sec-label"&gt;What learners will achieve&lt;/div&gt;</p>
-<p class="p1">&lt;div class="sec-title"&gt;Learning objectives&lt;/div&gt;</p>
-<p class="p1">&lt;p class="sec-body"&gt;By the end of this course, learners will be able to:&lt;/p&gt;</p>
-<p class="p1">&lt;div class="olist"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="orow"&gt;&lt;div class="oico ir"&gt;🦺&lt;/div&gt;&lt;div&gt;&lt;strong&gt;Work safely at every step&lt;/strong&gt;&lt;span&gt;Identify required PPE for lifting and packing, follow all preparation steps in order, and apply non-negotiable safety rules — including the center of gravity sticker on both sides.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="orow"&gt;&lt;div class="oico ir"&gt;🏗️&lt;/div&gt;&lt;div&gt;&lt;strong&gt;Lift and pack a finished conveyor correctly&lt;/strong&gt;&lt;span&gt;Execute the full lifting procedure and full packing procedure without skipping or reversing any step.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="orow"&gt;&lt;div class="oico ib"&gt;🔗&lt;/div&gt;&lt;div&gt;&lt;strong&gt;Understand how the two instructions connect&lt;/strong&gt;&lt;span&gt;Explain the handoff point where lifting ends and packing begins, and recognize that a worker assigned to pack must first confirm lifting was completed correctly.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p1">&lt;div class="obox"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;h3&gt;✓ Expected learning outcome&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;p&gt;After all three modules, a learner can independently and safely prepare a finished Caljan conveyor for dispatch — from production stand to fully packed and labeled.&lt;/p&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;hr&gt;</p>
-<p class="p1">&lt;div class="wrap"&gt;</p>
-<p class="p1">&lt;div class="sec-label"&gt;Course structure&lt;/div&gt;</p>
-<p class="p1">&lt;div class="sec-title"&gt;Three modules&lt;/div&gt;</p>
-<p class="p1">&lt;div class="mgrid"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="mcard on" id="mc1" onclick="selMod(1)"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="mtop"&gt;&lt;div class="mnum"&gt;01&lt;/div&gt;&lt;h3&gt;Lifting finished conveyors&lt;/h3&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="mbody"&gt;&lt;p&gt;Alex prepares and safely lifts a finished conveyor off the production stand onto the trolley. [cite: 44, 45]&lt;/p&gt;&lt;div class="prow"&gt;&lt;span class="tp"&gt;Retract&lt;/span&gt;&lt;span class="tp"&gt;Electricity&lt;/span&gt;&lt;span class="tp"&gt;Deattach&lt;/span&gt;&lt;span class="tp"&gt;Sling&lt;/span&gt;&lt;span class="tp"&gt;Crane&lt;/span&gt;&lt;span class="tp"&gt;Trolley&lt;/span&gt;&lt;span class="tp"&gt;Sticker&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="mcard" id="mc2" onclick="selMod(2)"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="mtop"&gt;&lt;div class="mnum"&gt;02&lt;/div&gt;&lt;h3&gt;Packing finished conveyors&lt;/h3&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="mbody"&gt;&lt;p&gt;The conveyor is on the trolley. Alex wraps, protects, numbers and labels it for safe transportation. [cite: 37, 46, 52]&lt;/p&gt;&lt;div class="prow"&gt;&lt;span class="tp"&gt;Paper &amp; cardboard&lt;/span&gt;&lt;span class="tp"&gt;Film ×2&lt;/span&gt;&lt;span class="tp"&gt;Tape&lt;/span&gt;&lt;span class="tp"&gt;Numbers&lt;/span&gt;&lt;span class="tp"&gt;Stickers&lt;/span&gt;&lt;span class="tp"&gt;Paint&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="mcard" id="mc3" onclick="selMod(3)"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="mtop"&gt;&lt;div class="mnum"&gt;03&lt;/div&gt;&lt;h3&gt;Combined scenario&lt;/h3&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="mbody"&gt;&lt;p&gt;Alex receives the full task: lift and pack. He must choose the right sequence and navigate the critical handoff. [cite: 44, 45, 46]&lt;/p&gt;&lt;div class="prow"&gt;&lt;span class="tp"&gt;Decision&lt;/span&gt;&lt;span class="tp"&gt;Sequence&lt;/span&gt;&lt;span class="tp"&gt;Handoff&lt;/span&gt;&lt;span class="tp"&gt;Spot mistake&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p1">&lt;div id="mnotice"&gt;📋 Select a module above to view its interactive scenario.&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="scen on" id="scen1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="sec-label" style="margin-top:1.75rem;padding-top:1.75rem;border-top:1px solid var(--gray-100);"&gt;Module 01 · Interactive scenario&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="sec-title"&gt;Alex's first lift&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="dots" id="dots1"&gt;&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide on" id="m1s1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 1 of 9 · Introduction&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Meet Alex&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="narr"&gt;It's Alex's first week at Caljan. His supervisor walks up:&lt;br&gt;&lt;br&gt;&lt;strong&gt;"Alex — conveyor #221438 is ready. Lift it off the production stand. You're on it."&lt;/strong&gt;&lt;br&gt;&lt;br&gt;Alex has watched this once before. Today it's his turn. [cite: 139]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="warn"&gt;&lt;span&gt;⚠️&lt;/span&gt;&lt;div&gt;The overhead crane may only be operated by &lt;strong&gt;employees with a valid certification&lt;/strong&gt; to operate an overhead crane. [cite: 140]&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="photo-block"&gt;&lt;div class="photo-ph"&gt;&lt;span class="pi"&gt;📷&lt;/span&gt;Production hall — conveyor on stand&lt;br&gt;&lt;small&gt;→ &lt;code&gt;&amp;lt;img src="lifting-intro.jpg"&amp;gt;&lt;/code&gt;&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide" id="m1s2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 2 of 9 · Safety first&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;What does Alex need to put on?&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="task-box"&gt;&lt;span&gt;👆&lt;/span&gt;&lt;div&gt;&lt;strong&gt;Your task:&lt;/strong&gt; Click on every item Alex needs for this lifting operation.&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="narr"&gt;His supervisor's rule: &lt;strong&gt;"If it's not on, you're not working."&lt;/strong&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="fb" id="fb-m1ppe"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="ppe-g"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="ppe" onclick="pickPPE(this,true,'fb-m1ppe')"&gt;&lt;span class="pi2"&gt;👟&lt;/span&gt;&lt;span class="pl"&gt;Safety boots&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="ppe" onclick="pickPPE(this,true,'fb-m1ppe')"&gt;&lt;span class="pi2"&gt;🥽&lt;/span&gt;&lt;span class="pl"&gt;Safety glasses&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="ppe" onclick="pickPPE(this,true,'fb-m1ppe')"&gt;&lt;span class="pi2"&gt;🧤&lt;/span&gt;&lt;span class="pl"&gt;Gloves&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="ppe" onclick="pickPPE(this,true,'fb-m1ppe')"&gt;&lt;span class="pi2"&gt;⛑️&lt;/span&gt;&lt;span class="pl"&gt;Hard hat&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="ppe" onclick="pickPPE(this,false,'fb-m1ppe')"&gt;&lt;span class="pi2"&gt;🎧&lt;/span&gt;&lt;span class="pl"&gt;Ear protection&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide" id="m1s3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 3 of 9 · Step 1 — Retract&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Is the conveyor fully retracted?&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="photo-block"&gt;&lt;div class="photo-ph"&gt;&lt;span class="pi"&gt;📷&lt;/span&gt;Fully retracted conveyor on stand&lt;br&gt;&lt;small&gt;→ &lt;code&gt;&amp;lt;img src="lifting-step1-retract.jpg"&amp;gt;&lt;/code&gt;&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="narr"&gt;&lt;strong&gt;The conveyor must be completely retracted before anything else happens.&lt;/strong&gt; [cite: 150]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="task-box"&gt;&lt;span&gt;❓&lt;/span&gt;&lt;div&gt;&lt;strong&gt;Choose the correct action:&lt;/strong&gt; Alex sees the conveyor is only partially retracted.&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="opts" id="q-m1s3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m1s3','A','B','s3')"&gt;&lt;div class="ol"&gt;A&lt;/div&gt;Continue — close enough, it won't matter.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m1s3','B','B','s3')"&gt;&lt;div class="ol"&gt;B&lt;/div&gt;Retract it completely before doing anything else. [cite: 150]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m1s3','C','B','s3')"&gt;&lt;div class="ol"&gt;C&lt;/div&gt;Ask the supervisor whether it matters.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="fb" id="fb-m1s3"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="retry-btn" id="retry-m1s3" onclick="resetQ('q-m1s3','fb-m1s3','retry-m1s3')"&gt;Try again →&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide" id="m1s4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 4 of 9 · Step 2 — Electricity&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Disconnect in the right order&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="photo-block"&gt;&lt;div class="photo-ph"&gt;&lt;span class="pi"&gt;📷&lt;/span&gt;Main switch / plug / cabinet&lt;br&gt;&lt;small&gt;→ &lt;code&gt;&amp;lt;img src="lifting-step2-electricity.jpg"&amp;gt;&lt;/code&gt;&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="narr" style="font-size:.91rem;"&gt;Disconnecting electricity is a &lt;strong&gt;three-step sequence&lt;/strong&gt;. Each action must be completed before the next begins. [cite: 153]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="task-box"&gt;&lt;span&gt;↕️&lt;/span&gt;&lt;div&gt;&lt;strong&gt;Drag the steps&lt;/strong&gt; into the correct order, then press &lt;strong&gt;Confirm order&lt;/strong&gt;.&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="seq-wrap" id="seq-m1s4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="seq-item" draggable="true" data-val="2"&gt;&lt;span class="seq-handle"&gt;⠿&lt;/span&gt;&lt;span class="seq-num"&gt;?&lt;/span&gt;Plug off the main electrical connection [cite: 153]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="seq-item" draggable="true" data-val="1"&gt;&lt;span class="seq-handle"&gt;⠿&lt;/span&gt;&lt;span class="seq-num"&gt;?&lt;/span&gt;Turn off the main switch [cite: 153]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="seq-item" draggable="true" data-val="3"&gt;&lt;span class="seq-handle"&gt;⠿&lt;/span&gt;&lt;span class="seq-num"&gt;?&lt;/span&gt;Remove electrical connection in the electrical cabinet [cite: 153]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn-confirm" onclick="checkSeq('seq-m1s4','fb-m1s4',[1,2,3])"&gt;Confirm order&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="seq-fb" id="fb-m1s4"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide" id="m1s5"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 5 of 9 · Steps 3 &amp; 4&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Deattach, then protect&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="photo-block"&gt;&lt;div class="photo-ph"&gt;&lt;span class="pi"&gt;📷&lt;/span&gt;Straps removed / back cover on&lt;br&gt;&lt;small&gt;→ &lt;code&gt;&amp;lt;img src="lifting-step3-deattach.jpg"&amp;gt;&lt;/code&gt;&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="narr"&gt;&lt;strong&gt;"These straps are the only thing keeping this conveyor on the stand."&lt;/strong&gt;&lt;br&gt;&lt;br&gt;He removes straps and brackets with the electric hand drill. [cite: 160, 163] Once free, the &lt;strong&gt;back cover goes on before the lift begins.&lt;/strong&gt; [cite: 162]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="warn"&gt;&lt;span&gt;💭&lt;/span&gt;&lt;div&gt;Why attach the back cover before lifting? Unprotected components can be damaged during crane movement.&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide" id="m1s6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 6 of 9 · Steps 5 &amp; 6&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Sling and centre the crane&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="photo-block"&gt;&lt;div class="photo-ph"&gt;&lt;span class="pi"&gt;📷&lt;/span&gt;Sling positioned / crane centred&lt;br&gt;&lt;small&gt;→ &lt;code&gt;&amp;lt;img src="lifting-step5-sling.jpg"&amp;gt;&lt;/code&gt;&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="narr"&gt;Alex places the protective film and sling — &lt;strong&gt;lifting capacity must match this specific conveyor&lt;/strong&gt;. [cite: 170] Sharp or protruding parts get a special protective layer first. [cite: 171]&lt;br&gt;&lt;br&gt;He finds the gravity center by placing the slings, slowly lifting the conveyor and adjusting the slings if necessary. [cite: 174]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="warn"&gt;&lt;span&gt;⚠️&lt;/span&gt;&lt;div&gt;When performing lifting works, follow the &lt;strong&gt;Work safety instruction for working with a cargo crane&lt;/strong&gt;. [cite: 175] Conveyor must be stable on both stands, not over leaning or in danger of falling. [cite: 177]&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide" id="m1s7"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 7 of 9 · Steps 7 &amp; 8 · Critical moment&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;The gravity sticker — no exceptions&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="photo-block"&gt;&lt;div class="photo-ph"&gt;&lt;span class="pi"&gt;📷&lt;/span&gt;Conveyor on trolley / sticker applied&lt;br&gt;&lt;small&gt;→ &lt;code&gt;&amp;lt;img src="lifting-step7-sticker.jpg"&amp;gt;&lt;/code&gt;&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="narr" style="font-size:.91rem;"&gt;Conveyor is on the trolley. [cite: 185] &lt;strong&gt;"DO NOT remove the crane before placing the center of gravity sticker. Not ever."&lt;/strong&gt; [cite: 190]&lt;br&gt;&lt;br&gt;Place the center of gravity sticker on both sides of the conveyor right below the crane hook. [cite: 191] Then the crane comes down.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="task-box"&gt;&lt;span&gt;❓&lt;/span&gt;&lt;div&gt;&lt;strong&gt;Choose the correct action:&lt;/strong&gt; One side has the sticker. The other does not. Alex is behind schedule.&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="opts" id="q-m1s7"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m1s7','A','B','s7')"&gt;&lt;div class="ol"&gt;A&lt;/div&gt;Remove the crane — one sticker is enough.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m1s7','B','B','s7')"&gt;&lt;div class="ol"&gt;B&lt;/div&gt;Sticker on both sides right below the hook, then remove the crane. [cite: 191]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m1s7','C','B','s7')"&gt;&lt;div class="ol"&gt;C&lt;/div&gt;Leave it for someone else to finish.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="fb" id="fb-m1s7"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="retry-btn" id="retry-m1s7" onclick="resetQ('q-m1s7','fb-m1s7','retry-m1s7')"&gt;Try again →&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide" id="m1s8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 8 of 9 · Knowledge check&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Before you move on&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="task-box"&gt;&lt;span&gt;❓&lt;/span&gt;&lt;div&gt;&lt;strong&gt;Choose the correct answer:&lt;/strong&gt; When can the crane be removed?&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="opts" id="q-m1kc1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m1kc1','A','C','kc1')"&gt;&lt;div class="ol"&gt;A&lt;/div&gt;Once the conveyor is stable on the trolley.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m1kc1','B','C','kc1')"&gt;&lt;div class="ol"&gt;B&lt;/div&gt;When the supervisor signals.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m1kc1','C','C','kc1')"&gt;&lt;div class="ol"&gt;C&lt;/div&gt;Only after the gravity sticker is placed on both sides right below the hook. [cite: 190, 191]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="fb" id="fb-m1kc1"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="retry-btn" id="retry-m1kc1" onclick="resetQ('q-m1kc1','fb-m1kc1','retry-m1kc1')"&gt;Try again →&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="task-box"&gt;&lt;span&gt;❓&lt;/span&gt;&lt;div&gt;&lt;strong&gt;Choose the correct answer:&lt;/strong&gt; Who may operate the overhead crane?&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="opts" id="q-m1kc2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m1kc2','A','B','kc2')"&gt;&lt;div class="ol"&gt;A&lt;/div&gt;Any employee with a safety briefing.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m1kc2','B','B','kc2')"&gt;&lt;div class="ol"&gt;B&lt;/div&gt;Only employees with a certification to operate an overhead crane. [cite: 140]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m1kc2','C','B','kc2')"&gt;&lt;div class="ol"&gt;C&lt;/div&gt;Any employee if a certified colleague supervises.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="fb" id="fb-m1kc2"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="retry-btn" id="retry-m1kc2" onclick="resetQ('q-m1kc2','fb-m1kc2','retry-m1kc2')"&gt;Try again →&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide" id="m1s9"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 9 of 9 · Module complete&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Lifting complete&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="narr"&gt;Sticker on both sides. Crane detached. Supervisor:&lt;br&gt;&lt;br&gt;&lt;strong&gt;"Good work. We're packing this one today — if it is planned to pack the conveyor right after, the first film layer goes on the trolley beforehand." [cite: 187]&lt;/strong&gt;&lt;br&gt;&lt;br&gt;&lt;strong&gt;"There's a separate instruction for that. It starts exactly where we left off."&lt;/strong&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="mcomp"&gt;&lt;h3&gt;✓ Module 1 complete&lt;/h3&gt;&lt;p&gt;Conveyor is on the trolley, center of gravity sticker placed, crane removed. Ready for packing. [cite: 44, 53]&lt;/p&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="bridge"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;h3&gt;🔗 Both instructions are one process&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;p&gt;The Lifting instruction ends at the trolley. Packing begins there. [cite: 44, 46] A worker assigned to pack must confirm lifting was completed correctly — including the gravity sticker on both sides. [cite: 53]&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;button class="btn-bridge" onclick="selMod(2)"&gt;Continue to Module 2 →&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="ctrl"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="bnav" id="m1prev" onclick="nav(1,-1)" disabled&gt;← Previous&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="sct" id="m1ct"&gt;1 / 9&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="bnav fwd" id="m1next" onclick="nav(1,1)"&gt;Next →&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="scen" id="scen2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="sec-label" style="margin-top:1.75rem;padding-top:1.75rem;border-top:1px solid var(--gray-100);"&gt;Module 02 · Interactive scenario&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="sec-title"&gt;Alex packs the conveyor&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="dots" id="dots2"&gt;&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide on" id="m2s1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 1 of 8 · Continuation&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Where we left off&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="narr"&gt;Conveyor on trolley. Center of gravity label applied. Crane removed. [cite: 44, 53]&lt;br&gt;&lt;br&gt;Supervisor: &lt;strong&gt;"This work operation is done using a film melting machine. [cite: 37] The gas cylinder has to be at least 5m distance from the flame source. [cite: 39] Gloves for thermal protection are required when melting the film! [cite: 38]"&lt;/strong&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="warn"&gt;&lt;span&gt;⚠️&lt;/span&gt;&lt;div&gt;Gas cylinder must be kept &lt;strong&gt;at least 5m distance from the flame source&lt;/strong&gt; at all times. [cite: 39]&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="photo-block"&gt;&lt;div class="photo-ph"&gt;&lt;span class="pi"&gt;📷&lt;/span&gt;Film melting machine&lt;br&gt;&lt;small&gt;→ &lt;code&gt;&amp;lt;img src="packing-intro-machine.jpg"&amp;gt;&lt;/code&gt;&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide" id="m2s2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 2 of 8 · Safety first&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Packing PPE — required gear&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="task-box"&gt;&lt;span&gt;👆&lt;/span&gt;&lt;div&gt;&lt;strong&gt;Your task:&lt;/strong&gt; Click on every item needed for packing operations.&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="warn"&gt;&lt;span&gt;🔥&lt;/span&gt;&lt;div&gt;&lt;strong&gt;Gloves for thermal protection are required&lt;/strong&gt; when melting the film. [cite: 38] Eye protection has to be used when using paint sprays. [cite: 103]&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="fb" id="fb-m2ppe"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="ppe-g"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="ppe" onclick="pickPPE(this,true,'fb-m2ppe')"&gt;&lt;span class="pi2"&gt;👟&lt;/span&gt;&lt;span class="pl"&gt;Safety boots&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="ppe" onclick="pickPPE(this,true,'fb-m2ppe')"&gt;&lt;span class="pi2"&gt;🔥🧤&lt;/span&gt;&lt;span class="pl"&gt;Thermal gloves&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="ppe" onclick="pickPPE(this,true,'fb-m2ppe')"&gt;&lt;span class="pi2"&gt;🥽&lt;/span&gt;&lt;span class="pl"&gt;Safety glasses&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="ppe" onclick="pickPPE(this,false,'fb-m2ppe')"&gt;&lt;span class="pi2"&gt;⛑️&lt;/span&gt;&lt;span class="pl"&gt;Hard hat&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="ppe" onclick="pickPPE(this,false,'fb-m2ppe')"&gt;&lt;span class="pi2"&gt;🎧&lt;/span&gt;&lt;span class="pl"&gt;Ear protection&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide" id="m2s3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 3 of 8 · Steps 1 &amp; 2&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Prepare trolley and gather materials&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="photo-block"&gt;&lt;div class="photo-ph"&gt;&lt;span class="pi"&gt;📷&lt;/span&gt;Film on trolley / materials laid out&lt;br&gt;&lt;small&gt;→ &lt;code&gt;&amp;lt;img src="packing-step1-trolley.jpg"&amp;gt;&lt;/code&gt;&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="narr" style="font-size:.91rem;"&gt;The first film layer should be placed on the trolley. [cite: 46] Then Alex makes sure all layout and necessary materials are prepared. [cite: 53, 54]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="task-box"&gt;&lt;span&gt;↕️&lt;/span&gt;&lt;div&gt;&lt;strong&gt;Drag the materials&lt;/strong&gt; into the correct logical order for step preparation.&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="seq-wrap" id="seq-m2s3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="seq-item" draggable="true" data-val="2"&gt;&lt;span class="seq-handle"&gt;⠿&lt;/span&gt;&lt;span class="seq-num"&gt;?&lt;/span&gt;Protective paper and cardboard for belts [cite: 57]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="seq-item" draggable="true" data-val="1"&gt;&lt;span class="seq-handle"&gt;⠿&lt;/span&gt;&lt;span class="seq-num"&gt;?&lt;/span&gt;Stickers with lifting instructions &amp; User guide [cite: 55, 56]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="seq-item" draggable="true" data-val="3"&gt;&lt;span class="seq-handle"&gt;⠿&lt;/span&gt;&lt;span class="seq-num"&gt;?&lt;/span&gt;Adhesive tape for connection places [cite: 58]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn-confirm" onclick="checkSeq('seq-m2s3','fb-m2s3',[1,2,3])"&gt;Confirm order&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="seq-fb" id="fb-m2s3"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide" id="m2s4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 4 of 8 · Step 3&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Protect the belt first&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="photo-block"&gt;&lt;div class="photo-ph"&gt;&lt;span class="pi"&gt;📷&lt;/span&gt;Paper then cardboard on belt&lt;br&gt;&lt;small&gt;→ &lt;code&gt;&amp;lt;img src="packing-step3-paper.jpg"&amp;gt;&lt;/code&gt;&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="narr"&gt;Place the protective paper on the belt, then put the protective cardboard on the paper. [cite: 61, 62] &lt;strong&gt;The paper and cardboard must cover the entire belt. [cite: 63]&lt;/strong&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="task-box"&gt;&lt;span&gt;❓&lt;/span&gt;&lt;div&gt;&lt;strong&gt;Choose the correct action:&lt;/strong&gt; Alex notices a small section of belt isn't covered.&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="opts" id="q-m2s4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m2s4','A','B','p1')"&gt;&lt;div class="ol"&gt;A&lt;/div&gt;Continue — a small gap won't cause damage.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m2s4','B','B','p1')"&gt;&lt;div class="ol"&gt;B&lt;/div&gt;Reposition paper and cardboard until they cover the entire belt. [cite: 63]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="fb" id="fb-m2s4"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="retry-btn" id="retry-m2s4" onclick="resetQ('q-m2s4','fb-m2s4','retry-m2s4')"&gt;Try again →&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide" id="m2s5"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 5 of 8 · Steps 4 &amp; 5&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;First film layer and adhesive tape&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="photo-block"&gt;&lt;div class="photo-ph"&gt;&lt;span class="pi"&gt;📷&lt;/span&gt;Film melting / tape on connections&lt;br&gt;&lt;small&gt;→ &lt;code&gt;&amp;lt;img src="packing-step4-film1.jpg"&amp;gt;&lt;/code&gt;&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="narr"&gt;Protective gloves against thermal risks have to be used during these operations. [cite: 71] Melt the first layer of film, [cite: 70] then cover the connection places with the adhesive tape. [cite: 73]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="warn"&gt;&lt;span&gt;🔥&lt;/span&gt;&lt;div&gt;&lt;strong&gt;Thermal gloves must be worn throughout all film melting operations. [cite: 71]&lt;/strong&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide" id="m2s6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 6 of 8 · Steps 6 &amp; 7&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Second film layer and identification&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="photo-block"&gt;&lt;div class="photo-ph"&gt;&lt;span class="pi"&gt;📷&lt;/span&gt;Second film layer / numbers on film&lt;br&gt;&lt;small&gt;→ &lt;code&gt;&amp;lt;img src="packing-step6-film2.jpg"&amp;gt;&lt;/code&gt;&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="warn"&gt;&lt;span&gt;🔥&lt;/span&gt;&lt;div&gt;&lt;strong&gt;Protective gloves against thermal risks&lt;/strong&gt; have to be used when melting the second layer of film. [cite: 79, 80]&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="narr" style="font-size:.91rem;"&gt;Second film layer done. Now Alex must write the identification information on the outside. [cite: 83]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="task-box"&gt;&lt;span&gt;❓&lt;/span&gt;&lt;div&gt;&lt;strong&gt;Choose the correct answer:&lt;/strong&gt; Where does Alex write the serial number? [cite: 83]&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="opts" id="q-m2s6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m2s6','A','C','p2')"&gt;&lt;div class="ol"&gt;A&lt;/div&gt;On the sides only with the project number. [cite: 84]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m2s6','B','C','p2')"&gt;&lt;div class="ol"&gt;B&lt;/div&gt;On the ends only to save space. [cite: 85]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m2s6','C','C','p2')"&gt;&lt;div class="ol"&gt;C&lt;/div&gt;Project number and serial number on the sides, and serial number on the ends. [cite: 84, 85]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="fb" id="fb-m2s6"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="retry-btn" id="retry-m2s6" onclick="resetQ('q-m2s6','fb-m2s6','retry-m2s6')"&gt;Try again →&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide" id="m2s7"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 7 of 8 · Steps 8 &amp; 9&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Stickers, manual and hazard spray&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="photo-block"&gt;&lt;div class="photo-ph"&gt;&lt;span class="pi"&gt;📷&lt;/span&gt;Stickers applied / manual attached / painted parts&lt;br&gt;&lt;small&gt;→ &lt;code&gt;&amp;lt;img src="packing-step8-stickers.jpg"&amp;gt;&lt;/code&gt;&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="warn"&gt;&lt;span&gt;🥽&lt;/span&gt;&lt;div&gt;&lt;strong&gt;Eye protection has to be used&lt;/strong&gt; when using paint sprays. [cite: 103]&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="narr" style="font-size:.91rem;"&gt;The stickers and manual have to be attached in accordance with the assembly checklist. [cite: 95] Two large lifting instruction stickers go on the sides, and the smallest sticker goes on one end. [cite: 96, 98]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="task-box"&gt;&lt;span&gt;❓&lt;/span&gt;&lt;div&gt;&lt;strong&gt;Choose the correct answer:&lt;/strong&gt; Where does the transportation and installation manual go? [cite: 97]&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="opts" id="q-m2s7"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m2s7','A','B','p3')"&gt;&lt;div class="ol"&gt;A&lt;/div&gt;Inside the electrical cabinet before closing it up.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m2s7','B','B','p3')"&gt;&lt;div class="ol"&gt;B&lt;/div&gt;Put the transportation and installation manual on one of the large stickers on the side. [cite: 97]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m2s7','C','B','p3')"&gt;&lt;div class="ol"&gt;C&lt;/div&gt;On one end of the conveyor right next to the small sticker.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="fb" id="fb-m2s7"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="retry-btn" id="retry-m2s7" onclick="resetQ('q-m2s7','fb-m2s7','retry-m2s7')"&gt;Try again →&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide" id="m2s8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 8 of 8 · Module complete&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Packing complete&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="narr"&gt;Hazardous parts, such as protruding electrical cabinets, electrical cable places or other areas that may be damaged during transport, are painted with a bright paint spray. [cite: 102] Supervisor nods:&lt;br&gt;&lt;br&gt;&lt;strong&gt;"Conveyor #221438 is ready for dispatch. Good work."&lt;/strong&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="mcomp"&gt;&lt;h3&gt;✓ Module 2 complete&lt;/h3&gt;&lt;p&gt;Full packing procedure completed successfully. Conveyor is safe for dispatch.&lt;/p&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="bridge"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;h3&gt;🔗 Ready for the combined scenario?&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;p&gt;Module 3 brings both instructions together into an on-the-job scenario. Alex receives a single full assignment — and must navigate it cleanly from start to finish.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;button class="btn-bridge" onclick="selMod(3)"&gt;Continue to Module 3 →&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="ctrl"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="bnav" id="m2prev" onclick="nav(2,-1)" disabled&gt;← Previous&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="sct" id="m2ct"&gt;1 / 8&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="bnav fwd" id="m2next" onclick="nav(2,1)"&gt;Next →&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="scen" id="scen3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="sec-label" style="margin-top:1.75rem;padding-top:1.75rem;border-top:1px solid var(--gray-100);"&gt;Module 03 · Combined scenario&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="sec-title"&gt;The full assignment&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="dots" id="dots3"&gt;&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide on" id="m3s1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 1 of 5 · Full assignment&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;One task, two instructions&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="narr"&gt;Supervisor: &lt;strong&gt;"Conveyor #221439. Lift it off the stand, wrap it up, and get it ready for dispatch today." [cite: 37, 139]&lt;/strong&gt;&lt;br&gt;&lt;br&gt;Alex knows both instructions. Today he must handle them together as one continuous workplace operation.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="warn"&gt;&lt;span&gt;🎯&lt;/span&gt;&lt;div&gt;In this module, Alex faces real workplace choices. Some paths lead to structural damage, product rejections, or thermal injuries. Use your manuals!&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="photo-block"&gt;&lt;div class="photo-ph"&gt;&lt;span class="pi"&gt;📷&lt;/span&gt;Conveyor #221439 on production stand&lt;br&gt;&lt;small&gt;→ &lt;code&gt;&amp;lt;img src="combined-start.jpg"&amp;gt;&lt;/code&gt;&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide" id="m3s2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 2 of 5 · Decision 1&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Where does Alex start?&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si single"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="narr"&gt;Alex stands in front of Conveyor #221439 on the production stand. He has brought all the packing film, cardboard, and stickers over to the area. &lt;strong&gt;What is his first correct operation?&lt;/strong&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="task-box"&gt;&lt;span&gt;❓&lt;/span&gt;&lt;div&gt;&lt;strong&gt;Choose the correct action:&lt;/strong&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="opts" id="q-m3s2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m3s2','A','B','m3d1')"&gt;&lt;div class="ol"&gt;A&lt;/div&gt;Start placing protective paper and cardboard on the belt right now while it's easy to reach. [cite: 61, 62]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m3s2','B','B','m3d1')"&gt;&lt;div class="ol"&gt;B&lt;/div&gt;Execute the Lifting instruction completely first — the conveyor must be moved on the trolley before packing can begin. [cite: 44, 45, 46]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m3s2','C','B','m3d1')"&gt;&lt;div class="ol"&gt;C&lt;/div&gt;Ask a certified colleague to start melting film on the lower frames while it hangs.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="fb" id="fb-m3s2"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="retry-btn" id="retry-m3s2" onclick="resetQ('q-m3s2','fb-m3s2','retry-m3s2')"&gt;Try again →&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide" id="m3s3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 3 of 5 · Decision 2 — Critical handoff&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;The moment the two instructions connect&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="narr"&gt;Lifting works are done. Conveyor is placed on the trolley. [cite: 185] Alex is eager to disconnect the crane straps and get moving with the packing materials. He stops and double-checks his safety steps.&lt;br&gt;&lt;br&gt;The front side has the red center of gravity mark. He walks around to the narrow side near the racks — **the second side is bare**. The packing film roll is already in his hand, and he is behind schedule.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="task-box"&gt;&lt;span&gt;❓&lt;/span&gt;&lt;div&gt;&lt;strong&gt;Choose the correct action:&lt;/strong&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="opts" id="q-m3s3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m3s3','A','C','m3d2')"&gt;&lt;div class="ol"&gt;A&lt;/div&gt;Remove the crane and hook immediately — one side is enough to safely ship.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m3s3','B','C','m3d2')"&gt;&lt;div class="ol"&gt;B&lt;/div&gt;Start wrapping the first film layer and wrap right over the missing side; it can be marked later on top of the film.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m3s3','C','C','m3d2')"&gt;&lt;div class="ol"&gt;C&lt;/div&gt;DO NOT remove the crane. Apply the sticker on both sides right below the crane hook first, then detach the crane and begin packing. [cite: 190, 191]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="fb" id="fb-m3s3"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="retry-btn" id="retry-m3s3" onclick="resetQ('q-m3s3','fb-m3s3','retry-m3s3')"&gt;Try again →&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide" id="m3s4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 4 of 5 · Decision 3 — Spot the mistake&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Something is wrong — can you see it?&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="photo-block"&gt;&lt;div class="photo-ph"&gt;&lt;span class="pi"&gt;📷&lt;/span&gt;Film melting — regular work gloves visible&lt;br&gt;&lt;small&gt;→ &lt;code&gt;&amp;lt;img src="combined-spot-mistake.jpg"&amp;gt;&lt;/code&gt;&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="narr"&gt;Alex is actively melting the film with the machine from end to end. [cite: 37, 70] He stopped a moment ago to write the serial number on the side with a permanent marker, [cite: 84] laid his thermal gloves aside, and forgot to swap them back.&lt;br&gt;&lt;br&gt;He is now operating the flame source with thin, standard canvas work gloves.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="task-box"&gt;&lt;span&gt;❓&lt;/span&gt;&lt;div&gt;&lt;strong&gt;Choose the correct action:&lt;/strong&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="opts" id="q-m3s4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m3s4','A','C','m3d3')"&gt;&lt;div class="ol"&gt;A&lt;/div&gt;Keep going carefully — it's a short section and it saves time.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m3s4','B','C','m3d3')"&gt;&lt;div class="ol"&gt;B&lt;/div&gt;Work a bit faster to keep his hands away from the rising heat.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt" onclick="ans('q-m3s4','C','C','m3d3')"&gt;&lt;div class="ol"&gt;C&lt;/div&gt;Stop immediately, turn down the flame tool, put on the mandatory protective gloves against thermal risks, then resume melting. [cite: 38, 71]&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="fb" id="fb-m3s4"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="retry-btn" id="retry-m3s4" onclick="resetQ('q-m3s4','fb-m3s4','retry-m3s4')"&gt;Try again →&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="slide" id="m3s5"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stag"&gt;Slide 5 of 5 · Course complete&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="si single"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="complete-wrap"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="complete-icon"&gt;✅&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="complete-title"&gt;Course Complete&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="complete-sub"&gt;Conveyor #221439 is fully ready for safe shipping.&lt;br&gt;You have mastered both operational protocols.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="complete-summary"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h3&gt;Key Takeaways Formed:&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;li&gt;The correct PPE application for both stages (thermal protection for film melting, eye protection for sprays). [cite: 38, 71, 103]&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;li&gt;The complete lifting sequence — retracting, 3-point electricity disconnect, bracket removal, cover assembly, and sling balancing. [cite: 150, 153, 160, 162, 174]&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;li&gt;The complete packing sequence — zero-gap belt protection, two layers of melted film, full multi-side marker text, and checklist labels. [cite: 63, 70, 79, 84, 85, 95]&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;li&gt;The golden handoff rule: Both center of gravity stickers must be applied securely right below the hook BEFORE the crane is ever cleared to move away. [cite: 190, 191]&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;li&gt;Procesual sync: A packing assignment always starts by validating the final check of the lifting run. [cite: 44, 46, 53]&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;button class="btn-review" onclick="selMod(1)"&gt;← Review Module 1&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;button class="btn-restart" onclick="restartCourse()"&gt;Restart Course from Scratch&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="ctrl"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="bnav" id="m3prev" onclick="nav(3,-1)" disabled&gt;← Previous&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="sct" id="m3ct"&gt;1 / 5&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="bnav fwd" id="m3next" onclick="nav(3,1)"&gt;Next →&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;/div&gt;&lt;footer&gt;vesma.d training · Caljan Conveyor Operations · ID Prototype · 2026&lt;/footer&gt;</p>
-<p class="p1">&lt;/div&gt;&lt;script&gt;</p>
-<p class="p1">const PW='h55m2kmv';</p>
-<p class="p1">const TOTALS={1:9,2:8,3:5};</p>
-<p class="p1">const cur={1:1,2:1,3:1};</p>
-<p class="p2"><br></p>
-<p class="p1">function unlock(){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const inp=document.getElementById('pw');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(inp.value===PW){</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('lock').style.display='none';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('course').style.display='block';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>[1,2,3].forEach(buildDots);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>['seq-m1s4','seq-m2s3'].forEach(initDrag);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>window.scrollTo(0,0);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>inp.classList.add('shake');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('err').style.display='block';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setTimeout(()=&gt;inp.classList.remove('shake'),400);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>inp.value='';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1">}</p>
-<p class="p1">document.addEventListener('keydown',e=&gt;{if(e.key==='Enter'&amp;&amp;document.getElementById('lock').style.display!=='none')unlock();});</p>
-<p class="p2"><br></p>
-<p class="p1">function buildDots(m){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const el=document.getElementById('dots'+m);el.innerHTML='';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>for(let i=1;i&lt;=TOTALS[m];i++){</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const d=document.createElement('div');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>d.className='dot'+(i===1?' on':'');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>d.onclick=()=&gt;goTo(m,i);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>el.appendChild(d);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1">}</p>
-<p class="p1">function goTo(m,n){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('m'+m+'s'+cur[m]).classList.remove('on');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.querySelectorAll('#dots'+m+' .dot')[cur[m]-1].classList.remove('on');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>cur[m]=n;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('m'+m+'s'+cur[m]).classList.add('on');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.querySelectorAll('#dots'+m+' .dot')[cur[m]-1].classList.add('on');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('m'+m+'ct').textContent=cur[m]+' / '+TOTALS[m];</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('m'+m+'prev').disabled=cur[m]===1;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('m'+m+'next').disabled=cur[m]===TOTALS[m];</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('scen'+m).scrollIntoView({behavior:'smooth',block:'start'});</p>
-<p class="p1">}</p>
-<p class="p1">function nav(m,d){const n=cur[m]+d;if(n&gt;=1&amp;&amp;n&lt;=TOTALS[m])goTo(m,n);}</p>
-<p class="p2"><br></p>
-<p class="p1">function selMod(n){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>[1,2,3].forEach(i=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('mc'+i).classList.remove('on');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('scen'+i).classList.remove('on');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('mc'+n).classList.add('on');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('scen'+n).classList.add('on');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('mnotice').style.display='none';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>setTimeout(()=&gt;document.getElementById('scen'+n).scrollIntoView({behavior:'smooth',block:'start'}),50);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function restartCourse(){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>[1,2,3].forEach(m=&gt;{goTo(m,1);});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>selMod(1);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>window.scrollTo({top:0,behavior:'smooth'});</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function pickPPE(el,correct,fbId){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(el.classList.contains('ok')||el.classList.contains('no'))return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>el.classList.add(correct?'ok':'no');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const fb=document.getElementById(fbId);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(fb){fb.className='fb show '+(correct?'ok':'no');fb.textContent=correct?'Correct!':'Not required or critical for this specific operation step.';}</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">const FB={</p>
-<p class="p1"><span class="Apple-converted-space">  </span>s3:{ok:'Correct. Completely retracted — no exceptions before starting crane prep.',no:'The conveyor must be completely retracted. "Close enough" is a strict quality and structural hazard.'},</p>
-<p class="p1"><span class="Apple-converted-space">  </span>s7:{ok:'Correct. Both stickers on both sides right below the hook before the crane is ever removed.',no:'Schedule metrics do not override safety guidelines. The crane stays until both stickers are active.'},</p>
-<p class="p1"><span class="Apple-converted-space">  </span>kc1:{ok:'Correct. Both gravity stickers must be explicitly set before freeing the cargo crane hook.',no:'Stability on the trolley is only half the job. The center markers are crucial for subsequent transport steps.'},</p>
-<p class="p1"><span class="Apple-converted-space">  </span>kc2:{ok:'Correct. Only employees with a specific valid crane operator certification may run the crane.',no:'Supervision by a peer does not substitute for real personal certification.'},</p>
-<p class="p1"><span class="Apple-converted-space">  </span>p1:{ok:'Correct. The entire conveyor belt surface must be covered without gaps.',no:'Even a small exposed gap can result in heavy abrasions or damage during transit.'},</p>
-<p class="p1"><span class="Apple-converted-space">  </span>p2:{ok:'Correct. Project and serial numbers on both sides, plus the serial number on both ends.',no:'Omitting either side or end labels directly leads to heavy inventory or logisitic loading delays.'},</p>
-<p class="p1"><span class="Apple-converted-space">  </span>p3:{ok:'Correct. The document pack attaches securely to one of the large side stickers.',no:'Placing it inside means the end user cannot reference safe installation steps without shredding the protection pack first.'},</p>
-<p class="p1"><span class="Apple-converted-space">  </span>m3d1:{ok:'Excellent! You recognized the continuous process flow — always verify the safety handoff marks.',no:'Dangerous choice. Moving straight to wrapping without validating the previous steps creates massive liability down the shipping line.'},</p>
-<p class="p1"><span class="Apple-converted-space">  </span>m3d2:{ok:'Correct. Alex takes ownership of the handoff quality, ensuring safe warehouse handling down the line.',no:'Incorrect. Leaving it off leaves an unmarked multi-ton risk for the freight or client crews.'},</p>
-<p class="p1"><span class="Apple-converted-space">  </span>m3d3:{ok:'The only valid operational response. Thermal protection limits are absolute.',no:'Absolutely not! Standard work cavas or leather gloves can fuse into high-temperature film under heat guns. Stop immediately.'}</p>
-<p class="p1">};</p>
-<p class="p2"><br></p>
-<p class="p1">function ans(qId,chosen,correct,key){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const opts=document.querySelectorAll('#'+qId+' .opt');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const L=['A','B','C','D'];</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const isOk=chosen===correct;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>opts.forEach((o,i)=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if(L[i]===chosen)o.classList.add(isOk?'ok':'no');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>else if(!isOk&amp;&amp;L[i]===correct)o.classList.add('ok');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>else o.classList.add('off');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const fbMap={</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'q-m1s3':'fb-m1s3','q-m1s7':'fb-m1s7','q-m1kc1':'fb-m1kc1','q-m1kc2':'fb-m1kc2',</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'q-m2s4':'fb-m2s4','q-m2s6':'fb-m2s6','q-m2s7':'fb-m2s7',</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'q-m3s2':'fb-m3s2','q-m3s3':'fb-m3s3','q-m3s4':'fb-m3s4'</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const retryMap={</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'q-m1s3':'retry-m1s3','q-m1s7':'retry-m1s7','q-m1kc1':'retry-m1kc1','q-m1kc2':'retry-m1kc2',</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'q-m2s4':'retry-m2s4','q-m2s6':'retry-m2s6','q-m2s7':'retry-m2s7',</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'q-m3s2':'retry-m3s2','q-m3s3':'retry-m3s3','q-m3s4':'retry-m3s4'</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const fb=document.getElementById(fbMap[qId]);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(fb&amp;&amp;FB[key]){fb.className='fb show '+(isOk?'ok':'no');fb.textContent=isOk?FB[key].ok:FB[key].no;}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(!isOk&amp;&amp;retryMap[qId]){const rb=document.getElementById(retryMap[qId]);if(rb)rb.classList.add('show');}</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function resetQ(qId,fbId,retryId){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.querySelectorAll('#'+qId+' .opt').forEach(o=&gt;o.className='opt');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const fb=document.getElementById(fbId);if(fb)fb.className='fb';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const rb=document.getElementById(retryId);if(rb)rb.classList.remove('show');</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function initDrag(id){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const wrap=document.getElementById(id);if(!wrap)return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>let dragEl=null;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>wrap.querySelectorAll('.seq-item').forEach(item=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">    </span>item.addEventListener('dragstart',()=&gt;{dragEl=item;setTimeout(()=&gt;item.classList.add('dragging'),0);});</p>
-<p class="p1"><span class="Apple-converted-space">    </span>item.addEventListener('dragend',()=&gt;{item.classList.remove('dragging');dragEl=null;updateNums(wrap);});</p>
-<p class="p1"><span class="Apple-converted-space">    </span>item.addEventListener('dragover',e=&gt;{e.preventDefault();if(item!==dragEl)item.classList.add('drag-over');});</p>
-<p class="p1"><span class="Apple-converted-space">    </span>item.addEventListener('dragleave',()=&gt;item.classList.remove('drag-over'));</p>
-<p class="p1"><span class="Apple-converted-space">    </span>item.addEventListener('drop',e=&gt;{e.preventDefault();item.classList.remove('drag-over');if(dragEl&amp;&amp;item!==dragEl)wrap.insertBefore(dragEl,item);updateNums(wrap);});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>updateNums(wrap);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function updateNums(wrap){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>wrap.querySelectorAll('.seq-item').forEach((item,i)=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const sn=item.querySelector('.seq-num');if(sn)sn.textContent=i+1;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>});</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function checkSeq(containerId,fbId,correctOrder){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const wrap=document.getElementById(containerId);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const items=[...wrap.querySelectorAll('.seq-item')];</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const userOrder=items.map(i=&gt;parseInt(i.dataset.val));</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const isOk=userOrder.every((v,i)=&gt;v===correctOrder[i]);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const fb=document.getElementById(fbId);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(isOk){</p>
-<p class="p1"><span class="Apple-converted-space">    </span>fb.className='seq-fb show ok';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>fb.textContent='Correct! That matches the required procedure layout order.';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>items.forEach(item=&gt;{item.classList.add('correct');item.setAttribute('draggable','false');item.style.cursor='default';const sn=item.querySelector('.seq-num');if(sn)sn.classList.add('ok');});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>fb.className='seq-fb show no';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>fb.textContent='Not quite right — think through the logical checklist sequence and try again.';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>items.forEach(item=&gt;item.classList.add('wrong'));</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setTimeout(()=&gt;{items.forEach(item=&gt;item.classList.remove('wrong'));fb.className='seq-fb';},1100);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1">}</p>
-<p class="p1">&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+
+<div id="lock">
+  <div class="lk">
+    <div class="lk-ico">🔒</div>
+    <h1>Course Access</h1>
+    <p>This training material is protected.<br>Enter the access code to continue.</p>
+    <input id="pw" type="password" class="lk-inp" placeholder="Access code" maxlength="24">
+    <p class="err" id="err">Incorrect code. Please try again.</p>
+    <button class="btn-main" onclick="unlock()">Enter Course</button>
+  </div>
+</div>
+
+<div id="course">
+<div class="topbar">
+  <div class="brand">vesma.d <span>training</span></div>
+  <div class="tb-pill">ID PROTOTYPE · 2026</div>
+</div>
+
+<div class="hero">
+  <div class="chip">Instructional Design · Homework Assignment</div>
+  <h1>Finished Conveyor<br><em>Operations Training</em></h1>
+  <p class="hero-lead">A three-module interactive learning experience covering lifting, packing, and the critical connection between both processes.</p>
+</div>
+
+<hr>
+<div class="wrap">
+
+<div class="img-guide">
+  <span style="flex-shrink:0;font-size:1.1rem;">🖼️</span>
+  <div><strong>For the course author — adding real photos:</strong> Each placeholder shows a suggested file name. Delete the <code>&lt;div class="photo-ph"&gt;</code> block and replace with <code>&lt;img src="filename.jpg" alt="..."&gt;</code> in the same GitHub folder.</div>
+</div>
+<hr style="margin-bottom:1.75rem;">
+
+<!-- ASSUMPTIONS -->
+<div class="sec-label">Design foundation</div>
+<div class="sec-title">Assumptions</div>
+<p class="sec-body">Every learning design rests on assumptions. Naming them makes the design honest — and easier to revise when reality differs.</p>
+<div class="agrid">
+  <div class="acard"><div class="anum">ASSUMPTION 01</div><h3>Learner identity</h3><p>The scenario character is named "Alex" — a short form that works across English, Latvian, Danish and German. In reality, this work is performed by both women and men. The character does not define who the course is for.</p><div class="atag">⚠ To be validated</div></div>
+  <div class="acard"><div class="anum">ASSUMPTION 02</div><h3>Learning context</h3><p>It is unknown whether employees study independently, alongside a mentor, or with a supervisor. This course is designed to work in any of these scenarios — as pre-task preparation or as a complement to on-the-job guidance.</p><div class="atag">⚠ To be validated</div></div>
+  <div class="acard"><div class="anum">ASSUMPTION 03</div><h3>Ideal course design</h3><p>This prototype reflects the best possible version of this course, without limitation by any specific platform's capabilities. Platform constraints (e.g. Hihaho) will be applied in a later stage.</p><div class="atag">⚠ Platform TBD</div></div>
+</div>
+</div>
+
+<hr>
+<div class="wrap">
+<div class="sec-label">What learners will achieve</div>
+<div class="sec-title">Learning objectives</div>
+<p class="sec-body">By the end of this course, learners will be able to:</p>
+<div class="olist">
+  <div class="orow"><div class="oico ir">🦺</div><div><strong>Work safely at every step</strong><span>Identify required PPE for lifting and packing, follow all preparation steps in order, and apply non-negotiable safety rules — including the centre of gravity sticker before removing the crane.</span></div></div>
+  <div class="orow"><div class="oico ir">🏗️</div><div><strong>Lift and pack a finished conveyor correctly</strong><span>Execute the full lifting procedure and full packing procedure without skipping or reversing any step.</span></div></div>
+  <div class="orow"><div class="oico ib">🔗</div><div><strong>Understand how the two instructions connect</strong><span>Explain the handoff point where lifting ends and packing begins, and recognise that a worker assigned to pack must first confirm lifting was completed correctly.</span></div></div>
+</div>
+<div class="obox">
+  <h3>✓ Expected learning outcome</h3>
+  <p>After all three modules, a learner can independently and safely prepare a finished Caljan conveyor for dispatch — from production stand to fully packed and labelled.</p>
+</div>
+</div>
+
+<hr>
+<div class="wrap">
+<div class="sec-label">Course structure</div>
+<div class="sec-title">Three modules</div>
+<div class="mgrid">
+  <div class="mcard on" id="mc1" onclick="selMod(1)">
+    <div class="mtop"><div class="mnum">01</div><h3>Lifting finished conveyors</h3></div>
+    <div class="mbody"><p>Alex prepares and safely lifts a finished conveyor off the production stand onto the trolley.</p><div class="prow"><span class="tp">Retract</span><span class="tp">Electricity</span><span class="tp">Deattach</span><span class="tp">Sling</span><span class="tp">Crane</span><span class="tp">Trolley</span><span class="tp">Sticker</span></div></div>
+  </div>
+  <div class="mcard" id="mc2" onclick="selMod(2)">
+    <div class="mtop"><div class="mnum">02</div><h3>Packing finished conveyors</h3></div>
+    <div class="mbody"><p>The conveyor is on the trolley. Alex wraps, protects, numbers and labels it for safe transportation.</p><div class="prow"><span class="tp">Paper & cardboard</span><span class="tp">Film ×2</span><span class="tp">Tape</span><span class="tp">Numbers</span><span class="tp">Stickers</span><span class="tp">Paint</span></div></div>
+  </div>
+  <div class="mcard" id="mc3" onclick="selMod(3)">
+    <div class="mtop"><div class="mnum">03</div><h3>Combined scenario</h3></div>
+    <div class="mbody"><p>Alex receives the full task: lift and pack. He must choose the right sequence and navigate the critical handoff.</p><div class="prow"><span class="tp">Decision</span><span class="tp">Sequence</span><span class="tp">Handoff</span><span class="tp">Spot mistake</span></div></div>
+  </div>
+</div>
+<div id="mnotice">📋 Select a module above to view its interactive scenario.</div>
+
+<!-- ══════════ MODULE 1 ══════════ -->
+<div class="scen on" id="scen1">
+  <div class="sec-label" style="margin-top:1.75rem;padding-top:1.75rem;border-top:1px solid var(--gray-100);">Module 01 · Interactive scenario</div>
+  <div class="sec-title">Alex's first lift</div>
+  <div class="dots" id="dots1"></div>
+
+  <!-- M1 S1 -->
+  <div class="slide on" id="m1s1">
+    <div class="stag">Slide 1 of 9 · Introduction</div>
+    <h2>Meet Alex</h2>
+    <div class="si">
+      <div>
+        <div class="narr">It's Alex's first week at Caljan. His supervisor walks up:<br><br><strong>"Alex — conveyor #221438 is ready. Lift it off the production stand. You're on it."</strong><br><br>Alex has watched this once before. Today it's his turn.</div>
+        <div class="warn"><span>⚠️</span><div>The overhead crane may only be operated by <strong>employees with a valid certification</strong>.</div></div>
+      </div>
+      <div>
+        <div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Production hall — conveyor on stand<br><small>→ <code>&lt;img src="lifting-intro.jpg"&gt;</code></small></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M1 S2 -->
+  <div class="slide" id="m1s2">
+    <div class="stag">Slide 2 of 9 · Safety first</div>
+    <h2>What does Alex need to put on?</h2>
+    <div class="si">
+      <div>
+        <div class="task-box"><span>👆</span><div><strong>Your task:</strong> Click on every item Alex needs for this lifting operation.</div></div>
+        <div class="narr">His supervisor's rule: <strong>"If it's not on, you're not working."</strong></div>
+        <div class="fb" id="fb-m1ppe"></div>
+      </div>
+      <div>
+        <div class="ppe-g">
+          <div class="ppe" onclick="pickPPE(this,true,'fb-m1ppe')"><span class="pi2">👟</span><span class="pl">Safety boots</span></div>
+          <div class="ppe" onclick="pickPPE(this,true,'fb-m1ppe')"><span class="pi2">🥽</span><span class="pl">Safety glasses</span></div>
+          <div class="ppe" onclick="pickPPE(this,true,'fb-m1ppe')"><span class="pi2">🧤</span><span class="pl">Gloves</span></div>
+          <div class="ppe" onclick="pickPPE(this,true,'fb-m1ppe')"><span class="pi2">⛑️</span><span class="pl">Hard hat</span></div>
+          <div class="ppe" onclick="pickPPE(this,false,'fb-m1ppe')"><span class="pi2">🎧</span><span class="pl">Ear protection</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M1 S3 -->
+  <div class="slide" id="m1s3">
+    <div class="stag">Slide 3 of 9 · Step 1 — Retract</div>
+    <h2>Is the conveyor fully retracted?</h2>
+    <div class="si">
+      <div>
+        <div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Fully retracted conveyor on stand<br><small>→ <code>&lt;img src="lifting-step1-retract.jpg"&gt;</code></small></div></div>
+      </div>
+      <div>
+        <div class="narr"><strong>The conveyor must be completely retracted before anything else happens.</strong></div>
+        <div class="task-box"><span>❓</span><div><strong>Choose the correct action:</strong> Alex sees the conveyor is only partially retracted.</div></div>
+        <div class="opts" id="q-m1s3">
+          <div class="opt" onclick="ans('q-m1s3','A','B','s3')"><div class="ol">A</div>Continue — close enough, it won't matter.</div>
+          <div class="opt" onclick="ans('q-m1s3','B','B','s3')"><div class="ol">B</div>Retract it completely before doing anything else.</div>
+          <div class="opt" onclick="ans('q-m1s3','C','B','s3')"><div class="ol">C</div>Ask the supervisor whether it matters.</div>
+        </div>
+        <div class="fb" id="fb-m1s3"></div>
+        <button class="retry-btn" id="retry-m1s3" onclick="resetQ('q-m1s3','fb-m1s3','retry-m1s3')">Try again →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- M1 S4 -->
+  <div class="slide" id="m1s4">
+    <div class="stag">Slide 4 of 9 · Step 2 — Electricity</div>
+    <h2>Disconnect in the right order</h2>
+    <div class="si">
+      <div>
+        <div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Main switch / plug / cabinet<br><small>→ <code>&lt;img src="lifting-step2-electricity.jpg"&gt;</code></small></div></div>
+        <div class="narr" style="font-size:.91rem;">Disconnecting electricity is a <strong>three-step sequence</strong>. Each action must be completed before the next begins.</div>
+      </div>
+      <div>
+        <div class="task-box"><span>↕️</span><div><strong>Drag the steps</strong> into the correct order, then press <strong>Confirm order</strong>.</div></div>
+        <div class="seq-wrap" id="seq-m1s4">
+          <div class="seq-item" draggable="true" data-val="2"><span class="seq-handle">⠿</span><span class="seq-num">?</span>Unplug the main electrical connection</div>
+          <div class="seq-item" draggable="true" data-val="1"><span class="seq-handle">⠿</span><span class="seq-num">?</span>Turn off the main switch</div>
+          <div class="seq-item" draggable="true" data-val="3"><span class="seq-handle">⠿</span><span class="seq-num">?</span>Remove cabinet connection</div>
+        </div>
+        <button class="btn-confirm" onclick="checkSeq('seq-m1s4','fb-m1s4',[1,2,3])">Confirm order</button>
+        <div class="seq-fb" id="fb-m1s4"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M1 S5 -->
+  <div class="slide" id="m1s5">
+    <div class="stag">Slide 5 of 9 · Steps 3 & 4</div>
+    <h2>Deattach, then protect</h2>
+    <div class="si">
+      <div>
+        <div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Straps removed / back cover on<br><small>→ <code>&lt;img src="lifting-step3-deattach.jpg"&gt;</code></small></div></div>
+      </div>
+      <div>
+        <div class="narr"><strong>"These straps are the only thing keeping this conveyor on the stand."</strong><br><br>He removes straps and brackets with the electric hand drill. Once free, the <strong>back cover goes on before the lift begins.</strong></div>
+        <div class="warn"><span>💭</span><div>Why attach the back cover before lifting? Unprotected components can be damaged during crane movement.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M1 S6 -->
+  <div class="slide" id="m1s6">
+    <div class="stag">Slide 6 of 9 · Steps 5 & 6</div>
+    <h2>Sling and centre the crane</h2>
+    <div class="si">
+      <div>
+        <div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Sling positioned / crane centred<br><small>→ <code>&lt;img src="lifting-step5-sling.jpg"&gt;</code></small></div></div>
+      </div>
+      <div>
+        <div class="narr">Alex places the sling — <strong>lifting capacity must match this specific conveyor</strong>. Sharp or protruding parts get a protective layer first.<br><br>He lifts a few centimetres, finds the centre of gravity, adjusts, lifts again. Balanced.</div>
+        <div class="warn"><span>⚠️</span><div>Follow the <strong>Work Safety Instruction for cargo cranes</strong>. Conveyor must be stable — not overleaning.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M1 S7 -->
+  <div class="slide" id="m1s7">
+    <div class="stag">Slide 7 of 9 · Steps 7 & 8 · Critical moment</div>
+    <h2>The gravity sticker — no exceptions</h2>
+    <div class="si">
+      <div>
+        <div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Conveyor on trolley / sticker applied<br><small>→ <code>&lt;img src="lifting-step7-sticker.jpg"&gt;</code></small></div></div>
+        <div class="narr" style="font-size:.91rem;">Conveyor is on the trolley. <strong>"DO NOT remove the crane before the sticker is on both sides. Not ever."</strong><br><br>Two stickers. Both sides. Below the crane hook. Then the crane comes down.</div>
+      </div>
+      <div>
+        <div class="task-box"><span>❓</span><div><strong>Choose the correct action:</strong> One side has the sticker. The other does not. Alex is behind schedule.</div></div>
+        <div class="opts" id="q-m1s7">
+          <div class="opt" onclick="ans('q-m1s7','A','B','s7')"><div class="ol">A</div>Remove the crane — one sticker is enough.</div>
+          <div class="opt" onclick="ans('q-m1s7','B','B','s7')"><div class="ol">B</div>Sticker on both sides, then remove the crane.</div>
+          <div class="opt" onclick="ans('q-m1s7','C','B','s7')"><div class="ol">C</div>Leave it for someone else to finish.</div>
+        </div>
+        <div class="fb" id="fb-m1s7"></div>
+        <button class="retry-btn" id="retry-m1s7" onclick="resetQ('q-m1s7','fb-m1s7','retry-m1s7')">Try again →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- M1 S8 -->
+  <div class="slide" id="m1s8">
+    <div class="stag">Slide 8 of 9 · Knowledge check</div>
+    <h2>Before you move on</h2>
+    <div class="si">
+      <div>
+        <div class="task-box"><span>❓</span><div><strong>Choose the correct answer:</strong> When can the crane be removed?</div></div>
+        <div class="opts" id="q-m1kc1">
+          <div class="opt" onclick="ans('q-m1kc1','A','C','kc1')"><div class="ol">A</div>Once the conveyor is stable on the trolley.</div>
+          <div class="opt" onclick="ans('q-m1kc1','B','C','kc1')"><div class="ol">B</div>When the supervisor signals.</div>
+          <div class="opt" onclick="ans('q-m1kc1','C','C','kc1')"><div class="ol">C</div>Only after the gravity sticker is on both sides.</div>
+        </div>
+        <div class="fb" id="fb-m1kc1"></div>
+        <button class="retry-btn" id="retry-m1kc1" onclick="resetQ('q-m1kc1','fb-m1kc1','retry-m1kc1')">Try again →</button>
+      </div>
+      <div>
+        <div class="task-box"><span>❓</span><div><strong>Choose the correct answer:</strong> Who may operate the overhead crane?</div></div>
+        <div class="opts" id="q-m1kc2">
+          <div class="opt" onclick="ans('q-m1kc2','A','B','kc2')"><div class="ol">A</div>Any employee with a safety briefing.</div>
+          <div class="opt" onclick="ans('q-m1kc2','B','B','kc2')"><div class="ol">B</div>Only employees with valid crane certification.</div>
+          <div class="opt" onclick="ans('q-m1kc2','C','B','kc2')"><div class="ol">C</div>Any employee if a certified colleague supervises.</div>
+        </div>
+        <div class="fb" id="fb-m1kc2"></div>
+        <button class="retry-btn" id="retry-m1kc2" onclick="resetQ('q-m1kc2','fb-m1kc2','retry-m1kc2')">Try again →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- M1 S9 -->
+  <div class="slide" id="m1s9">
+    <div class="stag">Slide 9 of 9 · Module complete</div>
+    <h2>Lifting complete</h2>
+    <div class="si">
+      <div>
+        <div class="narr">Sticker on both sides. Crane detached. Supervisor:<br><br><strong>"Good work. We're packing this one today — the first film layer goes on the trolley now."</strong><br><br><strong>"There's a separate instruction for that. It starts exactly where we left off."</strong></div>
+        <div class="mcomp"><h3>✓ Module 1 complete</h3><p>Conveyor is on the trolley, sticker placed, crane removed. Ready for packing.</p></div>
+      </div>
+      <div>
+        <div class="bridge">
+          <h3>🔗 Both instructions are one process</h3>
+          <p>The Lifting instruction ends at the trolley. Packing begins there. A worker assigned to pack must confirm lifting was completed correctly — including the gravity sticker on both sides.</p>
+          <button class="btn-bridge" onclick="selMod(2)">Continue to Module 2 →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ctrl">
+    <button class="bnav" id="m1prev" onclick="nav(1,-1)" disabled>← Previous</button>
+    <span class="sct" id="m1ct">1 / 9</span>
+    <button class="bnav fwd" id="m1next" onclick="nav(1,1)">Next →</button>
+  </div>
+</div>
+
+<!-- ══════════ MODULE 2 ══════════ -->
+<div class="scen" id="scen2">
+  <div class="sec-label" style="margin-top:1.75rem;padding-top:1.75rem;border-top:1px solid var(--gray-100);">Module 02 · Interactive scenario</div>
+  <div class="sec-title">Alex packs the conveyor</div>
+  <div class="dots" id="dots2"></div>
+
+  <!-- M2 S1 -->
+  <div class="slide on" id="m2s1">
+    <div class="stag">Slide 1 of 8 · Continuation</div>
+    <h2>Where we left off</h2>
+    <div class="si">
+      <div>
+        <div class="narr">Conveyor on trolley. Sticker on both sides. Crane removed.<br><br>Supervisor: <strong>"Nine steps. In order. Gas cylinder — minimum 5 metres from any flame. Thermal gloves when melting film. Always."</strong></div>
+        <div class="warn"><span>⚠️</span><div>Gas cylinder must be kept <strong>at least 5 metres from any flame source</strong> at all times.</div></div>
+      </div>
+      <div>
+        <div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Film melting machine<br><small>→ <code>&lt;img src="packing-intro-machine.jpg"&gt;</code></small></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M2 S2 -->
+  <div class="slide" id="m2s2">
+    <div class="stag">Slide 2 of 8 · Safety first</div>
+    <h2>Packing PPE — one extra item</h2>
+    <div class="si">
+      <div>
+        <div class="task-box"><span>👆</span><div><strong>Your task:</strong> Click on every item needed for packing operations.</div></div>
+        <div class="warn"><span>🔥</span><div><strong>Thermal gloves are mandatory</strong> when melting film. Regular gloves do not provide adequate heat protection.</div></div>
+        <div class="fb" id="fb-m2ppe"></div>
+      </div>
+      <div>
+        <div class="ppe-g">
+          <div class="ppe" onclick="pickPPE(this,true,'fb-m2ppe')"><span class="pi2">👟</span><span class="pl">Safety boots</span></div>
+          <div class="ppe" onclick="pickPPE(this,true,'fb-m2ppe')"><span class="pi2">🔥🧤</span><span class="pl">Thermal gloves</span></div>
+          <div class="ppe" onclick="pickPPE(this,true,'fb-m2ppe')"><span class="pi2">🥽</span><span class="pl">Safety glasses</span></div>
+          <div class="ppe" onclick="pickPPE(this,false,'fb-m2ppe')"><span class="pi2">⛑️</span><span class="pl">Hard hat</span></div>
+          <div class="ppe" onclick="pickPPE(this,false,'fb-m2ppe')"><span class="pi2">🎧</span><span class="pl">Ear protection</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M2 S3 — WITH TASK -->
+  <div class="slide" id="m2s3">
+    <div class="stag">Slide 3 of 8 · Steps 1 & 2</div>
+    <h2>Prepare trolley and gather materials</h2>
+    <div class="si">
+      <div>
+        <div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Film on trolley / materials laid out<br><small>→ <code>&lt;img src="packing-step1-trolley.jpg"&gt;</code></small></div></div>
+        <div class="narr" style="font-size:.91rem;">First film layer goes on the trolley. Then Alex confirms all materials are ready before starting.</div>
+      </div>
+      <div>
+        <div class="task-box"><span>↕️</span><div><strong>Drag to put the materials</strong> in the order Alex should gather them — most critical first.</div></div>
+        <div class="seq-wrap" id="seq-m2s3">
+          <div class="seq-item" draggable="true" data-val="3"><span class="seq-handle">⠿</span><span class="seq-num">?</span>Protective paper and cardboard for belt</div>
+          <div class="seq-item" draggable="true" data-val="1"><span class="seq-handle">⠿</span><span class="seq-num">?</span>Stickers with lifting instructions</div>
+          <div class="seq-item" draggable="true" data-val="2"><span class="seq-handle">⠿</span><span class="seq-num">?</span>Transportation and installation manual</div>
+          <div class="seq-item" draggable="true" data-val="4"><span class="seq-handle">⠿</span><span class="seq-num">?</span>Adhesive tape for connection places</div>
+        </div>
+        <button class="btn-confirm" onclick="checkSeq('seq-m2s3','fb-m2s3',[1,2,3,4])">Confirm order</button>
+        <div class="seq-fb" id="fb-m2s3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M2 S4 -->
+  <div class="slide" id="m2s4">
+    <div class="stag">Slide 4 of 8 · Step 3</div>
+    <h2>Protect the belt first</h2>
+    <div class="si">
+      <div>
+        <div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Paper then cardboard on belt<br><small>→ <code>&lt;img src="packing-step3-paper.jpg"&gt;</code></small></div></div>
+      </div>
+      <div>
+        <div class="narr">Paper on the belt first, then cardboard on top. <strong>The paper and cardboard must cover the entire belt — no gaps.</strong></div>
+        <div class="task-box"><span>❓</span><div><strong>Choose the correct action:</strong> Alex notices a small section of belt isn't covered.</div></div>
+        <div class="opts" id="q-m2s4">
+          <div class="opt" onclick="ans('q-m2s4','A','B','p1')"><div class="ol">A</div>Continue — a small gap won't cause damage.</div>
+          <div class="opt" onclick="ans('q-m2s4','B','B','p1')"><div class="ol">B</div>Reposition until the full belt is covered.</div>
+        </div>
+        <div class="fb" id="fb-m2s4"></div>
+        <button class="retry-btn" id="retry-m2s4" onclick="resetQ('q-m2s4','fb-m2s4','retry-m2s4')">Try again →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- M2 S5 -->
+  <div class="slide" id="m2s5">
+    <div class="stag">Slide 5 of 8 · Steps 4 & 5</div>
+    <h2>First film layer and adhesive tape</h2>
+    <div class="si">
+      <div>
+        <div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Film melting / tape on connections<br><small>→ <code>&lt;img src="packing-step4-film1.jpg"&gt;</code></small></div></div>
+      </div>
+      <div>
+        <div class="narr">Thermal gloves on. Alex melts the first film layer steadily from end to end. Then he covers all connection places with adhesive tape.</div>
+        <div class="warn"><span>🔥</span><div><strong>Thermal gloves must be worn throughout all film melting operations.</strong></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M2 S6 — WITH TASK -->
+  <div class="slide" id="m2s6">
+    <div class="stag">Slide 6 of 8 · Steps 6 & 7</div>
+    <h2>Second film layer and identification</h2>
+    <div class="si">
+      <div>
+        <div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Second film layer / numbers on film<br><small>→ <code>&lt;img src="packing-step6-film2.jpg"&gt;</code></small></div></div>
+        <div class="warn"><span>🔥</span><div><strong>Thermal gloves required</strong> when melting the second layer.</div></div>
+      </div>
+      <div>
+        <div class="narr" style="font-size:.91rem;">Second film layer done. Now Alex must write the identification information directly on the outside of the packaging.</div>
+        <div class="task-box"><span>❓</span><div><strong>Choose the correct answer:</strong> Where does Alex write the serial number?</div></div>
+        <div class="opts" id="q-m2s6">
+          <div class="opt" onclick="ans('q-m2s6','A','C','p2')"><div class="ol">A</div>On the sides only — that is where it will be read during transport.</div>
+          <div class="opt" onclick="ans('q-m2s6','B','C','p2')"><div class="ol">B</div>On one end only — to save time.</div>
+          <div class="opt" onclick="ans('q-m2s6','C','C','p2')"><div class="ol">C</div>On both sides (with project number) and on both ends.</div>
+        </div>
+        <div class="fb" id="fb-m2s6"></div>
+        <button class="retry-btn" id="retry-m2s6" onclick="resetQ('q-m2s6','fb-m2s6','retry-m2s6')">Try again →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- M2 S7 — WITH TASK -->
+  <div class="slide" id="m2s7">
+    <div class="stag">Slide 7 of 8 · Steps 8 & 9</div>
+    <h2>Stickers, manual and hazard paint</h2>
+    <div class="si">
+      <div>
+        <div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Stickers applied / manual attached / painted parts<br><small>→ <code>&lt;img src="packing-step8-stickers.jpg"&gt;</code></small></div></div>
+        <div class="warn"><span>🥽</span><div><strong>Eye protection required</strong> when using paint sprays.</div></div>
+      </div>
+      <div>
+        <div class="narr" style="font-size:.91rem;">The conveyor is wrapped. Alex must now apply all required markings.</div>
+        <div class="task-box"><span>❓</span><div><strong>Choose the correct answer:</strong> Where does the transportation and installation manual go?</div></div>
+        <div class="opts" id="q-m2s7">
+          <div class="opt" onclick="ans('q-m2s7','A','B','p3')"><div class="ol">A</div>Inside the packaging — to protect it from damage.</div>
+          <div class="opt" onclick="ans('q-m2s7','B','B','p3')"><div class="ol">B</div>Attached to one of the large lifting instruction stickers on the side.</div>
+          <div class="opt" onclick="ans('q-m2s7','C','B','p3')"><div class="ol">C</div>On the end of the conveyor, next to the small sticker.</div>
+        </div>
+        <div class="fb" id="fb-m2s7"></div>
+        <button class="retry-btn" id="retry-m2s7" onclick="resetQ('q-m2s7','fb-m2s7','retry-m2s7')">Try again →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- M2 S8 — CLEAN COMPLETE -->
+  <div class="slide" id="m2s8">
+    <div class="stag">Slide 8 of 8 · Module complete</div>
+    <h2>Packing complete</h2>
+    <div class="si">
+      <div>
+        <div class="narr">Supervisor checks the assembly checklist and nods.<br><br><strong>"Conveyor #221438 is ready for dispatch. Good work."</strong></div>
+        <div class="mcomp"><h3>✓ Module 2 complete</h3><p>Full packing procedure done. Conveyor is ready for safe transportation.</p></div>
+      </div>
+      <div>
+        <div class="bridge">
+          <h3>🔗 Ready for the combined scenario?</h3>
+          <p>Module 3 brings both instructions together. Alex receives a single full assignment — and must navigate it from start to finish, including all the critical decision points.</p>
+          <button class="btn-bridge" onclick="selMod(3)">Continue to Module 3 →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ctrl">
+    <button class="bnav" id="m2prev" onclick="nav(2,-1)" disabled>← Previous</button>
+    <span class="sct" id="m2ct">1 / 8</span>
+    <button class="bnav fwd" id="m2next" onclick="nav(2,1)">Next →</button>
+  </div>
+</div>
+
+<!-- ══════════ MODULE 3 ══════════ -->
+<div class="scen" id="scen3">
+  <div class="sec-label" style="margin-top:1.75rem;padding-top:1.75rem;border-top:1px solid var(--gray-100);">Module 03 · Combined scenario</div>
+  <div class="sec-title">The full assignment</div>
+  <div class="dots" id="dots3"></div>
+
+  <!-- M3 S1 -->
+  <div class="slide on" id="m3s1">
+    <div class="stag">Slide 1 of 5 · Full assignment</div>
+    <h2>One task, two instructions</h2>
+    <div class="si">
+      <div>
+        <div class="narr">Supervisor: <strong>"Conveyor #221439. Lift it, pack it, get it ready for dispatch today."</strong><br><br>Alex knows both instructions. Today he must do them together — in the right order — without step-by-step guidance.</div>
+        <div class="warn"><span>🎯</span><div>In this module, Alex faces real decisions. Some choices lead to delays, damage, or safety incidents.</div></div>
+      </div>
+      <div>
+        <div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Conveyor #221439 on production stand<br><small>→ <code>&lt;img src="combined-start.jpg"&gt;</code></small></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M3 S2 -->
+  <div class="slide" id="m3s2">
+    <div class="stag">Slide 2 of 5 · Decision 1</div>
+    <h2>Where does Alex start?</h2>
+    <div class="si single">
+      <div>
+        <div class="narr">Alex is in the production hall. Conveyor #221439 is on the stand. He has all packing materials with him. <strong>What does he do first?</strong></div>
+        <div class="task-box"><span>❓</span><div><strong>Choose the correct action.</strong></div></div>
+        <div class="opts" id="q-m3s2">
+          <div class="opt" onclick="ans('q-m3s2','A','B','m3d1')"><div class="ol">A</div>Start laying out packing materials — the conveyor looks ready to wrap.</div>
+          <div class="opt" onclick="ans('q-m3s2','B','B','m3d1')"><div class="ol">B</div>Follow the Lifting instruction first — the conveyor must be on the trolley before packing can begin.</div>
+          <div class="opt" onclick="ans('q-m3s2','C','B','m3d1')"><div class="ol">C</div>Ask a colleague to start packing while he prepares the crane.</div>
+        </div>
+        <div class="fb" id="fb-m3s2"></div>
+        <button class="retry-btn" id="retry-m3s2" onclick="resetQ('q-m3s2','fb-m3s2','retry-m3s2')">Try again →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- M3 S3 -->
+  <div class="slide" id="m3s3">
+    <div class="stag">Slide 3 of 5 · Decision 2 — Critical handoff</div>
+    <h2>The moment the two instructions connect</h2>
+    <div class="si">
+      <div>
+        <div class="narr">Lifting done. Conveyor is on the trolley. Alex is about to remove the crane and start packing — when he stops.<br><br><strong>"Wait. The gravity sticker."</strong><br><br>He checks. Left side has the sticker. Right side is bare. The packing film is in his hand. He is behind schedule.</div>
+      </div>
+      <div>
+        <div class="task-box"><span>❓</span><div><strong>Choose the correct action.</strong></div></div>
+        <div class="opts" id="q-m3s3">
+          <div class="opt" onclick="ans('q-m3s3','A','C','m3d2')"><div class="ol">A</div>Remove crane and start packing — sticker can go on after.</div>
+          <div class="opt" onclick="ans('q-m3s3','B','C','m3d2')"><div class="ol">B</div>Ask a colleague to apply the sticker while he starts packing.</div>
+          <div class="opt" onclick="ans('q-m3s3','C','C','m3d2')"><div class="ol">C</div>Sticker on both sides → remove crane → begin packing.</div>
+        </div>
+        <div class="fb" id="fb-m3s3"></div>
+        <button class="retry-btn" id="retry-m3s3" onclick="resetQ('q-m3s3','fb-m3s3','retry-m3s3')">Try again →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- M3 S4 -->
+  <div class="slide" id="m3s4">
+    <div class="stag">Slide 4 of 5 · Decision 3 — Spot the mistake</div>
+    <h2>Something is wrong — can you see it?</h2>
+    <div class="si">
+      <div>
+        <div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Film melting — regular gloves visible<br><small>→ <code>&lt;img src="combined-spot-mistake.jpg"&gt;</code></small></div></div>
+      </div>
+      <div>
+        <div class="narr">Alex is melting film. A colleague stops:<br><strong>"Alex — where are your gloves?"</strong><br><br>He stopped to write the serial number, put the thermal gloves down, and forgot to put them back on. He is now melting film with regular work gloves.</div>
+        <div class="task-box"><span>❓</span><div><strong>Choose the correct action.</strong></div></div>
+        <div class="opts" id="q-m3s4">
+          <div class="opt" onclick="ans('q-m3s4','A','C','m3d3')"><div class="ol">A</div>Continue carefully — almost done with this section.</div>
+          <div class="opt" onclick="ans('q-m3s4','B','C','m3d3')"><div class="ol">B</div>Work faster to finish before heat is a problem.</div>
+          <div class="opt" onclick="ans('q-m3s4','C','C','m3d3')"><div class="ol">C</div>Stop, put machine down, put on thermal gloves, then continue.</div>
+        </div>
+        <div class="fb" id="fb-m3s4"></div>
+        <button class="retry-btn" id="retry-m3s4" onclick="resetQ('q-m3s4','fb-m3s4','retry-m3s4')">Try again →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- M3 S5 — COURSE COMPLETE -->
+  <div class="slide" id="m3s5">
+    <div class="stag">Slide 5 of 5 · Course complete</div>
+    <div class="si single">
+      <div>
+        <div class="complete-wrap">
+          <div class="complete-icon">✅</div>
+          <div class="complete-title">Course complete</div>
+          <div class="complete-sub">Conveyor #221439 is ready for dispatch.<br>You have completed all three modules.</div>
+          <div class="complete-summary">
+            <h3>What you have learned</h3>
+            <ul>
+              <li>The correct PPE for both lifting and packing operations</li>
+              <li>The full lifting procedure — retract, disconnect, deattach, sling, crane, trolley, sticker</li>
+              <li>The full packing procedure — protective materials, two film layers, identification, stickers, paint</li>
+              <li>The gravity sticker rule: both sides, before the crane is removed — no exceptions</li>
+              <li>Thermal gloves are mandatory for all film melting — no exceptions</li>
+              <li>Both instructions form one connected process: lifting ends where packing begins</li>
+            </ul>
+          </div>
+          <button class="btn-review" onclick="selMod(1)">← Review Module 1</button>
+          <button class="btn-restart" onclick="restartCourse()">Start again from the beginning</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ctrl">
+    <button class="bnav" id="m3prev" onclick="nav(3,-1)" disabled>← Previous</button>
+    <span class="sct" id="m3ct">1 / 5</span>
+    <button class="bnav fwd" id="m3next" onclick="nav(3,1)">Next →</button>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+<footer>vesma.d training · Caljan Conveyor Operations · Instructional Design Prototype · 2026 · For evaluation purposes only</footer>
+</div><!-- /course -->
+
+<script>
+const PW='h55m2kmv';
+const TOTALS={1:9,2:8,3:5};
+const cur={1:1,2:1,3:1};
+
+function unlock(){
+  const inp=document.getElementById('pw');
+  if(inp.value===PW){
+    document.getElementById('lock').style.display='none';
+    document.getElementById('course').style.display='block';
+    [1,2,3].forEach(buildDots);
+    ['seq-m1s4','seq-m2s3'].forEach(initDrag);
+    window.scrollTo(0,0);
+  } else {
+    inp.classList.add('shake');
+    document.getElementById('err').style.display='block';
+    setTimeout(()=>inp.classList.remove('shake'),400);
+    inp.value='';
+  }
+}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('lock').style.display!=='none')unlock();});
+
+function buildDots(m){
+  const el=document.getElementById('dots'+m);el.innerHTML='';
+  for(let i=1;i<=TOTALS[m];i++){
+    const d=document.createElement('div');
+    d.className='dot'+(i===1?' on':'');
+    d.onclick=()=>goTo(m,i);
+    el.appendChild(d);
+  }
+}
+function goTo(m,n){
+  document.getElementById('m'+m+'s'+cur[m]).classList.remove('on');
+  document.querySelectorAll('#dots'+m+' .dot')[cur[m]-1].classList.remove('on');
+  cur[m]=n;
+  document.getElementById('m'+m+'s'+cur[m]).classList.add('on');
+  document.querySelectorAll('#dots'+m+' .dot')[cur[m]-1].classList.add('on');
+  document.getElementById('m'+m+'ct').textContent=cur[m]+' / '+TOTALS[m];
+  document.getElementById('m'+m+'prev').disabled=cur[m]===1;
+  document.getElementById('m'+m+'next').disabled=cur[m]===TOTALS[m];
+  document.getElementById('scen'+m).scrollIntoView({behavior:'smooth',block:'start'});
+}
+function nav(m,d){const n=cur[m]+d;if(n>=1&&n<=TOTALS[m])goTo(m,n);}
+
+function selMod(n){
+  [1,2,3].forEach(i=>{
+    document.getElementById('mc'+i).classList.remove('on');
+    document.getElementById('scen'+i).classList.remove('on');
+  });
+  document.getElementById('mc'+n).classList.add('on');
+  document.getElementById('scen'+n).classList.add('on');
+  document.getElementById('mnotice').style.display='none';
+  setTimeout(()=>document.getElementById('scen'+n).scrollIntoView({behavior:'smooth',block:'start'}),50);
+}
+
+function restartCourse(){
+  [1,2,3].forEach(m=>{goTo(m,1);});
+  selMod(1);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function pickPPE(el,correct,fbId){
+  if(el.classList.contains('ok')||el.classList.contains('no'))return;
+  el.classList.add(correct?'ok':'no');
+  const fb=document.getElementById(fbId);
+  if(fb){fb.className='fb show '+(correct?'ok':'no');fb.textContent=correct?'Correct!':'Not required for this operation.';}
+}
+
+const FB={
+  s3:{ok:'Correct. Fully retracted — no exceptions.',no:'The conveyor must be completely retracted. "Close enough" is not acceptable.'},
+  s7:{ok:'Correct. Both stickers, both sides, before the crane is removed — every time.',no:'Schedule does not override safety. The crane stays until both stickers are on both sides.'},
+  kc1:{ok:'Correct. Both gravity stickers must be in place before the crane is removed.',no:'Stability on the trolley is not enough. Both stickers come first.'},
+  kc2:{ok:'Correct. Only employees with valid crane certification may operate the crane.',no:'Supervision does not substitute for certification.'},
+  p1:{ok:'Correct. The full belt must be covered — no gaps.',no:'Even a small gap can cause transport damage. The entire belt must be covered.'},
+  p2:{ok:'Correct. Project number + serial number on both sides, serial number on both ends.',no:'The serial number goes on both sides (with project number) and on both ends.'},
+  p3:{ok:'Correct. The manual is attached to one of the large lifting stickers on the side.',no:'The manual is attached to one of the large lifting instruction stickers on the side of the conveyor.'},
+  m3d1:{ok:'Correct. Lifting instruction always comes first. Packing cannot start while the conveyor is on the stand.',no:'Packing cannot begin until the conveyor is on the trolley. Lifting instruction first.'},
+  m3d2:{ok:'Correct. Sticker on both sides → crane removed → packing begins. This order has no exceptions.',no:'The crane must not be removed before both stickers are in place — not for time, not for convenience.'},
+  m3d3:{ok:'Correct. Stop immediately. Thermal gloves are mandatory — no exceptions.',no:'Film melting without thermal gloves is a burn risk. Stop, secure the machine, put on correct PPE, then continue.'}
+};
+
+function ans(qId,chosen,correct,key){
+  const opts=document.querySelectorAll('#'+qId+' .opt');
+  const L=['A','B','C','D'];
+  const isOk=chosen===correct;
+  opts.forEach((o,i)=>{
+    if(L[i]===chosen)o.classList.add(isOk?'ok':'no');
+    else if(!isOk&&L[i]===correct)o.classList.add('ok');
+    else o.classList.add('off');
+  });
+  const fbMap={
+    'q-m1s3':'fb-m1s3','q-m1s7':'fb-m1s7','q-m1kc1':'fb-m1kc1','q-m1kc2':'fb-m1kc2',
+    'q-m2s4':'fb-m2s4','q-m2s6':'fb-m2s6','q-m2s7':'fb-m2s7',
+    'q-m3s2':'fb-m3s2','q-m3s3':'fb-m3s3','q-m3s4':'fb-m3s4'
+  };
+  const retryMap={
+    'q-m1s3':'retry-m1s3','q-m1s7':'retry-m1s7','q-m1kc1':'retry-m1kc1','q-m1kc2':'retry-m1kc2',
+    'q-m2s4':'retry-m2s4','q-m2s6':'retry-m2s6','q-m2s7':'retry-m2s7',
+    'q-m3s2':'retry-m3s2','q-m3s3':'retry-m3s3','q-m3s4':'retry-m3s4'
+  };
+  const fb=document.getElementById(fbMap[qId]);
+  if(fb&&FB[key]){fb.className='fb show '+(isOk?'ok':'no');fb.textContent=isOk?FB[key].ok:FB[key].no;}
+  if(!isOk&&retryMap[qId]){const rb=document.getElementById(retryMap[qId]);if(rb)rb.classList.add('show');}
+}
+
+function resetQ(qId,fbId,retryId){
+  document.querySelectorAll('#'+qId+' .opt').forEach(o=>o.className='opt');
+  const fb=document.getElementById(fbId);if(fb)fb.className='fb';
+  const rb=document.getElementById(retryId);if(rb)rb.classList.remove('show');
+}
+
+function toggleCk(el){el.classList.toggle('checked');}
+
+function initDrag(id){
+  const wrap=document.getElementById(id);if(!wrap)return;
+  let dragEl=null;
+  wrap.querySelectorAll('.seq-item').forEach(item=>{
+    item.addEventListener('dragstart',()=>{dragEl=item;setTimeout(()=>item.classList.add('dragging'),0);});
+    item.addEventListener('dragend',()=>{item.classList.remove('dragging');dragEl=null;updateNums(wrap);});
+    item.addEventListener('dragover',e=>{e.preventDefault();if(item!==dragEl)item.classList.add('drag-over');});
+    item.addEventListener('dragleave',()=>item.classList.remove('drag-over'));
+    item.addEventListener('drop',e=>{e.preventDefault();item.classList.remove('drag-over');if(dragEl&&item!==dragEl)wrap.insertBefore(dragEl,item);updateNums(wrap);});
+  });
+  updateNums(wrap);
+}
+
+function updateNums(wrap){
+  wrap.querySelectorAll('.seq-item').forEach((item,i)=>{
+    const sn=item.querySelector('.seq-num');if(sn)sn.textContent=i+1;
+  });
+}
+
+function checkSeq(containerId,fbId,correctOrder){
+  const wrap=document.getElementById(containerId);
+  const items=[...wrap.querySelectorAll('.seq-item')];
+  const userOrder=items.map(i=>parseInt(i.dataset.val));
+  const isOk=userOrder.every((v,i)=>v===correctOrder[i]);
+  const fb=document.getElementById(fbId);
+  if(isOk){
+    fb.className='seq-fb show ok';
+    fb.textContent='Correct! That is the right order.';
+    items.forEach(item=>{item.classList.add('correct');item.setAttribute('draggable','false');item.style.cursor='default';const sn=item.querySelector('.seq-num');if(sn)sn.classList.add('ok');});
+  } else {
+    fb.className='seq-fb show no';
+    fb.textContent='Not quite — check the order and try again.';
+    items.forEach(item=>item.classList.add('wrong'));
+    setTimeout(()=>{items.forEach(item=>item.classList.remove('wrong'));fb.className='seq-fb';},1100);
+  }
+}
+</script>
 </body>
 </html>
