@@ -4,285 +4,387 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>vesma.d training — Caljan Conveyor Operations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --red:#E63325;--red-dark:#c42318;
   --red-dim:rgba(230,51,37,0.09);--red-border:rgba(230,51,37,0.28);
-  --black:#111;--text:#1f1f1f;--text-mid:#3d3d3d;--text-light:#595959;
-  --gray-100:#e0e0e0;--gray-50:#f4f4f4;--white:#fff;
+  --black:#111;--near-black:#1a1a1a;
+  --text:#1f1f1f;--text-mid:#3d3d3d;--text-light:#595959;
+  --gray-200:#eaeaea;--gray-100:#e0e0e0;--gray-50:#f7f7f7;--white:#fff;
   --amber-dim:rgba(180,100,0,0.08);--amber-border:rgba(160,90,0,0.28);
   --green:#146b3a;--green-dim:rgba(20,107,58,0.08);--green-border:rgba(20,107,58,0.28);
   --blue:#174fa0;--blue-dim:rgba(23,79,160,0.07);--blue-border:rgba(23,79,160,0.28);
   --r:10px;--r-sm:6px;
-  --sh:0 1px 4px rgba(0,0,0,0.08);--sh-md:0 2px 14px rgba(0,0,0,0.11);
-  --vh:100vh;
+  --sh:0 2px 8px rgba(0,0,0,0.10);--sh-md:0 4px 20px rgba(0,0,0,0.13);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;overflow:hidden;}
-body{font-family:'Open Sans',sans-serif;font-size:16px;line-height:1.65;background:var(--gray-50);color:var(--text);-webkit-font-smoothing:antialiased;}
+body{font-family:'Open Sans',sans-serif;font-size:18px;line-height:1.7;background:var(--gray-200);color:var(--text);-webkit-font-smoothing:antialiased;}
 h1,h2,h3,.brand,.sec-title{font-family:'Montserrat',sans-serif;}
 
-/* ── LOCK ── */
-#lock{
-  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
-  background:var(--white);z-index:1000;
-}
-.lk{background:var(--white);border:1px solid var(--gray-100);border-radius:16px;padding:2.75rem 2rem;width:100%;max-width:420px;text-align:center;box-shadow:var(--sh-md);}
-.lk-ico{width:52px;height:52px;background:var(--red);border-radius:13px;margin:0 auto 1.3rem;display:flex;align-items:center;justify-content:center;font-size:22px;}
-.lk h1{font-size:1.45rem;font-weight:700;color:var(--black);margin-bottom:.4rem;}
-.lk p{color:var(--text-light);font-size:1rem;line-height:1.6;margin-bottom:1.6rem;}
-.lk-inp{width:100%;background:var(--gray-50);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.8rem 1rem;color:var(--black);font-family:monospace;font-size:1.1rem;letter-spacing:.14em;text-align:center;outline:none;transition:border-color .2s;margin-bottom:.8rem;}
+/* LOCK */
+#lock{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--white);z-index:1000;}
+.lk{background:var(--white);border:1px solid var(--gray-100);border-radius:16px;padding:2.75rem 2rem;width:100%;max-width:440px;text-align:center;box-shadow:var(--sh-md);}
+.lk-ico{width:56px;height:56px;background:var(--red);border-radius:13px;margin:0 auto 1.3rem;display:flex;align-items:center;justify-content:center;font-size:24px;}
+.lk h1{font-size:1.55rem;font-weight:700;color:var(--black);margin-bottom:.4rem;}
+.lk p{color:var(--text-light);font-size:1.05rem;line-height:1.65;margin-bottom:1.6rem;}
+.lk-inp{width:100%;background:var(--gray-50);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.85rem 1rem;color:var(--black);font-family:monospace;font-size:1.15rem;letter-spacing:.14em;text-align:center;outline:none;transition:border-color .2s;margin-bottom:.8rem;}
 .lk-inp:focus{border-color:var(--red);}
 .lk-inp.shake{animation:shake .3s ease;border-color:var(--red);}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-.err{color:var(--red);font-size:.9rem;font-weight:600;margin-bottom:.7rem;display:none;}
-.btn-main{background:var(--red);color:var(--white);border:none;border-radius:var(--r-sm);padding:.85rem 1.5rem;font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;width:100%;transition:background .2s;}
+.err{color:var(--red);font-size:.95rem;font-weight:600;margin-bottom:.7rem;display:none;}
+.btn-main{background:var(--red);color:var(--white);border:none;border-radius:var(--r-sm);padding:.9rem 1.5rem;font-family:'Montserrat',sans-serif;font-size:1.05rem;font-weight:700;cursor:pointer;width:100%;transition:background .2s;}
 .btn-main:hover{background:var(--red-dark);}
 
-/* ── PAGE SYSTEM ── */
-/* Each "page" fills exactly the viewport. Only one visible at a time. */
-.page{
-  position:fixed;inset:0;
-  display:none;
-  flex-direction:column;
-  background:var(--gray-50);
-  overflow:hidden;
-}
+/* WARNING MODAL */
+#warn-modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:2000;display:none;align-items:center;justify-content:center;}
+#warn-modal.open{display:flex;}
+.warn-box{background:var(--white);border-radius:14px;padding:2.25rem 2rem;max-width:420px;width:90%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,0.22);}
+.warn-box .wi{font-size:2.5rem;margin-bottom:.75rem;}
+.warn-box h3{font-family:'Montserrat',sans-serif;font-size:1.15rem;font-weight:700;color:var(--black);margin-bottom:.6rem;}
+.warn-box p{font-size:.97rem;color:var(--text-mid);line-height:1.6;margin-bottom:1.4rem;}
+.warn-box-btns{display:flex;gap:.75rem;justify-content:center;}
+.btn-warn-cancel{background:var(--gray-50);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.65rem 1.4rem;font-family:'Montserrat',sans-serif;font-size:.92rem;font-weight:700;cursor:pointer;color:var(--text);transition:all .2s;}
+.btn-warn-cancel:hover{background:var(--gray-100);}
+.btn-warn-go{background:var(--red);color:var(--white);border:none;border-radius:var(--r-sm);padding:.65rem 1.4rem;font-family:'Montserrat',sans-serif;font-size:.92rem;font-weight:700;cursor:pointer;transition:background .2s;}
+.btn-warn-go:hover{background:var(--red-dark);}
+
+/* BOSS LEVEL MODAL */
+#boss-modal{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:2000;display:none;align-items:center;justify-content:center;}
+#boss-modal.open{display:flex;}
+.boss-box{background:var(--white);border-radius:16px;padding:2.5rem 2rem;max-width:560px;width:94%;box-shadow:0 8px 48px rgba(0,0,0,0.28);}
+.boss-score-wrap{text-align:center;padding:1rem 0;}
+.boss-score-num{font-family:'Montserrat',sans-serif;font-size:3.5rem;font-weight:700;line-height:1;}
+.boss-score-num.great{color:var(--green);}
+.boss-score-num.ok{color:#f59e0b;}
+.boss-score-num.poor{color:var(--red);}
+.boss-score-label{font-size:1rem;color:var(--text-light);margin-top:.25rem;}
+.boss-results{margin-top:1.25rem;display:flex;flex-direction:column;gap:.5rem;}
+.boss-result-item{display:flex;gap:.75rem;align-items:flex-start;padding:.7rem .9rem;border-radius:var(--r-sm);font-size:.9rem;line-height:1.5;}
+.boss-result-item.ok{background:var(--green-dim);border:1px solid var(--green-border);}
+.boss-result-item.no{background:var(--red-dim);border:1px solid var(--red-border);}
+.boss-result-item .ri{font-size:1rem;flex-shrink:0;margin-top:1px;}
+.boss-result-item .rd{color:var(--text-mid);}
+.boss-result-item.no .rd{color:var(--red-dark);}
+.boss-result-item.ok .rd{color:var(--green);}
+.boss-btn-row{display:flex;gap:.75rem;justify-content:center;margin-top:1.5rem;}
+.btn-boss-retry{background:var(--gray-50);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.65rem 1.4rem;font-family:'Montserrat',sans-serif;font-size:.92rem;font-weight:700;cursor:pointer;color:var(--text);transition:all .2s;}
+.btn-boss-retry:hover{border-color:var(--near-black);}
+.btn-boss-done{background:var(--near-black);color:var(--white);border:none;border-radius:var(--r-sm);padding:.65rem 1.75rem;font-family:'Montserrat',sans-serif;font-size:.92rem;font-weight:700;cursor:pointer;transition:background .2s;}
+.btn-boss-done:hover{background:#333;}
+
+/* PAGE SYSTEM */
+.page{position:fixed;inset:0;display:none;flex-direction:column;background:var(--gray-200);overflow:hidden;}
 .page.active{display:flex;}
 
-/* shared topbar */
-.topbar{
-  background:var(--white);border-bottom:2px solid var(--red);
-  flex-shrink:0;height:52px;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 2rem;box-shadow:var(--sh);
-}
-.brand{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.95rem;color:var(--black);}
+/* TOPBAR */
+.topbar{background:var(--white);border-bottom:2px solid var(--red);flex-shrink:0;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;box-shadow:var(--sh);}
+.brand{font-family:'Montserrat',sans-serif;font-weight:700;font-size:1rem;color:var(--black);}
 .brand span{color:var(--red);}
-.tb-pill{font-size:.72rem;font-weight:600;color:var(--red);background:var(--red-dim);border:1px solid var(--red-border);border-radius:100px;padding:.18rem .75rem;}
+.tb-pill{font-size:.75rem;font-weight:600;color:var(--red);background:var(--red-dim);border:1px solid var(--red-border);border-radius:100px;padding:.2rem .8rem;}
 
-/* scrollable content area */
-.page-body{
-  flex:1;overflow-y:auto;
-  display:flex;flex-direction:column;
-}
+.page-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;}
 
-/* ── HERO PAGE ── */
-#pg-hero .page-body{
-  align-items:center;justify-content:center;
-  background:var(--white);
-  text-align:center;padding:2rem;
-}
-.chip{display:inline-block;border:1px solid var(--red-border);background:var(--red-dim);color:var(--red);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.26rem .85rem;border-radius:100px;margin-bottom:1.1rem;font-family:'Montserrat',sans-serif;}
-.hero-h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:700;line-height:1.15;max-width:640px;margin:0 auto .9rem;color:var(--black);}
+/* HERO */
+#pg-hero .page-body{align-items:center;justify-content:center;background:var(--white);text-align:center;padding:2rem;}
+.chip{display:inline-block;border:1px solid var(--red-border);background:var(--red-dim);color:var(--red);font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.3rem .95rem;border-radius:100px;margin-bottom:1.2rem;font-family:'Montserrat',sans-serif;}
+.hero-h1{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;line-height:1.15;max-width:640px;margin:0 auto 1rem;color:var(--black);}
 .hero-h1 em{font-style:normal;color:var(--red);}
-.hero-lead{color:var(--text-light);font-size:1.05rem;max-width:520px;margin:0 auto 2rem;line-height:1.7;}
-.btn-hero{background:var(--red);color:var(--white);border:none;border-radius:var(--r-sm);padding:.85rem 2.5rem;font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:background .2s;letter-spacing:.03em;}
-.btn-hero:hover{background:var(--red-dark);}
+.hero-lead{color:var(--text-light);font-size:1.15rem;max-width:520px;margin:0 auto 2.25rem;line-height:1.7;}
+.btn-hero{background:var(--near-black);color:var(--white);border:none;border-radius:var(--r-sm);padding:.95rem 2.75rem;font-family:'Montserrat',sans-serif;font-size:1.05rem;font-weight:700;cursor:pointer;transition:background .2s;letter-spacing:.03em;}
+.btn-hero:hover{background:#333;}
 
-/* ── CONTENT PAGES (assumptions, objectives, structure) ── */
-.content-page{max-width:860px;width:100%;margin:0 auto;padding:2rem 2rem;}
-.sec-label{font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:700;color:var(--red);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem;}
-.sec-title{font-size:1.35rem;font-weight:700;color:var(--black);margin-bottom:.55rem;}
-.sec-body{color:var(--text-light);font-size:.95rem;line-height:1.7;margin-bottom:1.25rem;}
-.page-nav{flex-shrink:0;background:var(--white);border-top:1px solid var(--gray-100);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;}
-.nav-btn{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.55rem 1.1rem;color:var(--text);font-family:'Montserrat',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:var(--sh);}
+/* CONTENT PAGES */
+.content-page{max-width:900px;width:100%;margin:0 auto;padding:2.25rem 2rem;}
+.sec-label{font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:700;color:var(--red);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.6rem;}
+.sec-title{font-size:1.5rem;font-weight:700;color:var(--black);margin-bottom:.65rem;}
+.sec-body{color:var(--text-light);font-size:1rem;line-height:1.75;margin-bottom:1.35rem;}
+
+/* PAGE NAV — Next button is dark/premium */
+.page-nav{flex-shrink:0;background:var(--white);border-top:1px solid var(--gray-100);height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;}
+.nav-btn{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.6rem 1.2rem;color:var(--text);font-family:'Montserrat',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:var(--sh);}
 .nav-btn:hover{background:var(--gray-50);}
 .nav-btn:disabled{opacity:.3;pointer-events:none;}
-.nav-btn.fwd{background:var(--red);border-color:var(--red);color:var(--white);}
-.nav-btn.fwd:hover{background:var(--red-dark);}
-.nav-ct{font-size:.85rem;color:var(--text-light);font-weight:600;}
+.nav-btn.fwd{background:var(--near-black);border-color:var(--near-black);color:var(--white);}
+.nav-btn.fwd:hover{background:#333;}
+.nav-ct{font-size:.9rem;color:var(--text-light);font-weight:600;}
+hr{border:none;border-top:1px solid var(--gray-100);margin:0;}
+@media(prefers-reduced-motion:reduce){
+  .slide{animation:none!important;}
+  .ppe{animation:none!important;}
+  .seq-item{transition:none!important;}
+  .mcard{transition:none!important;}
+}
 
-/* ── ASSUMPTIONS ── */
-.agrid{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem;}
-@media(max-width:700px){.agrid{grid-template-columns:1fr;}}
-.acard{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r);padding:1.2rem;box-shadow:var(--sh);}
-.anum{font-family:'Montserrat',sans-serif;font-size:.65rem;font-weight:700;color:var(--red);letter-spacing:.08em;margin-bottom:.4rem;}
-.acard h3{font-family:'Montserrat',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:.35rem;color:var(--black);}
-.acard p{font-size:.87rem;color:var(--text-mid);line-height:1.58;}
-.atag{display:inline-block;margin-top:.65rem;background:var(--amber-dim);border:1px solid var(--amber-border);color:#6b3d00;font-size:.73rem;font-weight:600;padding:.15rem .5rem;border-radius:4px;}
+/* ANALYSIS GRID — 4 cards */
+.agrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;}
+@media(max-width:900px){.agrid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:500px){.agrid{grid-template-columns:1fr;}}
+.acard{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r);padding:1.35rem;box-shadow:var(--sh);display:flex;flex-direction:column;}
+.acard.kpi{border-top:3px solid var(--near-black);}
+.anum{font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:700;color:var(--red);letter-spacing:.08em;margin-bottom:.5rem;}
+.acard h3{font-family:'Montserrat',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:.45rem;color:var(--black);}
+.acard p{font-size:.9rem;color:var(--text-mid);line-height:1.6;}
+.acard ul{font-size:.88rem;color:var(--text-mid);line-height:1.7;padding-left:1.1rem;margin-top:.35rem;}
+.acard li{margin-bottom:.15rem;}
+.acard .kpi-num{font-family:'Montserrat',sans-serif;font-size:1.5rem;font-weight:700;color:var(--near-black);margin:.4rem 0 .15rem;}
+.atag{display:inline-block;margin-top:.7rem;background:var(--green-dim);border:1px solid var(--green-border);color:var(--green);font-size:.78rem;font-weight:600;padding:.18rem .55rem;border-radius:4px;}
 
-/* ── OBJECTIVES ── */
-.olist{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1rem;}
-.orow{display:flex;gap:.75rem;align-items:flex-start;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);padding:.85rem 1.1rem;box-shadow:var(--sh);}
-.oico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:1px;}
+/* OBJECTIVES */
+.olist{display:flex;flex-direction:column;gap:.7rem;}
+.orow{display:flex;gap:.9rem;align-items:flex-start;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);padding:1rem 1.25rem;box-shadow:var(--sh);}
+.oico{width:34px;height:34px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:2px;}
 .ir{background:var(--red-dim);}.ib{background:var(--blue-dim);}
-.orow strong{font-family:'Montserrat',sans-serif;font-size:.88rem;font-weight:700;display:block;margin-bottom:.15rem;color:var(--black);}
-.orow span{font-size:.87rem;color:var(--text-mid);line-height:1.52;}
-.obox{background:var(--green-dim);border:1px solid var(--green-border);border-radius:var(--r);padding:1.1rem 1.3rem;}
-.obox h3{font-family:'Montserrat',sans-serif;font-size:.9rem;font-weight:700;color:var(--green);margin-bottom:.3rem;}
-.obox p{font-size:.87rem;color:var(--text-mid);line-height:1.58;}
+.orow strong{font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:700;display:block;margin-bottom:.2rem;color:var(--black);}
+.orow span{font-size:.97rem;color:var(--text-mid);line-height:1.58;}
+.obox{margin-top:1.35rem;background:var(--green-dim);border:1px solid var(--green-border);border-radius:var(--r);padding:1.35rem 1.5rem;}
+.obox h3{font-family:'Montserrat',sans-serif;font-size:.97rem;font-weight:700;color:var(--green);margin-bottom:.35rem;}
+.obox p{font-size:.97rem;color:var(--text-mid);line-height:1.62;}
 
-/* ── MODULE CARDS ── */
-.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem;margin-bottom:1rem;}
+/* MODULE CARDS */
+.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
 @media(max-width:700px){.mgrid{grid-template-columns:1fr;}}
-.mcard{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r);overflow:hidden;cursor:pointer;box-shadow:var(--sh);transition:border-color .2s,transform .18s;display:flex;flex-direction:column;}
-.mcard:hover{border-color:var(--red-border);transform:translateY(-2px);}
-.mcard.on{border-color:var(--red);}
+.mcard{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r);overflow:hidden;cursor:pointer;box-shadow:var(--sh);transition:border-color .2s,transform .18s,box-shadow .2s;display:flex;flex-direction:column;}
+.mcard:hover{border-color:rgba(0,0,0,0.2);transform:translateY(-2px);box-shadow:var(--sh-md);}
+.mcard.on{border-color:var(--near-black);}
 .mcard.done{border-color:var(--green);}
 .mcard.done .mtop{background:var(--green-dim);border-bottom-color:var(--green-border);}
 .mcard.done .mnum{background:var(--green);}
-.mtop{background:var(--red-dim);border-bottom:1px solid var(--red-border);padding:.9rem 1rem;display:flex;align-items:flex-start;gap:.65rem;min-height:72px;}
-.mnum{width:30px;height:30px;min-width:30px;background:var(--red);color:var(--white);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:.78rem;font-weight:700;flex-shrink:0;margin-top:1px;}
-.mtop h3{font-family:'Montserrat',sans-serif;font-size:.87rem;font-weight:700;line-height:1.3;color:var(--black);}
-.mbody{padding:.9rem 1rem;flex:1;}
-.mbody p{font-size:.85rem;color:var(--text-mid);line-height:1.55;margin-bottom:.65rem;}
-.prow{display:flex;flex-wrap:wrap;gap:.28rem;}
-.tp{background:var(--gray-50);border:1px solid var(--gray-100);border-radius:4px;padding:.13rem .45rem;font-size:.72rem;color:var(--text-light);}
-.done-badge{display:none;font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:700;color:var(--green);margin-top:.45rem;}
+.mcard.boss-level .mtop{background:rgba(26,26,26,0.06);border-bottom-color:rgba(26,26,26,0.18);}
+.mcard.boss-level .mnum{background:var(--near-black);}
+.mtop{background:var(--red-dim);border-bottom:1px solid var(--red-border);padding:1rem 1.1rem;display:flex;align-items:flex-start;gap:.7rem;min-height:78px;}
+.mnum{width:34px;height:34px;min-width:34px;background:var(--red);color:var(--white);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:.82rem;font-weight:700;flex-shrink:0;margin-top:1px;}
+.mtop h3{font-family:'Montserrat',sans-serif;font-size:.95rem;font-weight:700;line-height:1.35;color:var(--black);}
+.mbody{padding:1rem 1.1rem;flex:1;}
+.mbody p{font-size:.95rem;color:var(--text-mid);line-height:1.6;margin-bottom:.75rem;}
+.prow{display:flex;flex-wrap:wrap;gap:.3rem;}
+.tp{background:var(--gray-50);border:1px solid var(--gray-100);border-radius:4px;padding:.16rem .5rem;font-size:.77rem;color:var(--text-light);}
+.done-badge{display:none;font-family:'Montserrat',sans-serif;font-size:.77rem;font-weight:700;color:var(--green);margin-top:.5rem;}
 .mcard.done .done-badge{display:block;}
+.btn-start-mod{display:inline-block;width:100%;margin-top:.85rem;background:var(--near-black);color:var(--white);border:none;border-radius:var(--r-sm);padding:.65rem 1rem;font-family:'Montserrat',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:background .2s;text-align:center;min-height:48px;line-height:1.4;}
+.btn-start-mod:hover{background:#333;}
+.btn-start-mod.boss{background:var(--near-black);}
+#mnotice{display:none;}
 
-/* ── SCENARIO PAGE ── */
-#pg-scenario{background:var(--white);}
-#pg-scenario .page-body{background:var(--gray-50);}
-.scen-header{flex-shrink:0;background:var(--white);border-bottom:1px solid var(--gray-100);padding:.65rem 2rem;display:flex;align-items:center;justify-content:space-between;}
-.scen-title{font-family:'Montserrat',sans-serif;font-size:.82rem;font-weight:700;color:var(--red);}
-.dots{display:flex;gap:6px;align-items:center;}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--gray-100);cursor:pointer;transition:background .2s,transform .2s;border:1px solid var(--gray-100);}
-.dot.on{background:var(--red);border-color:var(--red);transform:scale(1.3);}
-.dot.done{background:var(--green);border-color:var(--green);}
+/* SCENARIO */
+#pg-scenario .page-body{background:var(--gray-200);}
+.scen-header{flex-shrink:0;background:var(--white);border-bottom:1px solid var(--gray-100);padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.scen-header-left{display:flex;align-items:center;gap:1rem;}
+.scen-title{font-family:'Montserrat',sans-serif;font-size:.85rem;font-weight:700;color:var(--text-light);white-space:nowrap;}
+.btn-back-course{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.35rem .9rem;font-family:'Montserrat',sans-serif;font-size:.78rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;white-space:nowrap;}
+.btn-back-course:hover{border-color:rgba(0,0,0,0.2);color:var(--black);}
+.dots{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--gray-100);cursor:pointer;transition:background .2s,transform .2s;}
+.dot.on{background:var(--near-black);transform:scale(1.3);}
+.dot.done{background:var(--green);}
 
-/* slide area */
-.slide-area{flex:1;overflow-y:auto;padding:1.5rem 2rem;}
+.slide-area{flex:1;overflow-y:auto;padding:1.5rem 2rem 1rem;}
 .slide{display:none;}
-.slide.on{display:block;animation:fu .28s ease;}
+.slide.on{display:flex;flex-direction:column;animation:fu .28s ease;}
 @keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.stag{font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:700;color:var(--red);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.45rem;}
-.slide h2{font-size:1.2rem;font-weight:700;color:var(--black);margin-bottom:.8rem;}
+.stag{font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:700;color:var(--red);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.45rem;flex-shrink:0;}
+.slide h2{font-size:1.3rem;font-weight:700;color:var(--black);margin-bottom:.8rem;flex-shrink:0;}
 
-.task-banner{background:var(--blue-dim);border:1px solid var(--blue-border);border-radius:var(--r-sm);padding:.6rem .9rem;font-size:.85rem;font-weight:700;color:var(--blue);margin-bottom:.75rem;display:flex;gap:.55rem;align-items:center;}
-
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;align-items:start;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;align-items:start;flex:1;}
 .two-col.single{grid-template-columns:1fr;}
 @media(max-width:600px){.two-col{grid-template-columns:1fr;}}
+.col{display:flex;flex-direction:column;}
 
-.narr{background:var(--white);border-left:4px solid var(--red);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.8rem 1.1rem;margin-bottom:.75rem;font-size:.93rem;line-height:1.6;color:var(--text);box-shadow:var(--sh);}
+.photo-block{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);overflow:hidden;box-shadow:var(--sh);margin-bottom:.75rem;}
+.photo-block img{width:100%;max-height:300px;object-fit:contain;display:block;background:var(--gray-50);}
+
+.task-banner{background:var(--blue-dim);border:1px solid var(--blue-border);border-radius:var(--r-sm);padding:.65rem 1rem;font-size:.9rem;font-weight:700;color:var(--blue);margin-bottom:.75rem;display:flex;gap:.55rem;align-items:center;flex-shrink:0;}
+
+/* STOP & THINK */
+.stop-think{background:#fff8e1;border:2px solid #f59e0b;border-radius:var(--r);padding:1rem 1.25rem;margin-bottom:.85rem;}
+.stop-think-label{font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:700;color:#b45309;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.4rem;}
+.stop-think p{font-size:.95rem;color:#78350f;line-height:1.6;}
+
+.narr{background:var(--white);border-left:4px solid var(--red);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.85rem 1.2rem;margin-bottom:.75rem;font-size:1rem;line-height:1.65;color:var(--text);box-shadow:var(--sh);flex-shrink:0;}
 .narr strong{color:var(--black);font-weight:700;}
-.narr.tight{line-height:1.45;}
-.warn{background:var(--amber-dim);border:1px solid var(--amber-border);border-radius:var(--r-sm);padding:.7rem .9rem;font-size:.88rem;line-height:1.55;color:#4a2800;display:flex;gap:.6rem;align-items:flex-start;margin-bottom:.75rem;}
+.narr.tight{line-height:1.48;}
+.warn{background:var(--amber-dim);border:1px solid var(--amber-border);border-radius:var(--r-sm);padding:.8rem 1rem;font-size:.95rem;line-height:1.58;color:#4a2800;display:flex;gap:.65rem;align-items:flex-start;margin-bottom:.75rem;flex-shrink:0;}
 .warn strong{color:#321c00;}
-.photo-block{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);overflow:hidden;margin-bottom:.75rem;box-shadow:var(--sh);}
-.photo-block img{width:100%;display:block;}
-.photo-ph{background:var(--gray-50);padding:1.4rem 1rem;text-align:center;color:var(--text-light);font-size:.85rem;line-height:1.5;}
-.photo-ph .pi{font-size:1.5rem;display:block;margin-bottom:.3rem;}
-.photo-ph code{font-family:monospace;font-size:.75rem;color:var(--red);background:var(--red-dim);padding:.1rem .35rem;border-radius:3px;}
 
-/* quiz */
-.qt{font-size:.93rem;color:var(--text);margin-bottom:.65rem;line-height:1.5;font-weight:600;}
-.opts{display:flex;flex-direction:column;gap:.45rem;}
-.opt{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.7rem .9rem;cursor:pointer;font-size:.9rem;line-height:1.45;color:var(--text);transition:all .2s;display:flex;gap:.65rem;align-items:flex-start;box-shadow:var(--sh);}
-.opt:hover:not(.locked):not(.ok):not(.no){border-color:var(--red-border);background:var(--red-dim);}
+/* ── PREMIUM STORY LAYOUT ── */
+.story-layout{display:flex;flex-direction:column;gap:1.25rem;max-width:800px;width:100%;margin:0 auto;}
+.story-hero{border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-md);background:var(--gray-50);flex-shrink:0;}
+.story-hero img{width:100%;max-height:340px;object-fit:cover;display:block;}
+.story-lead-text{font-size:1.15rem;line-height:1.55;color:var(--text);border-left:4px solid var(--red);padding-left:1.5rem;margin:0;}
+.story-lead-text strong{color:var(--black);font-weight:700;}
+.premium-warn{background:var(--white);border:1px solid var(--gray-100);border-left:4px solid #f59e0b;border-radius:var(--r-sm);padding:.85rem 1.1rem;font-size:.95rem;line-height:1.6;color:var(--text-mid);display:flex;gap:.7rem;align-items:flex-start;box-shadow:var(--sh);}
+.premium-warn strong{color:var(--black);font-weight:700;}
+.story-two{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start;}
+@media(max-width:600px){.story-two{grid-template-columns:1fr;}}
+
+/* QUIZ */
+.qt{font-size:1rem;color:var(--text);margin-bottom:.7rem;line-height:1.55;font-weight:600;flex-shrink:0;}
+.opts{display:flex;flex-direction:column;gap:.45rem;flex-shrink:0;}
+.opt{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.75rem 1rem;cursor:pointer;font-size:.97rem;line-height:1.5;color:var(--text);transition:all .2s;display:flex;gap:.7rem;align-items:flex-start;box-shadow:var(--sh);}
+.opt:hover:not(.locked):not(.ok):not(.no){border-color:rgba(0,0,0,0.2);background:var(--gray-50);}
+.opt:focus-visible{outline:2px solid var(--red);outline-offset:2px;}
 .opt.ok{border-color:var(--green);background:var(--green-dim);color:var(--green);pointer-events:none;}
 .opt.no{border-color:var(--red);background:var(--red-dim);color:var(--red-dark);pointer-events:none;}
 .opt.locked{pointer-events:none;opacity:.42;}
-.ol{width:20px;height:20px;border:2px solid var(--gray-100);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;font-family:'Montserrat',sans-serif;flex-shrink:0;margin-top:1px;color:var(--text-light);}
-.fb{margin-top:.55rem;padding:.75rem .9rem;border-radius:var(--r-sm);font-size:.88rem;line-height:1.5;display:none;font-weight:600;}
+/* boss level options — selected but no reveal */
+.opt.boss-selected{border-color:var(--near-black);background:rgba(26,26,26,0.05);}
+.ol{width:22px;height:22px;border:2px solid var(--gray-100);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;font-family:'Montserrat',sans-serif;flex-shrink:0;margin-top:1px;color:var(--text-light);}
+.fb{margin-top:.55rem;padding:.8rem 1rem;border-radius:var(--r-sm);font-size:.95rem;line-height:1.55;display:none;font-weight:600;}
 .fb.show{display:block;}
 .fb.ok{background:var(--green-dim);color:var(--green);border:1px solid var(--green-border);}
 .fb.no{background:var(--red-dim);color:var(--red-dark);border:1px solid var(--red-border);}
-.retry-btn{margin-top:.5rem;background:var(--white);border:2px solid var(--red);border-radius:var(--r-sm);padding:.45rem .9rem;color:var(--red);font-family:'Montserrat',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;transition:all .2s;display:none;}
+.retry-btn{margin-top:.5rem;background:var(--white);border:2px solid var(--red);border-radius:var(--r-sm);padding:.48rem 1rem;color:var(--red);font-family:'Montserrat',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .2s;display:none;}
 .retry-btn:hover{background:var(--red);color:var(--white);}
 .retry-btn.show{display:inline-block;}
 
-/* PPE — 6 items, reset all on wrong */
-.ppe-g{display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem;margin:.65rem 0;}
-.ppe{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.65rem .35rem;text-align:center;cursor:pointer;transition:all .2s;box-shadow:var(--sh);}
-.ppe:hover:not(.ok):not(.no):not(.locked){border-color:var(--red-border);}
+/* PPE — animated on correct */
+.ppe-g{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin:.5rem auto;max-width:600px;width:100%;}
+.ppe{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r);padding:1.1rem .5rem;text-align:center;cursor:pointer;transition:all .25s;box-shadow:var(--sh);}
+.ppe:hover:not(.ok):not(.no):not(.locked){border-color:rgba(0,0,0,0.2);transform:translateY(-2px);box-shadow:var(--sh-md);}
+.ppe:focus-visible{outline:2px solid var(--red);outline-offset:2px;}
 .ppe.locked{pointer-events:none;}
-.pi2{font-size:1.45rem;display:block;margin-bottom:.25rem;}
-.pl{font-size:.78rem;color:var(--text-mid);font-weight:600;}
-.ppe.ok{border-color:var(--green);background:var(--green-dim);}
+.pi2{font-size:2.25rem;display:block;margin-bottom:.5rem;}
+.pl{font-size:1rem;color:var(--text-mid);font-weight:600;}
+.ppe.ok{border-color:var(--green);background:var(--green-dim);animation:ppe-pop .3s ease;}
 .ppe.ok .pl{color:var(--green);}
 .ppe.no{border-color:var(--red);background:var(--red-dim);}
 .ppe.no .pl{color:var(--red-dark);}
+@keyframes ppe-pop{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
 
-/* drag-drop */
+/* DRAG-DROP — grab cursors */
 .seq-wrap{margin:.6rem 0;}
-.seq-item{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.65rem .85rem;margin-bottom:.38rem;font-size:.9rem;color:var(--text);cursor:grab;display:flex;align-items:center;gap:.65rem;box-shadow:var(--sh);transition:border-color .2s;user-select:none;}
+.seq-item{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.7rem .9rem;margin-bottom:.4rem;font-size:.97rem;color:var(--text);cursor:grab;display:flex;align-items:center;gap:.7rem;box-shadow:var(--sh);transition:border-color .2s,box-shadow .2s;user-select:none;touch-action:none;}
+.seq-item:hover{border-color:rgba(0,0,0,0.2);box-shadow:var(--sh-md);}
 .seq-item:active{cursor:grabbing;}
-.seq-item.dragging{opacity:.4;border-color:var(--red);}
+.seq-item.dragging{opacity:.4;border-color:var(--near-black);cursor:grabbing;}
 .seq-item.drag-over{border-color:var(--blue);background:var(--blue-dim);}
 .seq-item.correct{border-color:var(--green);background:var(--green-dim);color:var(--green);cursor:default;}
 .seq-item.wrong-flash{border-color:var(--red);background:var(--red-dim);}
-.seq-handle{color:var(--gray-100);font-size:.95rem;flex-shrink:0;}
-.seq-num{width:22px;height:22px;border-radius:50%;background:var(--red-dim);color:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:700;flex-shrink:0;}
+.seq-handle{color:var(--gray-100);font-size:1rem;flex-shrink:0;}
+.seq-num{width:24px;height:24px;border-radius:50%;background:var(--red-dim);color:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:.73rem;font-weight:700;flex-shrink:0;}
 .seq-num.ok{background:var(--green-dim);color:var(--green);}
-.btn-confirm{background:var(--red);color:var(--white);border:none;border-radius:var(--r-sm);padding:.55rem 1.2rem;font-family:'Montserrat',sans-serif;font-size:.83rem;font-weight:700;cursor:pointer;transition:background .2s;margin-top:.4rem;}
-.btn-confirm:hover{background:var(--red-dark);}
-.seq-fb{margin-top:.5rem;padding:.7rem .9rem;border-radius:var(--r-sm);font-size:.88rem;font-weight:600;display:none;}
+.btn-confirm{background:var(--near-black);color:var(--white);border:none;border-radius:var(--r-sm);padding:.6rem 1.3rem;font-family:'Montserrat',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:background .2s;margin-top:.45rem;}
+.btn-confirm:hover{background:#333;}
+.seq-fb{margin-top:.5rem;padding:.75rem 1rem;border-radius:var(--r-sm);font-size:.95rem;font-weight:600;display:none;}
 .seq-fb.show{display:block;}
 .seq-fb.ok{background:var(--green-dim);color:var(--green);border:1px solid var(--green-border);}
 .seq-fb.no{background:var(--red-dim);color:var(--red-dark);border:1px solid var(--red-border);}
 
-.steps{display:flex;flex-direction:column;gap:.4rem;margin:.6rem 0;}
-.sr{display:flex;gap:.75rem;align-items:center;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);padding:.65rem .9rem;font-size:.9rem;color:var(--text);box-shadow:var(--sh);}
-.sn{width:22px;height:22px;border-radius:50%;background:var(--red-dim);color:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:700;flex-shrink:0;}
+.steps{display:flex;flex-direction:column;gap:.45rem;margin:.65rem 0;}
+.sr{display:flex;gap:.8rem;align-items:center;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);padding:.75rem 1rem;font-size:.97rem;color:var(--text);box-shadow:var(--sh);}
+.sn{width:24px;height:24px;border-radius:50%;background:var(--red-dim);color:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:.73rem;font-weight:700;flex-shrink:0;}
 
-/* completion slide */
-.completion-slide{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:100%;padding:2rem;}
-.completion-icon{font-size:3.2rem;margin-bottom:.85rem;line-height:1;}
-.completion-slide h2{font-size:1.55rem;font-weight:700;color:var(--black);margin-bottom:.35rem;}
-.congrats{font-family:'Montserrat',sans-serif;font-size:1.05rem;font-weight:700;color:var(--green);margin-bottom:.75rem;}
-.completion-slide p{font-size:.95rem;color:var(--text-mid);line-height:1.6;max-width:500px;margin:0 auto 1.35rem;}
-.btn-continue{background:var(--red);color:var(--white);border:none;border-radius:var(--r-sm);padding:.8rem 2.2rem;font-family:'Montserrat',sans-serif;font-size:.97rem;font-weight:700;cursor:pointer;transition:background .2s;letter-spacing:.02em;}
-.btn-continue:hover{background:var(--red-dark);}
+/* COMPLETION SLIDE */
+.completion-slide{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;flex:1;padding:1.5rem;}
+.completion-icon{font-size:3.5rem;margin-bottom:.85rem;line-height:1;}
+.completion-slide h2{font-size:1.65rem;font-weight:700;color:var(--black);margin-bottom:.35rem;}
+.congrats{font-family:'Montserrat',sans-serif;font-size:1.5rem;font-weight:700;color:var(--green);margin-bottom:.85rem;text-transform:uppercase;letter-spacing:.06em;}
+.completion-slide p{font-size:1rem;color:var(--text-mid);line-height:1.65;max-width:500px;margin:0 auto 1.5rem;}
+.btn-continue{background:var(--near-black);color:var(--white);border:none;border-radius:var(--r-sm);padding:.85rem 2.5rem;font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:background .2s;letter-spacing:.02em;}
+.btn-continue:hover{background:#333;}
 
-/* ── SUMMARY PAGES ── */
-#pg-summary .page-body,#pg-next .page-body{overflow-y:auto;}
-.sum-hero{background:var(--white);border-bottom:1px solid var(--gray-100);padding:2.25rem 2rem;text-align:center;}
-.sum-badge{display:inline-flex;align-items:center;gap:.45rem;background:var(--green-dim);border:1px solid var(--green-border);border-radius:100px;padding:.3rem .9rem;font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:700;color:var(--green);margin-bottom:1rem;}
-.sum-hero h1{font-size:clamp(1.6rem,4vw,2.3rem);font-weight:700;color:var(--black);margin-bottom:.5rem;}
-.sum-hero p{font-size:.97rem;color:var(--text-light);max-width:480px;margin:0 auto 1.25rem;line-height:1.65;}
-.btn-next-courses{background:var(--red);color:var(--white);border:none;border-radius:var(--r-sm);padding:.75rem 2rem;font-family:'Montserrat',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:background .2s;letter-spacing:.02em;}
-.btn-next-courses:hover{background:var(--red-dark);}
-.sum-wrap{max-width:860px;margin:0 auto;padding:2rem 2rem;}
+/* BOSS LEVEL PROGRESS */
+.boss-progress{display:flex;gap:.5rem;margin-bottom:1rem;flex-shrink:0;}
+.boss-step{flex:1;height:6px;background:var(--gray-100);border-radius:3px;transition:background .3s;}
+.boss-step.done{background:var(--near-black);}
+.boss-step.current{background:var(--near-black);opacity:.4;}
+
+/* SCENARIO NAV — Next is dark */
+.scen-nav{flex-shrink:0;background:var(--white);border-top:1px solid var(--gray-100);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;}
+.bnav{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.6rem 1.2rem;color:var(--text);font-family:'Montserrat',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:var(--sh);}
+.bnav:hover{background:var(--gray-50);}
+.bnav:disabled{opacity:.3;pointer-events:none;}
+.bnav.fwd{background:var(--near-black);border-color:var(--near-black);color:var(--white);}
+.bnav.fwd:hover{background:#333;}
+.sct{font-size:.9rem;color:var(--text-light);font-weight:600;}
+
+/* SUMMARY */
+.sum-hero{background:var(--white);border-bottom:1px solid var(--gray-100);padding:2.5rem 2rem;text-align:center;flex-shrink:0;}
+.sum-badge{display:inline-flex;align-items:center;gap:.45rem;background:var(--green-dim);border:1px solid var(--green-border);border-radius:100px;padding:.3rem .9rem;font-family:'Montserrat',sans-serif;font-size:.8rem;font-weight:700;color:var(--green);margin-bottom:1rem;}
+.sum-hero h1{font-size:clamp(1.7rem,4vw,2.5rem);font-weight:700;color:var(--black);margin-bottom:.55rem;}
+.sum-hero p{font-size:1rem;color:var(--text-light);max-width:480px;margin:0 auto 1.35rem;line-height:1.65;}
+.btn-next-courses{background:var(--near-black);color:var(--white);border:none;border-radius:var(--r-sm);padding:.8rem 2.1rem;font-family:'Montserrat',sans-serif;font-size:.97rem;font-weight:700;cursor:pointer;transition:background .2s;}
+.btn-next-courses:hover{background:#333;}
+.sum-wrap{max-width:880px;margin:0 auto;padding:2rem;flex:1;overflow-y:auto;}
 .sum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
 @media(max-width:700px){.sum-grid{grid-template-columns:1fr;}}
 .sum-card{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);display:flex;flex-direction:column;}
 .sum-card.completed{border-color:var(--green);}
 .sum-card.locked{opacity:.58;}
-.sum-card-top{padding:.9rem 1rem;display:flex;align-items:flex-start;gap:.65rem;min-height:70px;border-bottom:1px solid var(--gray-100);}
+.sum-card-top{padding:.9rem 1rem;display:flex;align-items:flex-start;gap:.65rem;min-height:72px;border-bottom:1px solid var(--gray-100);}
 .sum-card.completed .sum-card-top{background:var(--green-dim);border-bottom-color:var(--green-border);}
 .sum-card.locked .sum-card-top{background:var(--gray-50);}
-.sum-card-icon{width:30px;height:30px;min-width:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:.78rem;font-weight:700;flex-shrink:0;margin-top:1px;color:var(--white);}
+.sum-card-icon{width:30px;height:30px;min-width:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:.82rem;font-weight:700;flex-shrink:0;margin-top:1px;color:var(--white);}
 .sum-card.completed .sum-card-icon{background:var(--green);}
 .sum-card.locked .sum-card-icon{background:var(--gray-100);color:var(--text-light);}
-.sum-card-top h3{font-family:'Montserrat',sans-serif;font-size:.87rem;font-weight:700;line-height:1.3;color:var(--black);}
+.sum-card-top h3{font-family:'Montserrat',sans-serif;font-size:.9rem;font-weight:700;line-height:1.3;color:var(--black);}
 .sum-card-body{padding:.9rem 1rem;flex:1;}
-.sum-card-body p{font-size:.85rem;color:var(--text-mid);line-height:1.55;margin-bottom:.6rem;}
-.sum-status{font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:700;}
+.sum-card-body p{font-size:.9rem;color:var(--text-mid);line-height:1.58;margin-bottom:.6rem;}
+.sum-status{font-family:'Montserrat',sans-serif;font-size:.78rem;font-weight:700;}
 .sum-card.completed .sum-status{color:var(--green);}
 .sum-card.locked .sum-status{color:var(--text-light);}
 .sum-cert{background:var(--white);border:1px solid var(--green-border);border-radius:var(--r);padding:1.75rem;text-align:center;box-shadow:var(--sh-md);margin-top:1.25rem;}
-.sum-cert h3{font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:700;color:var(--green);margin-bottom:.45rem;}
-.sum-cert p{font-size:.92rem;color:var(--text-mid);line-height:1.62;margin-bottom:1.1rem;}
-.btn-restart{background:var(--gray-50);color:var(--text);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.6rem 1.4rem;font-family:'Montserrat',sans-serif;font-size:.87rem;font-weight:700;cursor:pointer;transition:all .2s;}
-.btn-restart:hover{border-color:var(--red);color:var(--red);}
-
-/* next courses page */
+.sum-cert h3{font-family:'Montserrat',sans-serif;font-size:1.05rem;font-weight:700;color:var(--green);margin-bottom:.45rem;}
+.sum-cert p{font-size:.97rem;color:var(--text-mid);line-height:1.62;margin-bottom:1.1rem;}
+.btn-restart{background:var(--gray-50);color:var(--text);border:2px solid var(--gray-100);border-radius:var(--r-sm);padding:.65rem 1.5rem;font-family:'Montserrat',sans-serif;font-size:.92rem;font-weight:700;cursor:pointer;transition:all .2s;}
+.btn-restart:hover{border-color:var(--near-black);color:var(--near-black);}
 .next-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
 @media(max-width:700px){.next-grid{grid-template-columns:1fr;}}
 .next-card{background:var(--white);border:2px solid var(--gray-100);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);display:flex;flex-direction:column;}
-.next-card-top{background:var(--blue-dim);border-bottom:1px solid var(--blue-border);padding:.9rem 1rem;display:flex;align-items:flex-start;gap:.65rem;min-height:70px;}
-.next-icon{width:30px;height:30px;min-width:30px;border-radius:6px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;margin-top:1px;}
-.next-card-top h3{font-family:'Montserrat',sans-serif;font-size:.87rem;font-weight:700;line-height:1.3;color:var(--black);}
+.next-card-top{background:var(--blue-dim);border-bottom:1px solid var(--blue-border);padding:.9rem 1rem;display:flex;align-items:flex-start;gap:.65rem;min-height:72px;}
+.next-icon{width:30px;height:30px;min-width:30px;border-radius:6px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:.88rem;flex-shrink:0;margin-top:1px;}
+.next-card-top h3{font-family:'Montserrat',sans-serif;font-size:.9rem;font-weight:700;line-height:1.3;color:var(--black);}
 .next-card-body{padding:.9rem 1rem;flex:1;}
-.next-card-body p{font-size:.85rem;color:var(--text-mid);line-height:1.55;margin-bottom:.65rem;}
-.next-tag{display:inline-block;background:var(--blue-dim);border:1px solid var(--blue-border);color:var(--blue);font-size:.72rem;font-weight:600;padding:.15rem .5rem;border-radius:4px;font-family:'Montserrat',sans-serif;}
+.next-card-body p{font-size:.9rem;color:var(--text-mid);line-height:1.55;margin-bottom:.65rem;}
+.next-tag{display:inline-block;background:var(--blue-dim);border:1px solid var(--blue-border);color:var(--blue);font-size:.75rem;font-weight:600;padding:.15rem .5rem;border-radius:4px;font-family:'Montserrat',sans-serif;}
 </style>
 </head>
 <body>
 
 <!-- LOCK -->
-<div id="lock">
+<div id="lock" role="dialog" aria-modal="true" aria-labelledby="lock-title">
   <div class="lk">
-    <div class="lk-ico">🔒</div>
-    <h1>Course Access</h1>
+    <div class="lk-ico" aria-hidden="true">🔒</div>
+    <h1 id="lock-title">Course Access</h1>
     <p>This training material is protected.<br>Enter the access code to continue.</p>
-    <input id="pw" type="password" class="lk-inp" placeholder="Access code" maxlength="24">
-    <p class="err" id="err">Incorrect code. Please try again.</p>
-    <button class="btn-main" onclick="unlock()">Enter Course</button>
+    <input id="pw" type="password" class="lk-inp" placeholder="Access code" maxlength="24" autocomplete="off" autofocus aria-label="Access code" aria-describedby="err">
+    <p class="err" id="err" role="alert">Incorrect code. Please try again.</p>
+    <button type="button" class="btn-main" onclick="unlock()">Enter Course</button>
+  </div>
+</div>
+
+<!-- WARNING MODAL -->
+<div id="warn-modal" role="dialog" aria-modal="true" aria-labelledby="warn-title">
+  <div class="warn-box">
+    <div class="wi" aria-hidden="true">⚠️</div>
+    <h3 id="warn-title">Return to Course Structure?</h3>
+    <p>Your progress in the current module will not be saved. You will need to start this module again from the beginning.</p>
+    <div class="warn-box-btns">
+      <button type="button" class="btn-warn-cancel" onclick="closeWarning()">Stay here</button>
+      <button type="button" class="btn-warn-go" onclick="goToCourseStructure()">Yes, go back</button>
+    </div>
+  </div>
+</div>
+
+<!-- BOSS LEVEL RESULTS MODAL -->
+<div id="boss-modal" role="dialog" aria-modal="true" aria-labelledby="boss-title">
+  <div class="boss-box">
+    <div style="text-align:center;margin-bottom:1rem;">
+      <div style="font-size:2.5rem;margin-bottom:.5rem;" id="boss-icon" aria-hidden="true">🎯</div>
+      <div style="font-family:'Montserrat',sans-serif;font-size:1.2rem;font-weight:700;color:var(--black);" id="boss-title">Boss Level Complete</div>
+    </div>
+    <div class="boss-score-wrap">
+      <div class="boss-score-num" id="boss-score-num">5/5</div>
+      <div class="boss-score-label" id="boss-score-label">Performance score</div>
+    </div>
+    <div class="boss-results" id="boss-results"></div>
+    <div class="boss-btn-row">
+      <button type="button" class="btn-boss-retry" onclick="retryBoss()">Try again</button>
+      <button type="button" class="btn-boss-done" onclick="finishBoss()">Finish course →</button>
+    </div>
   </div>
 </div>
 
@@ -290,32 +392,57 @@ h1,h2,h3,.brand,.sec-title{font-family:'Montserrat',sans-serif;}
 <div class="page" id="pg-hero">
   <div class="topbar"><div class="brand">vesma.d <span>training</span></div><div class="tb-pill">ID PROTOTYPE · 2026</div></div>
   <div class="page-body">
-    <div class="chip">Instructional Design · Homework Assignment</div>
     <h1 class="hero-h1">Finished Conveyor<br><em>Operations Training</em></h1>
-    <p class="hero-lead">A three-module interactive learning experience covering lifting, packing, and the critical connection between both processes.</p>
-    <button class="btn-hero" onclick="showPage('pg-assumptions')">Start →</button>
+    <p class="hero-lead">A three-module interactive learning experience covering lifting and packing the finished conveyor.</p>
+    <button type="button" class="btn-hero" onclick="showPage('pg-analysis')">Start →</button>
   </div>
 </div>
 
-<!-- PAGE: ASSUMPTIONS -->
-<div class="page" id="pg-assumptions">
+<!-- PAGE: ANALYSIS -->
+<div class="page" id="pg-analysis">
   <div class="topbar"><div class="brand">vesma.d <span>training</span></div><div class="tb-pill">ID PROTOTYPE · 2026</div></div>
   <div class="page-body">
     <div class="content-page">
-      <div class="sec-label">Design foundation</div>
-      <div class="sec-title">Assumptions</div>
-      <p class="sec-body">Every learning design rests on assumptions. Naming them makes the design honest — and easier to revise when reality differs.</p>
+      <div class="sec-label">Instructional Design Foundation</div>
+      <div class="sec-title">Target Audience & Context Analysis</div>
       <div class="agrid">
-        <div class="acard"><div class="anum">ASSUMPTION 01</div><h3>Learner identity</h3><p>The scenario character is named "Alex" — a short form that works across English, Latvian, Danish and German. In reality, this work is performed by both women and men. The character does not define who the course is for.</p><div class="atag">⚠ To be validated</div></div>
-        <div class="acard"><div class="anum">ASSUMPTION 02</div><h3>Learning context</h3><p>It is unknown whether employees study independently, alongside a mentor, or with a supervisor. This course is designed to work in any of these scenarios — as pre-task preparation or alongside on-the-job guidance.</p><div class="atag">⚠ To be validated</div></div>
-        <div class="acard"><div class="anum">ASSUMPTION 03</div><h3>Ideal course design</h3><p>This prototype reflects the best possible version of this course, without limitation by any specific platform's capabilities. Platform constraints (e.g. Hihaho) will be applied in a later stage.</p><div class="atag">⚠ Platform TBD</div></div>
+        <div class="acard">
+          <div class="anum">LEARNER IDENTITY</div>
+          <h3>Persona: Alex</h3>
+          <p>Optimized for the onboarding flow. The scenario character "Alex" represents a new hire in their first week, ensures broad cultural and gender relevance across languages.</p>
+        </div>
+        <div class="acard">
+          <div class="anum">LEARNING CONTEXT</div>
+          <h3>Blended Learning Model</h3>
+          <p>This digital module serves as <strong>pre-work</strong> before hands-on practice. Designed for three-phase delivery:</p>
+          <ul>
+            <li>① Digital pre-work (this course)</li>
+            <li>② On-the-job with mentor on the line</li>
+            <li>③ Practical assessment sign-off</li>
+          </ul>
+        </div>
+        <div class="acard">
+          <div class="anum">DESIGN RATIONALE</div>
+          <h3>Course Prototype</h3>
+          <p>This prototype reflects the best possible instructional design — without limitation by any specific platform.</p>
+          <ul>
+            <li>Scenario-based learning</li>
+            <li>Metacognitive prompts</li>
+            <li>Boss Level assessment</li>
+          </ul>
+        </div>
+        <div class="acard kpi">
+          <div class="anum">BUSINESS IMPACT</div>
+          <h3>Target KPIs</h3>
+          <p>Measurable outcomes this training is designed to achieve: reduce transport damage incidents by 15% and accelerate new employee onboarding by 2 days.</p>
+        </div>
       </div>
     </div>
   </div>
   <div class="page-nav">
-    <button class="nav-btn" onclick="showPage('pg-hero')">← Back</button>
-    <span class="nav-ct">Assumptions</span>
-    <button class="nav-btn fwd" onclick="showPage('pg-objectives')">Next →</button>
+    <button type="button" class="nav-btn" onclick="showPage('pg-hero')">← Back</button>
+    <span class="nav-ct">Context Analysis</span>
+    <button type="button" class="nav-btn fwd" onclick="showPage('pg-objectives')">Next →</button>
   </div>
 </div>
 
@@ -324,24 +451,22 @@ h1,h2,h3,.brand,.sec-title{font-family:'Montserrat',sans-serif;}
   <div class="topbar"><div class="brand">vesma.d <span>training</span></div><div class="tb-pill">ID PROTOTYPE · 2026</div></div>
   <div class="page-body">
     <div class="content-page">
-      <div class="sec-label">What learners will achieve</div>
-      <div class="sec-title">Learning objectives</div>
-      <p class="sec-body">By the end of this course, learners will be able to:</p>
-      <div class="olist">
-        <div class="orow"><div class="oico ir">🦺</div><div><strong>Work safely at every step</strong><span>Identify required PPE for lifting and packing, follow all preparation steps in order, and apply non-negotiable safety rules — including the gravity sticker before removing the crane.</span></div></div>
-        <div class="orow"><div class="oico ir">🏗️</div><div><strong>Lift and pack a finished conveyor correctly</strong><span>Execute the full lifting and packing procedures without skipping or reversing any step — from retract and disconnect through to film, labelling, stickers and hazard markings.</span></div></div>
-        <div class="orow"><div class="oico ib">🔗</div><div><strong>Understand how the two instructions connect</strong><span>Explain the handoff point where lifting ends and packing begins, and recognise that a worker assigned to pack must first confirm lifting was completed correctly.</span></div></div>
-      </div>
-      <div class="obox">
-        <h3>✓ Expected learning outcome</h3>
-        <p>After all three modules, a learner can independently and safely prepare a finished Caljan conveyor for dispatch — from production stand to fully packed and labelled — following all relevant SOPs.</p>
-      </div>
+      <div class="sec-label">Your mission</div>
+      <div class="sec-title">Precision & Safety from Stand to Dispatch</div>
+      <p style="font-size:1rem;line-height:1.85;color:var(--text-mid);">
+        <strong style="color:var(--black);font-family:'Montserrat',sans-serif;">The Role</strong><br>
+        Your mission in this course is to become the ultimate guardian of safety and quality for Caljan conveyors. You are not just moving equipment — you are the final line of defense before our product reaches the customer.<br><br>
+        <strong style="color:var(--black);font-family:'Montserrat',sans-serif;">The Action</strong><br>
+        By mastering this training, you will take full ownership of the lifting and packing process: from the very first electrical disconnection to the final hazard marking. Your goal is to execute every Standard Operating Procedure (SOP) with zero skips and zero errors, ensuring that required PPE is your second skin and non-negotiable safety rules guide your every move.<br><br>
+        <strong style="color:var(--black);font-family:'Montserrat',sans-serif;">The Impact</strong><br>
+        When you complete all three modules, you will have the confidence and skill to independently, safely, and flawlessly prepare a finished conveyor for dispatch, directly reducing transport damage and helping your team move faster and safer every single day.
+      </p>
     </div>
   </div>
   <div class="page-nav">
-    <button class="nav-btn" onclick="showPage('pg-assumptions')">← Back</button>
-    <span class="nav-ct">Objectives</span>
-    <button class="nav-btn fwd" onclick="showPage('pg-structure')">Next →</button>
+    <button type="button" class="nav-btn" onclick="showPage('pg-analysis')">← Back</button>
+    <span class="nav-ct">Mission</span>
+    <button type="button" class="nav-btn fwd" onclick="showPage('pg-structure')">Next →</button>
   </div>
 </div>
 
@@ -351,30 +476,30 @@ h1,h2,h3,.brand,.sec-title{font-family:'Montserrat',sans-serif;}
   <div class="page-body">
     <div class="content-page">
       <div class="sec-label">Course structure</div>
-      <div class="sec-title">Three modules — choose where to begin</div>
+      <div class="sec-title">Three modules — click a module to begin</div>
       <div class="mgrid">
-        <div class="mcard on" id="mc1" onclick="startMod(1)">
+        <div class="mcard" id="mc1">
           <div class="mtop"><div class="mnum" id="mn1">01</div><h3>Lifting finished conveyors</h3></div>
-          <div class="mbody"><p>Alex prepares and safely lifts a finished conveyor off the production stand onto the trolley.</p><div class="prow"><span class="tp">Retract</span><span class="tp">Electricity</span><span class="tp">Deattach</span><span class="tp">Sling</span><span class="tp">Crane</span><span class="tp">Trolley</span><span class="tp">Sticker</span></div><div class="done-badge">✓ Completed</div></div>
+          <div class="mbody"><p>Alex prepares and safely lifts a finished conveyor off the production stand onto the trolley.</p><div class="prow"><span class="tp">Retract</span><span class="tp">Electricity</span><span class="tp">Deattach</span><span class="tp">Back cover</span><span class="tp">Sling</span><span class="tp">Crane</span><span class="tp">Trolley</span><span class="tp">Sticker</span></div><div class="done-badge">✓ Completed</div>
+          <button type="button" class="btn-start-mod" onclick="startMod(1)">Start Module 1 →</button></div>
         </div>
-        <div class="mcard" id="mc2" onclick="startMod(2)">
+        <div class="mcard" id="mc2">
           <div class="mtop"><div class="mnum" id="mn2">02</div><h3>Packing finished conveyors</h3></div>
-          <div class="mbody"><p>The conveyor is on the trolley. Alex wraps, protects, numbers and labels it for safe transportation.</p><div class="prow"><span class="tp">Paper & cardboard</span><span class="tp">Film ×2</span><span class="tp">Tape</span><span class="tp">Numbers</span><span class="tp">Stickers</span><span class="tp">Paint</span></div><div class="done-badge">✓ Completed</div></div>
+          <div class="mbody"><p>The conveyor is on the trolley. Alex wraps, protects, numbers and labels it for safe transportation.</p><div class="prow"><span class="tp">Film on trolley</span><span class="tp">Sticker</span><span class="tp">Paper</span><span class="tp">Film ×2</span><span class="tp">Tape</span><span class="tp">Numbers</span><span class="tp">Stickers</span><span class="tp">Paint</span></div><div class="done-badge">✓ Completed</div>
+          <button type="button" class="btn-start-mod" onclick="startMod(2)">Start Module 2 →</button></div>
         </div>
-        <div class="mcard" id="mc3" onclick="startMod(3)">
-          <div class="mtop"><div class="mnum" id="mn3">03</div><h3>Combined scenario</h3></div>
-          <div class="mbody"><p>Alex receives the full task: lift and pack. He must choose the right sequence and navigate the critical handoff.</p><div class="prow"><span class="tp">Decision</span><span class="tp">Sequence</span><span class="tp">Handoff</span><span class="tp">Spot mistake</span></div><div class="done-badge">✓ Completed</div></div>
+        <div class="mcard boss-level" id="mc3">
+          <div class="mtop"><div class="mnum" id="mn3">03</div><h3>Boss Level — Combined scenario</h3></div>
+          <div class="mbody"><p>No guidance. No feedback after each step. Alex faces 5 decisions — you see your score only at the end.</p><div class="prow"><span class="tp">🎯 Assessment mode</span><span class="tp">5 decisions</span><span class="tp">Performance score</span></div><div class="done-badge">✓ Completed</div>
+          <button type="button" class="btn-start-mod boss" onclick="startMod(3)">Start Boss Level →</button></div>
         </div>
-      </div>
-      <div style="background:var(--blue-dim);border:1px solid var(--blue-border);border-radius:var(--r-sm);padding:.75rem 1.1rem;font-size:.9rem;color:var(--blue);font-weight:600;">
-        🖼️ <strong>Photo guide:</strong> Each placeholder shows a suggested filename. Replace <code style="font-family:monospace;font-size:.8rem;background:rgba(23,79,160,.1);padding:.05rem .3rem;border-radius:3px;">&lt;div class="photo-ph"&gt;</code> with <code style="font-family:monospace;font-size:.8rem;background:rgba(23,79,160,.1);padding:.05rem .3rem;border-radius:3px;">&lt;img src="filename.jpg"&gt;</code> in the same GitHub folder.
       </div>
     </div>
   </div>
   <div class="page-nav">
-    <button class="nav-btn" onclick="showPage('pg-objectives')">← Back</button>
+    <button type="button" class="nav-btn" onclick="showPage('pg-objectives')">← Back</button>
     <span class="nav-ct">Course structure</span>
-    <button class="nav-btn fwd" onclick="startMod(1)">Begin Module 1 →</button>
+    <button type="button" class="nav-btn fwd" onclick="startMod(1)">Begin →</button>
   </div>
 </div>
 
@@ -382,50 +507,49 @@ h1,h2,h3,.brand,.sec-title{font-family:'Montserrat',sans-serif;}
 <div class="page" id="pg-scenario">
   <div class="topbar"><div class="brand">vesma.d <span>training</span></div><div class="tb-pill">ID PROTOTYPE · 2026</div></div>
   <div class="scen-header">
-    <div class="scen-title" id="scen-title">Module 01</div>
+    <div class="scen-header-left">
+      <button type="button" class="btn-back-course" onclick="openWarning()">← Course structure</button>
+      <div class="scen-title" id="scen-title">Module 01</div>
+    </div>
     <div class="dots" id="dots"></div>
   </div>
-  <div class="slide-area" id="slide-area">
-    <!-- slides injected by JS -->
-  </div>
-  <div class="page-nav" id="scen-nav">
-    <button class="nav-btn" id="s-prev" onclick="navSlide(-1)" disabled>← Previous</button>
-    <span class="nav-ct" id="s-ct">1 / 9</span>
-    <button class="nav-btn fwd" id="s-next" onclick="navSlide(1)" style="display:none;">Next →</button>
+  <div class="slide-area" id="slide-area"></div>
+  <div class="scen-nav" id="scen-nav">
+    <button type="button" class="bnav" id="s-prev" onclick="navSlide(-1)" disabled>← Previous</button>
+    <span class="sct" id="s-ct">1 / 12</span>
+    <button type="button" class="bnav fwd" id="s-next" onclick="navSlide(1)" style="display:none;">Next →</button>
   </div>
 </div>
 
-<!-- PAGE: SUMMARY -->
-<div class="page" id="pg-summary">
+<!-- SUMMARY -->
+<div class="page" id="summary">
   <div class="topbar"><div class="brand">vesma.d <span>training</span></div><div class="tb-pill">ID PROTOTYPE · 2026</div></div>
-  <div class="page-body">
-    <div class="sum-hero">
-      <div class="sum-badge">🎓 Course completed</div>
-      <h1>Well done!</h1>
-      <p>You have successfully completed the Caljan Conveyor Operations training. Here is a summary of your progress.</p>
-      <button class="btn-next-courses" onclick="showPage('pg-next')">What comes next →</button>
-    </div>
+  <div class="page-body" style="overflow-y:auto;">
     <div class="sum-wrap">
+      <div class="sum-badge" style="display:inline-flex;margin-bottom:1rem;">🎓 Course completed</div>
       <div class="sec-label">Your progress</div>
       <div class="sec-title" style="margin-bottom:1rem;">Completed modules</div>
       <div class="sum-grid">
         <div class="sum-card completed"><div class="sum-card-top"><div class="sum-card-icon">✓</div><h3>Lifting finished conveyors</h3></div><div class="sum-card-body"><p>Preparation steps, crane operation, sling placement, centre of gravity, trolley and sticker rule.</p><div class="sum-status">✓ Completed</div></div></div>
         <div class="sum-card completed"><div class="sum-card-top"><div class="sum-card-icon">✓</div><h3>Packing finished conveyors</h3></div><div class="sum-card-body"><p>Protective materials, two film layers, identification numbers, stickers, manual and hazard paint.</p><div class="sum-status">✓ Completed</div></div></div>
-        <div class="sum-card completed"><div class="sum-card-top"><div class="sum-card-icon">✓</div><h3>Combined scenario</h3></div><div class="sum-card-body"><p>Full sequence from production stand to dispatch-ready, including the critical handoff between both instructions.</p><div class="sum-status">✓ Completed</div></div></div>
+        <div class="sum-card completed"><div class="sum-card-top"><div class="sum-card-icon">🎯</div><h3>Boss Level — Combined scenario</h3></div><div class="sum-card-body"><p>Full assessment: 5 decisions, no mid-feedback, performance score. Both instructions as one connected process.</p><div class="sum-status">✓ Completed</div></div></div>
       </div>
       <div class="sum-cert">
         <h3>🏅 Caljan Conveyor Operations — Completed</h3>
-        <p>You have demonstrated knowledge of the full lifting and packing procedure for finished Caljan conveyors, including all safety requirements, the correct sequence of steps, and the critical connection between both instructions.</p>
-        <button class="btn-restart" onclick="showPage('pg-structure')">← Return to course</button>
+        <p>You have demonstrated knowledge of the full lifting and packing procedure, including all safety requirements, the correct sequence of steps, and the critical connection between both instructions.</p>
+        <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-top:1rem;">
+          <button type="button" class="btn-restart" onclick="showPage('pg-structure')">← Return to course</button>
+          <button type="button" class="btn-next-courses" onclick="showPage('pg-next')">What comes next →</button>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- PAGE: NEXT COURSES -->
+<!-- NEXT COURSES -->
 <div class="page" id="pg-next">
   <div class="topbar"><div class="brand">vesma.d <span>training</span></div><div class="tb-pill">ID PROTOTYPE · 2026</div></div>
-  <div class="page-body">
+  <div class="page-body" style="overflow-y:auto;">
     <div class="sum-hero">
       <div class="sum-badge">📚 Recommended next steps</div>
       <h1>What comes next</h1>
@@ -433,602 +557,662 @@ h1,h2,h3,.brand,.sec-title{font-family:'Montserrat',sans-serif;}
     </div>
     <div class="sum-wrap">
       <div class="next-grid">
-        <div class="next-card">
-          <div class="next-card-top"><div class="next-icon">🏗️</div><h3>Work Safety — Cargo Crane Operations</h3></div>
-          <div class="next-card-body"><p>Certification prerequisites, safe rigging techniques, load calculations and emergency procedures for overhead crane work.</p><div class="next-tag">Coming soon</div></div>
-        </div>
-        <div class="next-card">
-          <div class="next-card-top"><div class="next-icon">🔧</div><h3>Conveyor Installation & Commissioning</h3></div>
-          <div class="next-card-body"><p>Step-by-step guide for installing and commissioning a Caljan conveyor at the customer site, including electrical connections and testing.</p><div class="next-tag">Coming soon</div></div>
-        </div>
-        <div class="next-card">
-          <div class="next-card-top"><div class="next-icon">✅</div><h3>Quality Control — Finished Products</h3></div>
-          <div class="next-card-body"><p>Inspection criteria, documentation requirements and non-conformance reporting for finished conveyors before dispatch.</p><div class="next-tag">Coming soon</div></div>
-        </div>
+        <div class="next-card"><div class="next-card-top"><div class="next-icon">🏗️</div><h3>Work Safety — Cargo Crane Operations</h3></div><div class="next-card-body"><p>Certification prerequisites, safe rigging techniques, load calculations and emergency procedures for overhead crane work.</p><div class="next-tag">Coming soon</div></div></div>
+        <div class="next-card"><div class="next-card-top"><div class="next-icon">🔧</div><h3>Conveyor Installation & Commissioning</h3></div><div class="next-card-body"><p>Step-by-step guide for installing and commissioning a Caljan conveyor at the customer site, including electrical connections and testing.</p><div class="next-tag">Coming soon</div></div></div>
+        <div class="next-card"><div class="next-card-top"><div class="next-icon">✅</div><h3>Quality Control — Finished Products</h3></div><div class="next-card-body"><p>Inspection criteria, documentation requirements and non-conformance reporting for finished conveyors before dispatch.</p><div class="next-tag">Coming soon</div></div></div>
       </div>
-      <div style="margin-top:1.5rem;text-align:center;">
-        <button class="btn-restart" onclick="showPage('pg-summary')">← Back to summary</button>
+      <div style="margin-top:1.5rem;text-align:center;padding-bottom:2rem;">
+        <button type="button" class="btn-next-courses" onclick="showPage('pg-final')">Finish →</button>
       </div>
     </div>
   </div>
 </div>
 
+<!-- FINAL PAGE -->
+<div class="page" id="pg-final">
+  <div class="topbar"><div class="brand">vesma.d <span>training</span></div><div class="tb-pill">ID PROTOTYPE · 2026</div></div>
+  <div class="page-body">
+    <div class="content-page" style="display:flex;flex-direction:column;justify-content:center;height:100%;">
+      <div class="sec-label">Instructional Design Prototype · 2026</div>
+      <div class="sec-title" style="font-size:2rem;margin-bottom:1.5rem;">The Design Partnership</div>
+      <p style="font-size:1rem;line-height:1.85;color:var(--text-mid);max-width:680px;">
+        Great learning products are built on continuous iteration. Let's explore what we can build together.
+      </p>
+    </div>
+  </div>
+</div>
+
 <script>
-/* ═══════════════════════════════════════
-   PAGE SYSTEM
-═══════════════════════════════════════ */
+'use strict';
 const PW='h55m2kmv';
+const modules={1:{title:'Module 01 · Lifting',total:12},2:{title:'Module 02 · Packing',total:11},3:{title:'Boss Level · Combined',total:2}};
+let curMod=1,curSlide=1;
+const gates={};const qSolved={};const ppeState={};const modDone={1:false,2:false,3:false};
+
+/* Boss level state */
+const bossAnswers=[];
+const bossQuestions=[
+  {q:'What does Alex do first — conveyor on stand, all packing materials ready?',correct:'B',opts:['Start laying out packing materials — looks ready.','Follow the Lifting instruction first — conveyor must be on trolley before packing.','Ask a colleague to start packing while he prepares the crane.'],key:'m3d1',stopThink:'The packing materials are all there. The conveyor looks ready. It would save 20 minutes to start wrapping now. What is the real first step — and what happens if Alex skips it?'},
+  {q:'Lifting done. Gravity sticker on left side only. Alex is behind schedule.',correct:'C',opts:['Remove crane — one sticker is enough for now.','Ask a colleague to apply the second sticker while he starts packing.','Apply sticker to both sides → remove crane → begin packing.'],key:'m3d2',stopThink:'In 2 weeks this conveyor arrives at the customer site. If the gravity sticker is missing on one side, what happens when they try to lift it off the truck?'},
+  {q:'Alex is melting film. He realises he\'s wearing regular work gloves — not thermal.',correct:'C',opts:['Continue carefully — almost done.','Work faster to finish this section quickly.','Stop, secure the machine, put on thermal gloves, then continue.'],key:'m3d3',stopThink:'Alex is 80% done with this section. Stopping now means a 3-minute delay. What are the real consequences of continuing without thermal protection?'},
+  {q:'Serial number: where does Alex write it after the second film layer?',correct:'C',opts:['On both sides only.','On one side and one end — enough for identification.','Project number + serial number on both sides; serial number on both ends.'],key:'m2q6',stopThink:null},
+  {q:'Packing complete. Assembly checklist is missing. Supervisor is waiting.',correct:'C',opts:['Call the supervisor — it\'s probably fine.','Check the sides only — ends are less critical.','Physically verify all stickers, manual, end sticker and hazard paint before calling.'],key:'m3d4',stopThink:'The supervisor is waiting. Calling now saves 5 minutes. What is the cost if something was missed and the conveyor is already in transit?'}
+];
+let bossCurrentQ=0;
+let bossShowingStopThink=false;
+
+/* ── PAGES ── */
+function showPage(id){
+  const page=document.getElementById(id);
+  if(!page)return;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  page.classList.add('active');
+  // scroll any scrollable child to top
+  page.querySelectorAll('.page-body,.sum-wrap,.slide-area').forEach(el=>el.scrollTop=0);
+}
 function unlock(){
   const inp=document.getElementById('pw');
+  const lock=document.getElementById('lock');
+  const err=document.getElementById('err');
   if(inp.value===PW){
-    document.getElementById('lock').style.display='none';
+    lock.style.display='none';
     showPage('pg-hero');
-  } else {
+  }else{
     inp.classList.add('shake');
-    document.getElementById('err').style.display='block';
+    err.style.display='block';
     setTimeout(()=>inp.classList.remove('shake'),400);
     inp.value='';
+    inp.focus();
   }
 }
-document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('lock').style.display!=='none')unlock();});
+document.getElementById('pw').addEventListener('keydown',e=>{if(e.key==='Enter')unlock();});
 
-function showPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  // scroll to top of page-body
-  const pb=document.querySelector('#'+id+' .page-body');
-  if(pb)pb.scrollTop=0;
-}
+/* ── WARNING ── */
+function openWarning(){document.getElementById('warn-modal').classList.add('open');}
+function closeWarning(){document.getElementById('warn-modal').classList.remove('open');}
+function goToCourseStructure(){closeWarning();showPage('pg-structure');}
 
-/* ═══════════════════════════════════════
-   SLIDE DATA
-═══════════════════════════════════════ */
-const modules={
-  1:{title:'Module 01 · Lifting',total:9},
-  2:{title:'Module 02 · Packing',total:8},
-  3:{title:'Module 03 · Combined',total:6}
-};
-let curMod=1,curSlide=1;
-
-/* per-slide gating: key="m-s" -> {needed, solved} */
-const gates={};
-/* per-question solved: key=qId */
-const qSolved={};
-/* module done */
-const modDone={1:false,2:false,3:false};
-
-function registerGate(m,s,needed){
-  const k=m+'-'+s;
-  if(!gates[k])gates[k]={needed,count:0,solved:false};
-}
-function solveGate(m,s){
-  const k=m+'-'+s;
-  if(!gates[k])return;
-  gates[k].count++;
-  if(gates[k].count>=gates[k].needed){
-    gates[k].solved=true;
-    updateNextBtn();
-  }
-}
+/* ── GATES ── */
+function registerGate(m,s,needed){const k=m+'-'+s;if(!gates[k])gates[k]={needed,count:0,solved:false};}
+function solveGate(m,s){const k=m+'-'+s;if(!gates[k])return;gates[k].count++;if(gates[k].count>=gates[k].needed){gates[k].solved=true;updateNextBtn();}}
 function isGated(m,s){const k=m+'-'+s;return gates[k]&&!gates[k].solved;}
 
-/* ═══════════════════════════════════════
-   NAVIGATION
-═══════════════════════════════════════ */
+/* ── NAV ── */
 function startMod(m){
   curMod=m;curSlide=1;
+  Object.keys(qSolved).forEach(k=>{if(k.startsWith('m'+m))delete qSolved[k];});
+  Object.keys(gates).forEach(k=>{if(k.startsWith(m+'-'))delete gates[k];});
+  Object.keys(ppeState).forEach(k=>{if(k.includes('m'+m))delete ppeState[k];});
+  if(m===3){bossAnswers.length=0;bossCurrentQ=0;bossShowingStopThink=false;}
   buildScenario(m);
   showPage('pg-scenario');
 }
-function navSlide(d){
-  const total=modules[curMod].total;
-  const n=curSlide+d;
-  if(n<1||n>total)return;
-  curSlide=n;
-  renderSlide();
-}
+function navSlide(d){const n=curSlide+d;if(n>=1&&n<=modules[curMod].total){curSlide=n;renderSlide();}}
 function goToSlide(n){curSlide=n;renderSlide();}
 
 function renderSlide(){
   const total=modules[curMod].total;
   document.getElementById('s-ct').textContent=curSlide+' / '+total;
   document.getElementById('s-prev').disabled=curSlide===1;
-  // show/hide slides
-  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('on'));
-  const sl=document.getElementById('sl-'+curSlide);
-  if(sl)sl.classList.add('on');
-  // dots
-  document.querySelectorAll('#dots .dot').forEach((d,i)=>{
-    d.classList.toggle('on',i===curSlide-1);
-  });
-  // scroll slide-area top
-  const sa=document.getElementById('slide-area');if(sa)sa.scrollTop=0;
-  // hide page-nav on completion slide
-  const isCompletion=curSlide===total;
-  document.getElementById('scen-nav').style.display=isCompletion?'none':'flex';
+  const area=document.getElementById('slide-area');
+  area.querySelectorAll('.slide').forEach(s=>s.classList.remove('on'));
+  const sl=document.getElementById('sl-'+curSlide);if(sl)sl.classList.add('on');
+  document.querySelectorAll('#dots .dot').forEach((d,i)=>d.classList.toggle('on',i===curSlide-1));
+  if(area)area.scrollTop=0;
+  // Always show nav
+  document.getElementById('scen-nav').style.display='flex';
   updateNextBtn();
 }
 function updateNextBtn(){
   const btn=document.getElementById('s-next');
   const total=modules[curMod].total;
-  if(curSlide===total){btn.style.display='none';return;}
+  const isLast=curSlide===total;
+  // M3 last slide: Next launches boss
+  if(curMod===3&&isLast){
+    btn.style.display=isGated(3,2)?'none':'inline-block';
+    btn.onclick=launchBoss;
+    btn.textContent='Start Boss Level →';
+    return;
+  }
+  // M1/M2 completion slides: Next calls completeMod
+  if(isLast&&(curMod===1||curMod===2)){
+    btn.style.display='inline-block';
+    btn.onclick=()=>completeMod(curMod);
+    btn.textContent='Continue →';
+    return;
+  }
+  // Default: gated or open Next
+  btn.onclick=()=>navSlide(1);
+  btn.textContent='Next →';
   btn.style.display=isGated(curMod,curSlide)?'none':'inline-block';
 }
 
-/* ═══════════════════════════════════════
-   BUILD SCENARIO HTML
-═══════════════════════════════════════ */
 function buildScenario(m){
   document.getElementById('scen-title').textContent=modules[m].title;
   const total=modules[m].total;
-  // build dots
-  const dotsEl=document.getElementById('dots');
-  dotsEl.innerHTML='';
+  const dotsEl=document.getElementById('dots');dotsEl.innerHTML='';
   for(let i=1;i<=total;i++){
     const d=document.createElement('div');
     d.className='dot'+(i===1?' on':'');
-    d.onclick=(()=>{const n=i;return()=>goToSlide(n);})();
+    d.setAttribute('role','button');
+    d.setAttribute('aria-label','Slide '+i);
+    d.addEventListener('click',()=>goToSlide(i));
     dotsEl.appendChild(d);
   }
-  // inject slides
-  const area=document.getElementById('slide-area');
-  area.innerHTML='';
+  const area=document.getElementById('slide-area');area.innerHTML='';
   const slides=m===1?getM1Slides():m===2?getM2Slides():getM3Slides();
-  slides.forEach((html,i)=>{
-    const div=document.createElement('div');
-    div.className='slide'+(i===0?' on':'');
-    div.id='sl-'+(i+1);
-    div.innerHTML=html;
-    area.appendChild(div);
+  slides.forEach((html,i)=>{const div=document.createElement('div');div.className='slide'+(i===0?' on':'');div.id='sl-'+(i+1);div.innerHTML=html;area.appendChild(div);});
+  // live regions for quiz/sequence feedback (screen readers announce results)
+  area.querySelectorAll('.fb,.seq-fb').forEach(el=>el.setAttribute('aria-live','polite'));
+  // keyboard support for PPE tiles
+  area.querySelectorAll('.ppe').forEach(p=>{
+    p.setAttribute('tabindex','0');
+    p.setAttribute('role','button');
+    p.addEventListener('keydown',e=>{
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();p.click();}
+    });
   });
-  // register gates
-  if(m===1){
-    registerGate(1,3,1);registerGate(1,4,1);registerGate(1,7,1);registerGate(1,8,2);
-  } else if(m===2){
-    registerGate(2,3,1);registerGate(2,4,1);registerGate(2,6,1);registerGate(2,7,1);
-  } else {
-    registerGate(3,2,1);registerGate(3,3,1);registerGate(3,4,1);registerGate(3,5,1);
-  }
-  // init drags
-  setTimeout(()=>{
-    initDrag('seq-m1s4');
-    initDrag('seq-m2s3');
-  },50);
+  if(m===1){registerGate(1,3,1);registerGate(1,4,1);registerGate(1,10,1);registerGate(1,11,2);}
+  else if(m===2){registerGate(2,3,1);registerGate(2,5,1);registerGate(2,7,1);registerGate(2,9,1);registerGate(2,10,1);}
+  else if(m===3){registerGate(3,2,1);}
+  setTimeout(()=>{initDrag('seq-m1s4');initDrag('seq-m2s3');},50);
   renderSlide();
 }
+function completeMod(m){
+  modDone[m]=true;
+  const card=document.getElementById('mc'+m);
+  if(card)card.classList.add('done');
+  showPage('pg-structure');
+}
 
-/* ═══════════════════════════════════════
-   MODULE 1 SLIDES
-═══════════════════════════════════════ */
-function getM1Slides(){return[
-// S1
-`<div class="stag">Slide 1 of 9 · Introduction</div><h2>Meet Alex</h2>
-<div class="two-col">
-  <div><div class="narr">It's Alex's first week at Caljan. Supervisor:<br><br><strong>"Alex — conveyor #221438 is ready. Lift it off the stand. You're on it."</strong><br><br>Alex has watched this once. Today it's his turn.</div><div class="warn"><span>⚠️</span><div>The overhead crane may only be operated by <strong>employees with a valid certification</strong>.</div></div></div>
-  <div><div class="photo-block"><img src="lifting-intro.jpg" alt="Production hall — finished conveyor on production stand"></div></div>
-</div>`,
-// S2
-`<div class="stag">Slide 2 of 9 · Safety first</div><h2>What does Alex need to put on?</h2>
-<div class="two-col">
-  <div><div class="narr"><strong>"If it's not on, you're not working."</strong></div>
-  <div class="task-banner">🖱️ Click every item required. If you choose a wrong item, all selections reset.</div>
-  <div class="fb" id="fb-m1ppe"></div></div>
-  <div><div class="ppe-g" id="ppe-m1">
-    <div class="ppe" onclick="pickPPE6(this,'ppe-m1',true,'fb-m1ppe',1,2)"><span class="pi2">👟</span><span class="pl">Safety boots</span></div>
-    <div class="ppe" onclick="pickPPE6(this,'ppe-m1',true,'fb-m1ppe',1,2)"><span class="pi2">🥽</span><span class="pl">Safety glasses</span></div>
-    <div class="ppe" onclick="pickPPE6(this,'ppe-m1',true,'fb-m1ppe',1,2)"><span class="pi2">🧤</span><span class="pl">Gloves</span></div>
-    <div class="ppe" onclick="pickPPE6(this,'ppe-m1',true,'fb-m1ppe',1,2)"><span class="pi2">⛑️</span><span class="pl">Hard hat</span></div>
-    <div class="ppe" onclick="pickPPE6(this,'ppe-m1',false,'fb-m1ppe',1,2)"><span class="pi2">🎧</span><span class="pl">Ear protection</span></div>
-    <div class="ppe" onclick="pickPPE6(this,'ppe-m1',false,'fb-m1ppe',1,2)"><span class="pi2">🧯</span><span class="pl">Fire extinguisher</span></div>
-  </div></div>
-</div>`,
-// S3
-`<div class="stag">Slide 3 of 9 · Step 1 — Retract</div><h2>Is the conveyor fully retracted?</h2>
-<div class="two-col">
-  <div><div class="photo-block"><img src="lifting-step1-retract.jpg" alt="Fully retracted conveyor on the production stand"></div></div>
-  <div><div class="narr"><strong>The conveyor must be completely retracted before anything else happens.</strong></div>
-  <div class="task-banner">❓ Choose the correct answer.</div>
-  <p class="qt">Alex sees the conveyor is only partially retracted. What should he do?</p>
-  <div class="opts" id="q-m1s3">
-    <div class="opt" onclick="ansQ('q-m1s3','A','B','s3',1,3)"><div class="ol">A</div>Continue — close enough.</div>
-    <div class="opt" onclick="ansQ('q-m1s3','B','B','s3',1,3)"><div class="ol">B</div>Retract it completely first.</div>
-    <div class="opt" onclick="ansQ('q-m1s3','C','B','s3',1,3)"><div class="ol">C</div>Ask the supervisor.</div>
-  </div>
-  <div class="fb" id="fb-m1s3"></div>
-  <button class="retry-btn" id="retry-q-m1s3" onclick="resetQ('q-m1s3','fb-m1s3','retry-q-m1s3')">Try again →</button>
-  </div>
-</div>`,
-// S4
-`<div class="stag">Slide 4 of 9 · Step 2 — Electricity</div><h2>Disconnect in the right order</h2>
-<div class="two-col">
-  <div><div class="photo-block"><img src="lifting-step2-electricity.jpg" alt="Main switch, electrical plug and cabinet connections"></div><div class="narr" style="font-size:.9rem;">Disconnecting electricity is a <strong>three-step sequence</strong>. Each action must be completed before the next begins.</div></div>
-  <div><div class="task-banner">↕️ Drag the steps into the correct order, then press Confirm.</div>
-  <div class="seq-wrap" id="seq-m1s4">
-    <div class="seq-item" draggable="true" data-val="2"><span class="seq-handle">⠿</span><span class="seq-num">?</span>Unplug the main electrical connection</div>
-    <div class="seq-item" draggable="true" data-val="1"><span class="seq-handle">⠿</span><span class="seq-num">?</span>Turn off the main switch</div>
-    <div class="seq-item" draggable="true" data-val="3"><span class="seq-handle">⠿</span><span class="seq-num">?</span>Remove the cabinet connection</div>
-  </div>
-  <button class="btn-confirm" id="bc-seq-m1s4" onclick="checkSeq('seq-m1s4','fb-m1s4',[1,2,3],1,4)">Confirm order</button>
-  <div class="seq-fb" id="fb-m1s4"></div></div>
-</div>`,
-// S5
-`<div class="stag">Slide 5 of 9 · Steps 3 & 4</div><h2>Deattach, then protect</h2>
-<div class="two-col">
-  <div><div class="photo-block"><img src="lifting-step3-deattach.jpg" alt="Straps and brackets being removed, back cover attached"></div></div>
-  <div><div class="narr"><strong>"These straps are the only thing keeping this conveyor on the stand."</strong><br><br>He removes straps and brackets with the electric hand drill. Once free, the <strong>back cover goes on before the lift begins.</strong></div><div class="warn"><span>💭</span><div>Why attach the back cover <em>before</em> lifting? Unprotected components can be damaged during crane movement.</div></div></div>
-</div>`,
-// S6
-`<div class="stag">Slide 6 of 9 · Steps 5 & 6</div><h2>Sling and centre the crane</h2>
-<div class="two-col">
-  <div><div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Sling positioned / crane centred<br><small>→ <code>&lt;img src="lifting-step5-sling.jpg"&gt;</code></small></div></div></div>
-  <div><div class="narr">Alex places the sling — <strong>lifting capacity must match this specific conveyor</strong>. Sharp parts get a protective layer first.<br><br>He lifts a few centimetres, finds the centre of gravity, adjusts, lifts again. Balanced.</div><div class="warn"><span>⚠️</span><div>Follow the <strong>Work Safety Instruction for cargo cranes</strong>. Conveyor must be stable — not overleaning.</div></div></div>
-</div>`,
-// S7
-`<div class="stag">Slide 7 of 9 · Steps 7 & 8 · Critical moment</div><h2>The sticker rule — no exceptions</h2>
-<div class="two-col">
-  <div><div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Conveyor on trolley / sticker applied<br><small>→ <code>&lt;img src="lifting-step7-sticker.jpg"&gt;</code></small></div></div><div class="narr tight"><strong>"DO NOT remove the crane before the sticker is on both sides. Not ever."</strong><br>Two stickers. Both sides. Below the crane hook. Then the crane comes down.</div></div>
-  <div><div class="task-banner">❓ Choose the correct answer.</div>
-  <p class="qt">One side has the sticker. The other does not. Alex is behind schedule. What does he do?</p>
-  <div class="opts" id="q-m1s7">
-    <div class="opt" onclick="ansQ('q-m1s7','A','B','s7',1,7)"><div class="ol">A</div>Remove the crane — one sticker is enough.</div>
-    <div class="opt" onclick="ansQ('q-m1s7','B','B','s7',1,7)"><div class="ol">B</div>Apply the sticker to both sides, then remove the crane.</div>
-    <div class="opt" onclick="ansQ('q-m1s7','C','B','s7',1,7)"><div class="ol">C</div>Leave it for someone else.</div>
-  </div>
-  <div class="fb" id="fb-m1s7"></div>
-  <button class="retry-btn" id="retry-q-m1s7" onclick="resetQ('q-m1s7','fb-m1s7','retry-q-m1s7')">Try again →</button></div>
-</div>`,
-// S8
-`<div class="stag">Slide 8 of 9 · Knowledge check</div><h2>Before you move on</h2>
-<div class="two-col">
-  <div><div class="task-banner">❓ Choose the correct answer.</div>
-  <p class="qt">When can the crane be removed?</p>
-  <div class="opts" id="q-m1kc1">
-    <div class="opt" onclick="ansQ('q-m1kc1','A','C','kc1',1,8)"><div class="ol">A</div>Once stable on the trolley.</div>
-    <div class="opt" onclick="ansQ('q-m1kc1','B','C','kc1',1,8)"><div class="ol">B</div>When the supervisor signals.</div>
-    <div class="opt" onclick="ansQ('q-m1kc1','C','C','kc1',1,8)"><div class="ol">C</div>Only after the gravity sticker is on both sides.</div>
-  </div>
-  <div class="fb" id="fb-m1kc1"></div>
-  <button class="retry-btn" id="retry-q-m1kc1" onclick="resetQ('q-m1kc1','fb-m1kc1','retry-q-m1kc1')">Try again →</button></div>
-  <div><div class="task-banner">❓ Choose the correct answer.</div>
-  <p class="qt">Who may operate the overhead crane?</p>
-  <div class="opts" id="q-m1kc2">
-    <div class="opt" onclick="ansQ('q-m1kc2','A','B','kc2',1,8)"><div class="ol">A</div>Any employee with a safety briefing.</div>
-    <div class="opt" onclick="ansQ('q-m1kc2','B','B','kc2',1,8)"><div class="ol">B</div>Only employees with valid crane certification.</div>
-    <div class="opt" onclick="ansQ('q-m1kc2','C','B','kc2',1,8)"><div class="ol">C</div>Any employee if a certified colleague supervises.</div>
-  </div>
-  <div class="fb" id="fb-m1kc2"></div>
-  <button class="retry-btn" id="retry-q-m1kc2" onclick="resetQ('q-m1kc2','fb-m1kc2','retry-q-m1kc2')">Try again →</button></div>
-</div>`,
-// S9 — completion
-`<div class="completion-slide">
-  <div class="completion-icon">🏅</div>
-  <h2>Module 1 complete</h2>
-  <p class="congrats">Congratulations!</p>
-  <p>You have successfully completed the Lifting finished conveyors module. The conveyor is on the trolley, the centre of gravity sticker is placed on both sides, and the crane is removed.</p>
-  <button class="btn-continue" onclick="completeMod(1)">Continue →</button>
-</div>`
-];}
-
-/* ═══════════════════════════════════════
-   MODULE 2 SLIDES
-═══════════════════════════════════════ */
-function getM2Slides(){return[
-// S1
-`<div class="stag">Slide 1 of 8 · Continuation</div><h2>Where we left off</h2>
-<div class="two-col">
-  <div><div class="narr">Conveyor on trolley. Sticker on both sides. Crane removed.<br><br>Supervisor: <strong>"Nine steps. Follow them in order. Gas cylinder — minimum 5 metres from any flame. Thermal gloves when melting film. Always."</strong></div><div class="warn"><span>⚠️</span><div>Gas cylinder must be kept <strong>at least 5 metres from any flame source</strong> at all times.</div></div></div>
-  <div><div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Film melting machine<br><small>→ <code>&lt;img src="packing-intro-machine.jpg"&gt;</code></small></div></div></div>
-</div>`,
-// S2
-`<div class="stag">Slide 2 of 8 · Safety first</div><h2>Packing PPE — one extra item</h2>
-<div class="two-col">
-  <div><div class="narr">Packing requires one additional item — thermal protection for the film melting machine.</div>
-  <div class="task-banner">🖱️ Click every item required. If you choose a wrong item, all selections reset.</div>
-  <div class="warn"><span>🔥</span><div><strong>Thermal gloves are mandatory</strong> when melting film.</div></div>
-  <div class="fb" id="fb-m2ppe"></div></div>
-  <div><div class="ppe-g" id="ppe-m2">
-    <div class="ppe" onclick="pickPPE6(this,'ppe-m2',true,'fb-m2ppe',2,2)"><span class="pi2">👟</span><span class="pl">Safety boots</span></div>
-    <div class="ppe" onclick="pickPPE6(this,'ppe-m2',true,'fb-m2ppe',2,2)"><span class="pi2">🔥🧤</span><span class="pl">Thermal gloves</span></div>
-    <div class="ppe" onclick="pickPPE6(this,'ppe-m2',true,'fb-m2ppe',2,2)"><span class="pi2">🥽</span><span class="pl">Safety glasses</span></div>
-    <div class="ppe" onclick="pickPPE6(this,'ppe-m2',false,'fb-m2ppe',2,2)"><span class="pi2">⛑️</span><span class="pl">Hard hat</span></div>
-    <div class="ppe" onclick="pickPPE6(this,'ppe-m2',false,'fb-m2ppe',2,2)"><span class="pi2">🎧</span><span class="pl">Ear protection</span></div>
-    <div class="ppe" onclick="pickPPE6(this,'ppe-m2',false,'fb-m2ppe',2,2)"><span class="pi2">🧯</span><span class="pl">Fire extinguisher</span></div>
-  </div></div>
-</div>`,
-// S3
-`<div class="stag">Slide 3 of 8 · Steps 1 & 2</div><h2>Prepare trolley and gather materials</h2>
-<div class="two-col">
-  <div><div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Film on trolley / materials laid out<br><small>→ <code>&lt;img src="packing-step1-trolley.jpg"&gt;</code></small></div></div><div class="narr" style="font-size:.9rem;">First film layer goes on the trolley. Then Alex confirms all materials are ready.</div></div>
-  <div><div class="task-banner">↕️ Drag steps into the correct order, then press Confirm.</div>
-  <div class="seq-wrap" id="seq-m2s3">
-    <div class="seq-item" draggable="true" data-val="3"><span class="seq-handle">⠿</span><span class="seq-num">?</span>Collect protective paper and cardboard</div>
-    <div class="seq-item" draggable="true" data-val="1"><span class="seq-handle">⠿</span><span class="seq-num">?</span>Place first film layer on the trolley</div>
-    <div class="seq-item" draggable="true" data-val="2"><span class="seq-handle">⠿</span><span class="seq-num">?</span>Confirm centre of gravity sticker is applied</div>
-    <div class="seq-item" draggable="true" data-val="4"><span class="seq-handle">⠿</span><span class="seq-num">?</span>Gather stickers, manual and adhesive tape</div>
-  </div>
-  <button class="btn-confirm" id="bc-seq-m2s3" onclick="checkSeq('seq-m2s3','fb-m2s3',[1,2,3,4],2,3)">Confirm order</button>
-  <div class="seq-fb" id="fb-m2s3"></div></div>
-</div>`,
-// S4
-`<div class="stag">Slide 4 of 8 · Step 3</div><h2>Protect the belt first</h2>
-<div class="two-col">
-  <div><div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Paper then cardboard on belt<br><small>→ <code>&lt;img src="packing-step3-paper.jpg"&gt;</code></small></div></div></div>
-  <div><div class="narr">Paper on the belt first, then cardboard on top. <strong>The paper and cardboard must cover the entire belt — no gaps.</strong></div>
-  <div class="task-banner">❓ Choose the correct answer.</div>
-  <p class="qt">Alex notices a small section of belt isn't covered. What does he do?</p>
-  <div class="opts" id="q-m2s4">
-    <div class="opt" onclick="ansQ('q-m2s4','A','B','p1',2,4)"><div class="ol">A</div>Continue — a small gap won't matter.</div>
-    <div class="opt" onclick="ansQ('q-m2s4','B','B','p1',2,4)"><div class="ol">B</div>Reposition until the full belt is covered.</div>
-  </div>
-  <div class="fb" id="fb-m2s4"></div>
-  <button class="retry-btn" id="retry-q-m2s4" onclick="resetQ('q-m2s4','fb-m2s4','retry-q-m2s4')">Try again →</button></div>
-</div>`,
-// S5
-`<div class="stag">Slide 5 of 8 · Steps 4 & 5</div><h2>First film layer and adhesive tape</h2>
-<div class="two-col">
-  <div><div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Film melting / tape on connections<br><small>→ <code>&lt;img src="packing-step4-film1.jpg"&gt;</code></small></div></div></div>
-  <div><div class="narr">Thermal gloves on. Alex melts the first film layer steadily from end to end. Then he covers all connection places with adhesive tape.</div><div class="warn"><span>🔥</span><div><strong>Thermal gloves must be worn throughout all film melting operations.</strong></div></div></div>
-</div>`,
-// S6
-`<div class="stag">Slide 6 of 8 · Steps 6 & 7</div><h2>Second film layer and identification</h2>
-<div class="two-col">
-  <div><div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Second film / numbers on film<br><small>→ <code>&lt;img src="packing-step6-film2.jpg"&gt;</code></small></div></div><div class="narr" style="font-size:.9rem;">Second film layer for double protection. Then write identification directly on the outside.</div><div class="warn"><span>🔥</span><div><strong>Thermal gloves required</strong> when melting the second layer.</div></div></div>
-  <div><div class="task-banner">❓ Choose the correct answer.</div>
-  <p class="qt">Where does Alex write the serial number?</p>
-  <div class="opts" id="q-m2s6">
-    <div class="opt" onclick="ansQ('q-m2s6','A','C','m2q6',2,6)"><div class="ol">A</div>On the sides only.</div>
-    <div class="opt" onclick="ansQ('q-m2s6','B','C','m2q6',2,6)"><div class="ol">B</div>On one side and one end.</div>
-    <div class="opt" onclick="ansQ('q-m2s6','C','C','m2q6',2,6)"><div class="ol">C</div>Project number + serial number on both sides; serial number on both ends.</div>
-  </div>
-  <div class="fb" id="fb-m2s6"></div>
-  <button class="retry-btn" id="retry-q-m2s6" onclick="resetQ('q-m2s6','fb-m2s6','retry-q-m2s6')">Try again →</button></div>
-</div>`,
-// S7
-`<div class="stag">Slide 7 of 8 · Steps 8 & 9</div><h2>Stickers, manual and hazard paint</h2>
-<div class="two-col">
-  <div><div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Stickers / manual / painted parts<br><small>→ <code>&lt;img src="packing-step8-stickers.jpg"&gt;</code></small></div></div><div class="warn"><span>🥽</span><div><strong>Eye protection required</strong> when using paint sprays.</div></div></div>
-  <div><div class="task-banner">❓ Choose the correct answer.</div>
-  <p class="qt">Where is the transportation and installation manual attached?</p>
-  <div class="opts" id="q-m2s7">
-    <div class="opt" onclick="ansQ('q-m2s7','A','B','m2q7',2,7)"><div class="ol">A</div>Placed inside the film wrapping.</div>
-    <div class="opt" onclick="ansQ('q-m2s7','B','B','m2q7',2,7)"><div class="ol">B</div>Attached to one of the large lifting instruction stickers on the side.</div>
-    <div class="opt" onclick="ansQ('q-m2s7','C','B','m2q7',2,7)"><div class="ol">C</div>Fixed to the small sticker on the end.</div>
-  </div>
-  <div class="fb" id="fb-m2s7"></div>
-  <button class="retry-btn" id="retry-q-m2s7" onclick="resetQ('q-m2s7','fb-m2s7','retry-q-m2s7')">Try again →</button></div>
-</div>`,
-// S8 — completion
-`<div class="completion-slide">
-  <div class="completion-icon">🏅</div>
-  <h2>Module 2 complete</h2>
-  <p class="congrats">Congratulations!</p>
-  <p>You have successfully completed the Packing finished conveyors module. The conveyor is double-wrapped, numbered, labelled and marked — ready for safe transportation.</p>
-  <button class="btn-continue" onclick="completeMod(2)">Continue →</button>
-</div>`
-];}
-
-/* ═══════════════════════════════════════
-   MODULE 3 SLIDES
-═══════════════════════════════════════ */
-function getM3Slides(){return[
-// S1
-`<div class="stag">Slide 1 of 6 · Full assignment</div><h2>One task, two instructions</h2>
-<div class="two-col">
-  <div><div class="narr">Supervisor: <strong>"Conveyor #221439. Lift it, pack it, get it ready for dispatch today."</strong><br><br>Alex knows both instructions. Today he must do them together — in the right order — without step-by-step guidance.</div><div class="warn"><span>🎯</span><div>In this module, Alex faces real decisions. Some choices lead to delays, damage or safety incidents.</div></div></div>
-  <div><div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Conveyor #221439 on production stand<br><small>→ <code>&lt;img src="combined-start.jpg"&gt;</code></small></div></div></div>
-</div>`,
-// S2
-`<div class="stag">Slide 2 of 6 · First decision</div><h2>Where does Alex start?</h2>
-<div class="two-col single">
-  <div><div class="narr">Alex is in the production hall. Conveyor #221439 is on the stand. He has all packing materials with him.</div>
-  <div class="task-banner">❓ Choose the correct answer.</div>
-  <p class="qt">What does Alex do first?</p>
-  <div class="opts" id="q-m3s2">
-    <div class="opt" onclick="ansQ('q-m3s2','A','B','m3d1',3,2)"><div class="ol">A</div>Start laying out packing materials — the conveyor looks ready to wrap.</div>
-    <div class="opt" onclick="ansQ('q-m3s2','B','B','m3d1',3,2)"><div class="ol">B</div>Follow the Lifting instruction first — the conveyor must be on the trolley before packing can begin.</div>
-    <div class="opt" onclick="ansQ('q-m3s2','C','B','m3d1',3,2)"><div class="ol">C</div>Ask a colleague to start packing while he prepares the crane.</div>
-  </div>
-  <div class="fb" id="fb-m3s2"></div>
-  <button class="retry-btn" id="retry-q-m3s2" onclick="resetQ('q-m3s2','fb-m3s2','retry-q-m3s2')">Try again →</button></div>
-</div>`,
-// S3
-`<div class="stag">Slide 3 of 6 · The critical handoff</div><h2>The moment the two instructions connect</h2>
-<div class="two-col">
-  <div><div class="narr">Lifting is done. Conveyor is on the trolley. Alex is about to remove the crane and start packing — when he stops.<br><br><strong>"Wait. The gravity sticker."</strong><br><br>He checks. Sticker on the left side. Right side is bare. Packing film is in his hand. He's behind on time.</div></div>
-  <div><div class="task-banner">❓ Choose the correct answer.</div>
-  <p class="qt">The gravity sticker is missing on one side. What does Alex do?</p>
-  <div class="opts" id="q-m3s3">
-    <div class="opt" onclick="ansQ('q-m3s3','A','C','m3d2',3,3)"><div class="ol">A</div>Remove crane and start packing — sticker can go on after.</div>
-    <div class="opt" onclick="ansQ('q-m3s3','B','C','m3d2',3,3)"><div class="ol">B</div>Ask a colleague to apply the sticker while he starts packing.</div>
-    <div class="opt" onclick="ansQ('q-m3s3','C','C','m3d2',3,3)"><div class="ol">C</div>Sticker on both sides → remove crane → begin packing.</div>
-  </div>
-  <div class="fb" id="fb-m3s3"></div>
-  <button class="retry-btn" id="retry-q-m3s3" onclick="resetQ('q-m3s3','fb-m3s3','retry-q-m3s3')">Try again →</button></div>
-</div>`,
-// S4
-`<div class="stag">Slide 4 of 6 · Spot the mistake</div><h2>Something is wrong — can you see it?</h2>
-<div class="two-col">
-  <div><div class="photo-block"><div class="photo-ph"><span class="pi">📷</span>Film melting — regular gloves visible<br><small>→ <code>&lt;img src="combined-spot-mistake.jpg"&gt;</code></small></div></div><div class="narr tight">A colleague stops: <strong>"Alex — where are your gloves?"</strong> He put down his thermal gloves when writing the serial number and forgot to put them back on.</div></div>
-  <div><div class="task-banner">❓ Choose the correct answer.</div>
-  <p class="qt">Alex is using the film melting machine with regular work gloves. What is the correct action?</p>
-  <div class="opts" id="q-m3s4">
-    <div class="opt" onclick="ansQ('q-m3s4','A','C','m3d3',3,4)"><div class="ol">A</div>Continue carefully — almost done.</div>
-    <div class="opt" onclick="ansQ('q-m3s4','B','C','m3d3',3,4)"><div class="ol">B</div>Work faster to finish before heat is a problem.</div>
-    <div class="opt" onclick="ansQ('q-m3s4','C','C','m3d3',3,4)"><div class="ol">C</div>Stop, secure the machine, put on thermal gloves, then continue.</div>
-  </div>
-  <div class="fb" id="fb-m3s4"></div>
-  <button class="retry-btn" id="retry-q-m3s4" onclick="resetQ('q-m3s4','fb-m3s4','retry-q-m3s4')">Try again →</button></div>
-</div>`,
-// S5
-`<div class="stag">Slide 5 of 6 · Final knowledge check</div><h2>One last question before dispatch</h2>
-<div class="two-col single">
-  <div><div class="narr">Conveyor is packed. Alex is about to call his supervisor — but first he checks himself on the one rule that appears in both instructions.</div>
-  <div class="task-banner">❓ Choose the correct answer.</div>
-  <p class="qt">Alex cannot find the assembly checklist. What should he do?</p>
-  <div class="opts" id="q-m3s5">
-    <div class="opt" onclick="ansQ('q-m3s5','A','C','m3d4',3,5)"><div class="ol">A</div>Call the supervisor anyway — it's probably fine.</div>
-    <div class="opt" onclick="ansQ('q-m3s5','B','C','m3d4',3,5)"><div class="ol">B</div>Check the sides only — the ends are less important.</div>
-    <div class="opt" onclick="ansQ('q-m3s5','C','C','m3d4',3,5)"><div class="ol">C</div>Physically verify all stickers, manual, end sticker and hazard paint are in place before calling the supervisor.</div>
-  </div>
-  <div class="fb" id="fb-m3s5"></div>
-  <button class="retry-btn" id="retry-q-m3s5" onclick="resetQ('q-m3s5','fb-m3s5','retry-q-m3s5')">Try again →</button></div>
-</div>`,
-// S6 — completion
-`<div class="completion-slide">
-  <div class="completion-icon">🎓</div>
-  <h2>Course complete</h2>
-  <p class="congrats">Congratulations!</p>
-  <p>Supervisor: <strong>"This is exactly how it should be done. Lifting instruction, packing instruction — one process, start to finish. Every step, in order."</strong><br><br>You have completed all three modules and can independently prepare a finished Caljan conveyor for dispatch.</p>
-  <button class="btn-continue" onclick="showPage('pg-summary')">Finish →</button>
-</div>`
-];}
-
-/* ═══════════════════════════════════════
-   FEEDBACK TEXTS
-═══════════════════════════════════════ */
+/* ── FEEDBACK TEXTS ── */
 const FB={
-  s3:{ok:'Correct. Fully retracted — no exceptions.',no:'The conveyor must be completely retracted before anything else begins.'},
-  s7:{ok:'Correct. Both stickers, both sides, before the crane is removed — every time.',no:'Schedule does not override safety. Apply both stickers before removing the crane.'},
-  kc1:{ok:'Correct. Both gravity stickers must be placed first.',no:'Stability on the trolley is not enough. Both stickers must be placed first.'},
-  kc2:{ok:'Correct. Only certified employees may operate the crane.',no:'Supervision does not substitute for certification.'},
-  p1:{ok:'Correct. The full belt must be covered — no gaps.',no:'Even a small gap can cause transport damage. The entire belt must be covered.'},
-  m2q6:{ok:'Correct. Project number + serial number on both sides; serial number on both ends.',no:'The serial number must appear on both ends, and the project number + serial number on both sides.'},
-  m2q7:{ok:'Correct. The manual is attached to one of the large stickers on the side.',no:'The manual must be attached to a large sticker on the side — not inside the film or on the end sticker.'},
-  m3d1:{ok:'Correct. Lifting instruction always comes first.',no:'Packing cannot begin until the conveyor is on the trolley. The Lifting instruction must be completed first.'},
-  m3d2:{ok:'Correct. Sticker on both sides → crane removed → packing begins. No exceptions.',no:'The crane must not be removed before both stickers are placed — regardless of schedule.'},
-  m3d3:{ok:'Correct. Stop immediately. Thermal gloves are mandatory.',no:'Film melting without thermal gloves is a burn risk. Stop, secure the machine, put on the correct PPE.'},
-  m3d4:{ok:'Correct. A physical check is mandatory before signing off.',no:'Every marking must be verified before the conveyor leaves.'}
+  s3:{ok:'Correct. Fully retracted — no exceptions.',
+      no:'The conveyor must be completely retracted before anything else begins.'},
+  s7:{ok:'Correct. Both stickers, both sides, before the crane is removed — every time.',
+      no:'Schedule does not override safety. Apply both stickers before removing the crane.'},
+  kc1:{ok:'Correct. Both gravity stickers must be placed first.',
+       no:'Stability on the trolley is not enough. Both stickers must be placed first.'},
+  kc2:{ok:'Correct. Only certified employees may operate the crane.',
+       no:'Supervision does not substitute for certification.'},
+  p1:{ok:'Correct. The full belt must be covered — no gaps.',
+      no:'Even a small gap can cause transport damage. The entire belt must be covered.'},
+  m2tape:{ok:'Correct. Adhesive tape is applied to all connection places where film meets or overlaps.',
+           no:'Adhesive tape covers the connection places specifically — not the full surface.'},
+  m2q6:{ok:'Correct. Project number + serial number on both sides; serial number on both ends.',
+        no:'The serial number must appear on both ends, and the project number + serial number on both sides.'},
+  m2q7:{ok:'Correct. The manual is attached to one of the large stickers on the side.',
+        no:'The manual must be on a large sticker on the side — not inside the film or on the end sticker.'},
+  m3d1:{ok:'Correct. Lifting instruction always comes first.',
+        no:'Packing cannot begin until the conveyor is on the trolley. Lifting instruction must be completed first.'},
+  m3d2:{ok:'Correct. Sticker on both sides → crane removed → packing begins. No exceptions.',
+        no:'The crane must not be removed before both stickers are placed. The missing sticker means the customer cannot safely lift the conveyor at their site — potentially stopping their production line.'},
+  m3d3:{ok:'Correct. Stop immediately. Thermal gloves are mandatory.',
+        no:'Continuing without thermal gloves risks 2nd-degree burns. If Alex is injured, the production line stops for at least 2 hours while the incident is investigated and documented.'},
+  m3d4:{ok:'Correct. A physical check is mandatory before signing off.',
+        no:'Every marking must be verified before the conveyor leaves.'}
 };
 
-/* ═══════════════════════════════════════
-   QUIZ LOGIC — never reveal correct on wrong
-═══════════════════════════════════════ */
 function ansQ(qId,chosen,correct,key,m,s){
   if(qSolved[qId])return;
   const opts=document.querySelectorAll('#'+qId+' .opt');
-  const L=['A','B','C','D'];
-  const ok=chosen===correct;
-  if(ok){
-    qSolved[qId]=true;
-    opts.forEach((o,i)=>{
-      if(L[i]===chosen)o.classList.add('ok');
-      else o.classList.add('locked');
-    });
-    solveGate(m,s);
-  } else {
-    opts.forEach((o,i)=>{if(L[i]===chosen)o.classList.add('no');});
-    const rb=document.getElementById('retry-'+qId);
-    if(rb)rb.classList.add('show');
-  }
-  const fb=document.getElementById('fb-'+qId.replace('q-',''));
+  const L=['A','B','C','D'];const ok=chosen===correct;
+  if(ok){qSolved[qId]=true;opts.forEach((o,i)=>{if(L[i]===chosen)o.classList.add('ok');else o.classList.add('locked');o.removeAttribute('tabindex');});solveGate(m,s);}
+  else{opts.forEach((o,i)=>{if(L[i]===chosen){o.classList.add('no');o.removeAttribute('tabindex');}});const rb=document.getElementById('retry-'+qId);if(rb)rb.classList.add('show');}
+  const fb=document.getElementById('fb-'+qId);
   if(fb&&FB[key]){fb.className='fb show '+(ok?'ok':'no');fb.textContent=ok?FB[key].ok:FB[key].no;}
 }
-
-function resetQ(qId,fbId,retryId){
+function resetQ(qId,retryId){
   if(qSolved[qId])return;
-  document.querySelectorAll('#'+qId+' .opt').forEach(o=>o.className='opt');
-  const fb=document.getElementById(fbId);if(fb)fb.className='fb';
+  document.querySelectorAll('#'+qId+' .opt').forEach(o=>{o.className='opt';o.setAttribute('tabindex','0');});
+  const fb=document.getElementById('fb-'+qId);if(fb)fb.className='fb';
   const rb=document.getElementById(retryId);if(rb)rb.classList.remove('show');
 }
 
-/* ═══════════════════════════════════════
-   PPE — 6 items, reset all on wrong
-═══════════════════════════════════════ */
-const ppeState={};
-function pickPPE6(el,gridId,correct,fbId,m,s){
-  const grid=document.getElementById(gridId);
-  if(!grid)return;
-  // if already locked (all correct), ignore
-  if(el.classList.contains('locked'))return;
+/* ── PPE — reset all on wrong, animate on correct ── */
+function pickPPE6(el,gridId,correct,m,s){
+  const grid=document.getElementById(gridId);if(!grid||el.classList.contains('locked'))return;
   if(correct){
     el.classList.add('ok');
-    // check if all correct items are now selected
-    const allCorrect=[...grid.querySelectorAll('.ppe')].filter(p=>!p.classList.contains('no'));
-    const correctItems=[...grid.querySelectorAll('.ppe')].filter(p=>{
-      // detect correct by checking if onclick contains 'true'
-      return p.getAttribute('onclick')&&p.getAttribute('onclick').includes(',true,');
-    });
+    const correctItems=[...grid.querySelectorAll('.ppe')].filter(p=>p.getAttribute('onclick')&&p.getAttribute('onclick').includes(',true,'));
     const selectedCorrect=[...grid.querySelectorAll('.ppe.ok')].length;
-    const fb=document.getElementById(fbId);
     if(selectedCorrect===correctItems.length){
-      // all correct selected — lock everything
-      grid.querySelectorAll('.ppe').forEach(p=>{p.classList.add('locked');});
-      if(fb){fb.className='fb show ok';fb.textContent='Correct! All required items selected.';}
+      grid.querySelectorAll('.ppe').forEach(p=>p.classList.add('locked'));
+      // show thermal warning for M2 PPE only after all correct
+      const tw=document.getElementById('thermal-warn-m2');
+      if(tw)tw.style.display='flex';
       if(!ppeState[gridId]){ppeState[gridId]=true;solveGate(m,s);}
-    } else {
-      if(fb){fb.className='fb show ok';fb.textContent='Correct — keep going!';}
     }
   } else {
-    // wrong — reset all
-    const fb=document.getElementById(fbId);
-    if(fb){fb.className='fb show no';fb.textContent='Incorrect item selected. All selections have been reset — try again.';}
-    setTimeout(()=>{
-      grid.querySelectorAll('.ppe').forEach(p=>{p.className='ppe';});
-      if(fb)fb.className='fb';
-    },1200);
+    el.classList.add('no');
+    setTimeout(()=>{grid.querySelectorAll('.ppe').forEach(p=>{p.className='ppe';});},1200);
   }
 }
 
-/* ═══════════════════════════════════════
-   DRAG & DROP
-═══════════════════════════════════════ */
+/* ── DRAG & DROP (mouse + touch) ── */
 function initDrag(cid){
   const wrap=document.getElementById(cid);if(!wrap)return;
-  let dragEl=null;
+  let dragEl=null,touchClone=null,touchOffX=0,touchOffY=0;
+
   wrap.querySelectorAll('.seq-item').forEach(item=>{
+    // Mouse
     item.addEventListener('dragstart',()=>{dragEl=item;setTimeout(()=>item.classList.add('dragging'),0);});
-    item.addEventListener('dragend',()=>{item.classList.remove('dragging');dragEl=null;updateNums(wrap);});
+    item.addEventListener('dragend',()=>{item.classList.remove('dragging');dragEl=null;wrap.querySelectorAll('.seq-item').forEach(si=>si.classList.remove('drag-over'));updateNums(wrap);});
     item.addEventListener('dragover',e=>{e.preventDefault();if(item!==dragEl)item.classList.add('drag-over');});
     item.addEventListener('dragleave',()=>item.classList.remove('drag-over'));
     item.addEventListener('drop',e=>{e.preventDefault();item.classList.remove('drag-over');if(dragEl&&item!==dragEl)wrap.insertBefore(dragEl,item);updateNums(wrap);});
-  });
-  updateNums(wrap);
+
+    // Touch
+    item.addEventListener('touchstart',e=>{
+      if(item.classList.contains('correct'))return;
+      dragEl=item;
+      const t=e.touches[0];
+      const r=item.getBoundingClientRect();
+      touchOffX=t.clientX-r.left;touchOffY=t.clientY-r.top;
+      touchClone=item.cloneNode(true);
+      touchClone.style.cssText=`position:fixed;pointer-events:none;opacity:.75;z-index:9999;width:${r.width}px;left:${t.clientX-touchOffX}px;top:${t.clientY-touchOffY}px;`;
+      document.body.appendChild(touchClone);
+      item.classList.add('dragging');
+    },{passive:true});
+
+    item.addEventListener('touchmove',e=>{
+      e.preventDefault();
+      if(!dragEl||!touchClone)return;
+      const t=e.touches[0];
+      touchClone.style.left=(t.clientX-touchOffX)+'px';
+      touchClone.style.top=(t.clientY-touchOffY)+'px';
+      wrap.querySelectorAll('.seq-item').forEach(si=>si.classList.remove('drag-over'));
+      const el=document.elementFromPoint(t.clientX,t.clientY);
+      const over=el&&el.closest('.seq-item');
+      if(over&&over!==dragEl)over.classList.add('drag-over');
+    },{passive:false});
+
+    item.addEventListener('touchend',e=>{
+      if(!dragEl)return;
+      if(touchClone){touchClone.remove();touchClone=null;}
+      dragEl.classList.remove('dragging');
+      const t=e.changedTouches[0];
+      const el=document.elementFromPoint(t.clientX,t.clientY);
+      const over=el&&el.closest('.seq-item');
+      if(over&&over!==dragEl)wrap.insertBefore(dragEl,over);
+      wrap.querySelectorAll('.seq-item').forEach(si=>si.classList.remove('drag-over'));
+      dragEl=null;updateNums(wrap);
+    });
+  });updateNums(wrap);
 }
-function updateNums(wrap){
-  wrap.querySelectorAll('.seq-item').forEach((item,i)=>{const sn=item.querySelector('.seq-num');if(sn)sn.textContent=i+1;});
-}
-function checkSeq(cid,fbId,correctOrder,m,s){
-  registerGate(m,s,1);
+function updateNums(wrap){wrap.querySelectorAll('.seq-item').forEach((item,i)=>{const sn=item.querySelector('.seq-num');if(sn)sn.textContent=i+1;});}
+function checkSeq(cid,correctOrder,m,s){
   const wrap=document.getElementById(cid);if(!wrap)return;
   const items=[...wrap.querySelectorAll('.seq-item')];
-  const userOrder=items.map(i=>parseInt(i.dataset.val));
-  const ok=userOrder.every((v,i)=>v===correctOrder[i]);
-  const fb=document.getElementById(fbId);
-  if(ok){
-    if(fb){fb.className='seq-fb show ok';fb.textContent='Correct! That is the right order.';}
-    items.forEach(item=>{item.classList.add('correct');item.setAttribute('draggable','false');item.style.cursor='default';const sn=item.querySelector('.seq-num');if(sn)sn.classList.add('ok');});
-    const bc=document.getElementById('bc-'+cid);if(bc)bc.style.display='none';
-    solveGate(m,s);
+  const userOrder=items.map(i=>parseInt(i.dataset.val,10));
+  // For electricity (seq-m1s4): step 1 must be first, steps 2+3 can be in either order
+  let ok;
+  if(cid==='seq-m1s4'){
+    ok=userOrder[0]===1&&userOrder.slice(1).sort((a,b)=>a-b).join(',')==='2,3';
   } else {
-    if(fb){fb.className='seq-fb show no';fb.textContent='Not quite — check the order and try again.';}
-    items.forEach(item=>item.classList.add('wrong-flash'));
-    setTimeout(()=>items.forEach(item=>item.classList.remove('wrong-flash')),900);
+    ok=userOrder.every((v,i)=>v===correctOrder[i]);
+  }
+  const fb=document.getElementById('fb-'+cid);
+  if(ok){if(fb){fb.className='seq-fb show ok';fb.textContent='Correct! That is the right order.';}
+    items.forEach(item=>{item.classList.add('correct');item.setAttribute('draggable','false');item.style.cursor='default';const sn=item.querySelector('.seq-num');if(sn)sn.classList.add('ok');});
+    const bc=document.getElementById('bc-'+cid);if(bc)bc.style.display='none';solveGate(m,s);
+  } else {if(fb){fb.className='seq-fb show no';fb.textContent=cid==='seq-m1s4'?'Not quite — the main switch must be turned off first.':'Not quite — check the order and try again.';}
+    items.forEach(item=>item.classList.add('wrong-flash'));setTimeout(()=>items.forEach(item=>item.classList.remove('wrong-flash')),900);}
+}
+
+/* ── BOSS LEVEL ── */
+function renderBossQ(idx){
+  const qData=bossQuestions[idx];
+  const area=document.getElementById('slide-area');
+  const progHtml=bossQuestions.map((_,i)=>`<div class="boss-step ${i<idx?'done':i===idx?'current':''}"></div>`).join('');
+  if(qData.stopThink&&!bossShowingStopThink){
+    bossShowingStopThink=true;
+    area.innerHTML=`<div class="slide on" id="sl-boss">
+      <div class="story-layout">
+        <div class="stag">Boss Level · Decision ${idx+1} of ${bossQuestions.length}</div>
+        <h2>Stop &amp; Think</h2>
+        <div class="boss-progress">${progHtml}</div>
+        <div class="stop-think">
+          <div class="stop-think-label">🧠 Stop &amp; Think before you answer</div>
+          <p>${qData.stopThink}</p>
+        </div>
+        <div style="text-align:center;margin-top:.5rem;">
+          <button type="button" class="btn-confirm" onclick="showBossQuestion(${idx})">I've thought about it → Show the question</button>
+        </div>
+      </div>
+    </div>`;
+  } else {
+    bossShowingStopThink=false;
+    const optHtml=qData.opts.map((o,i)=>{
+      const L=['A','B','C'];
+      return `<div class="opt" tabindex="0" role="button" id="boss-opt-${i}" onclick="answerBoss(${idx},'${L[i]}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();answerBoss(${idx},'${L[i]}')}"><div class="ol">${L[i]}</div>${o}</div>`;
+    }).join('');
+    area.innerHTML=`<div class="slide on" id="sl-boss">
+      <div class="story-layout">
+        <div class="stag">Boss Level · Decision ${idx+1} of ${bossQuestions.length}</div>
+        <h2>${qData.q}</h2>
+        <div class="boss-progress">${progHtml}</div>
+        <div class="task-banner" style="justify-content:center;">❓ Choose — no feedback until the end.</div>
+        <div class="opts" style="max-width:600px;margin:0 auto;">${optHtml}</div>
+      </div>
+    </div>`;
   }
 }
-
-/* ═══════════════════════════════════════
-   MODULE COMPLETION
-═══════════════════════════════════════ */
-function completeMod(m){
-  modDone[m]=true;
-  document.getElementById('mc'+m).classList.add('done');
-  showPage('pg-structure');
-  // reset active state
-  [1,2,3].forEach(i=>document.getElementById('mc'+i).classList.remove('on'));
+function showBossQuestion(idx){renderBossQ(idx);}
+function answerBoss(idx,chosen){
+  const L=['A','B','C'];
+  // mark selected visually only — no correct/wrong reveal
+  document.querySelectorAll('#sl-boss .opt').forEach((o,i)=>{
+    o.classList.add(L[i]===chosen?'boss-selected':'locked');
+    o.removeAttribute('tabindex');
+  });
+  bossAnswers[idx]=chosen;
+  setTimeout(()=>{
+    if(idx+1<bossQuestions.length){bossCurrentQ=idx+1;renderBossQ(idx+1);}
+    else{showBossResults();}
+  },600);
+}
+function showBossResults(){
+  const score=bossAnswers.filter((a,i)=>a===bossQuestions[i].correct).length;
+  const total=bossQuestions.length;
+  const pct=Math.round((score/total)*100);
+  const numEl=document.getElementById('boss-score-num');
+  numEl.textContent=score+'/'+total;
+  numEl.className='boss-score-num '+(pct>=80?'great':pct>=60?'ok':'poor');
+  const scoreLabel=pct>=80?'Excellent performance':pct>=60?'Good effort — review the errors below':'Keep practising';
+  document.getElementById('boss-score-label').textContent=pct+'% — '+scoreLabel;
+  document.getElementById('boss-icon').textContent=pct>=80?'🏆':pct>=60?'👍':'🔄';
+  const resultsEl=document.getElementById('boss-results');
+  resultsEl.innerHTML=bossQuestions.map((qd,i)=>{
+    const ok=bossAnswers[i]===qd.correct;
+    const fb=FB[qd.key];
+    return `<div class="boss-result-item ${ok?'ok':'no'}">
+      <span class="ri">${ok?'✓':'✗'}</span>
+      <div class="rd"><strong>Decision ${i+1}:</strong> ${ok?fb.ok:fb.no}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('boss-modal').classList.add('open');
+}
+function launchBoss(){
+  // hide nav completely during boss questions
+  document.getElementById('scen-nav').style.display='none';
+  bossCurrentQ=0;bossShowingStopThink=false;
+  renderBossQ(0);
+}
+function retryBoss(){
+  document.getElementById('boss-modal').classList.remove('open');
+  bossAnswers.length=0;bossCurrentQ=0;bossShowingStopThink=false;
+  startMod(3);
+}
+function finishBoss(){
+  document.getElementById('boss-modal').classList.remove('open');
+  modDone[3]=true;document.getElementById('mc3').classList.add('done');
+  showPage('summary');
 }
 
-/* ═══════════════════════════════════════
-   START MODULE
-═══════════════════════════════════════ */
-function startMod(m){
-  curMod=m;curSlide=1;
-  // reset per-module q solved and gates
-  Object.keys(qSolved).forEach(k=>{if(k.includes('m'+m))delete qSolved[k];});
-  Object.keys(gates).forEach(k=>{if(k.startsWith(m+'-'))delete gates[k];});
-  Object.keys(ppeState).forEach(k=>{if(k.includes('m'+m))delete ppeState[k];});
-  buildScenario(m);
-  showPage('pg-scenario');
+/* ── SLIDE BUILDERS ── */
+function img(src,alt){return `<div class="photo-block"><img src="${src}" alt="${alt}" loading="lazy" decoding="async"></div>`;}
+function storyImg(src,alt){return `<div class="story-hero"><img src="${src}" alt="${alt}" loading="lazy" decoding="async"></div>`;}
+function narr(txt){return `<div class="narr">${txt}</div>`;}
+function lead(txt){return `<p class="story-lead-text">${txt}</p>`;}
+function leadp(lines){return `<div class="story-lead-text">${lines.map(l=>`<p style="margin-bottom:.5rem;">${l}</p>`).join('')}</div>`;}
+function warn(icon,txt){return `<div class="warn"><span>${icon}</span><div>${txt}</div></div>`;}
+function pwarn(icon,txt){return `<div class="premium-warn"><span>${icon}</span><div>${txt}</div></div>`;}
+function task(icon,txt){return `<div class="task-banner">${icon} ${txt}</div>`;}
+function q(id,correct,key,m,s,options){
+  const L=['A','B','C','D'];
+  const opts=options.map((o,i)=>`<div class="opt" tabindex="0" role="button" onclick="ansQ('${id}','${L[i]}','${correct}','${key}',${m},${s})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();ansQ('${id}','${L[i]}','${correct}','${key}',${m},${s})}"><div class="ol">${L[i]}</div>${o}</div>`).join('');
+  return `<div class="opts" id="${id}">${opts}</div><div class="fb" id="fb-${id}"></div><button type="button" class="retry-btn" id="retry-${id}" onclick="resetQ('${id}','retry-${id}')">Try again →</button>`;
 }
+
+/* ── MODULE 1 — 12 SLIDES ── */
+function getM1Slides(){
+const T=12;return[
+`<div class="stag">Slide 1 of ${T} · Introduction</div><h2>Meet Alex</h2>
+<div class="story-layout">
+${storyImg('lifting-intro.jpg','Production hall — finished conveyor on production stand')}
+${lead('It\'s Alex\'s first week at Caljan. His supervisor walks up:<br><strong>"Alex — conveyor #221438 is ready. Lift it off the stand. You\'re on it."</strong><br>Alex has watched this process once before as an observer. Today it\'s his turn.')}
+</div>`,
+
+`<div class="stag">Slide 2 of ${T} · Safety first</div><h2>What does Alex need to put on?</h2>
+<div class="story-layout" style="text-align:center;">
+<div class="ppe-g" id="ppe-m1">
+<div class="ppe" onclick="pickPPE6(this,'ppe-m1',true,1,2)"><span class="pi2">👟</span><span class="pl">Safety boots</span></div>
+<div class="ppe" onclick="pickPPE6(this,'ppe-m1',true,1,2)"><span class="pi2">🥽</span><span class="pl">Safety glasses</span></div>
+<div class="ppe" onclick="pickPPE6(this,'ppe-m1',true,1,2)"><span class="pi2">🧤</span><span class="pl">Gloves</span></div>
+<div class="ppe" onclick="pickPPE6(this,'ppe-m1',true,1,2)"><span class="pi2">⛑️</span><span class="pl">Hard hat</span></div>
+<div class="ppe" onclick="pickPPE6(this,'ppe-m1',false,1,2)"><span class="pi2">🎧</span><span class="pl">Ear protection</span></div>
+<div class="ppe" onclick="pickPPE6(this,'ppe-m1',false,1,2)"><span class="pi2">🧯</span><span class="pl">Fire extinguisher</span></div>
+</div>
+<div class="task-banner" style="justify-content:center;max-width:600px;margin:.75rem auto 0;">🖱️ Click every item required for this lifting operation. If all answers are correct, click Next.</div>
+<div class="fb" id="fb-ppe-m1" style="max-width:600px;margin:.5rem auto 0;"></div>
+</div>`,
+
+`<div class="stag">Slide 3 of ${T} · Step 1 — Retract</div><h2>Is the conveyor fully retracted?</h2>
+<div class="two-col"><div class="col">${img('lifting-step1-retract.jpg','Fully retracted conveyor on the production stand')}</div>
+<div class="col">
+${narr('<strong>The conveyor must be completely retracted before anything else happens.</strong>')}
+${task('❓','Choose the correct answer.')}
+<p class="qt">Alex sees the conveyor is only partially retracted. What should he do?</p>
+${q('q-m1s3','B','s3',1,3,['Continue — close enough.','Retract it completely first.','Ask the supervisor.'])}
+</div></div>`,
+
+`<div class="stag">Slide 4 of ${T} · Step 2 — Disconnect electricity</div><h2>Disconnect in the right order</h2>
+<div class="two-col"><div class="col">
+${img('lifting-step2-electricity.jpg','Main switch, electrical plug and cabinet connections')}
+${narr('Disconnecting electricity is a <strong>three-step sequence</strong>. Each action must be completed before the next begins.')}
+</div><div class="col">
+${task('↕️','Drag the steps into the correct order, then press Confirm.')}
+<div class="seq-wrap" id="seq-m1s4">
+<div class="seq-item" draggable="true" data-val="2"><span class="seq-handle">⠿</span><span class="seq-num">?</span>Unplug the main electrical connection</div>
+<div class="seq-item" draggable="true" data-val="1"><span class="seq-handle">⠿</span><span class="seq-num">?</span>Turn off the main switch</div>
+<div class="seq-item" draggable="true" data-val="3"><span class="seq-handle">⠿</span><span class="seq-num">?</span>Remove the cabinet connection</div>
+</div>
+<button type="button" class="btn-confirm" id="bc-seq-m1s4" onclick="checkSeq('seq-m1s4',[1,2,3],1,4)">Confirm</button>
+<div class="seq-fb" id="fb-seq-m1s4"></div>
+</div></div>`,
+
+`<div class="stag">Slide 5 of ${T} · Step 3 — Deattach from stand</div><h2>Free the conveyor from the stand</h2>
+<div class="story-layout">
+${storyImg('lifting-step3-deattach.jpg','Straps and brackets being removed from production stand')}
+${lead('"These straps and brackets are the only thing keeping this conveyor on the stand." Alex uses the electric hand drill to remove all straps and brackets carefully. The conveyor is now free.')}
+${pwarn('💭','Check that <strong>all</strong> straps and brackets are removed before attempting to lift. A missed bracket can cause the conveyor to tip.')}
+</div>`,
+
+`<div class="stag">Slide 6 of ${T} · Step 4 — Back cover</div><h2>Attach the back cover</h2>
+<div class="story-layout">
+${storyImg('lifting-step4-backcover.jpg','Back cover being attached with electric hand drill')}
+${lead('Before the conveyor leaves the stand, the <strong>back cover must be attached</strong> using the electric hand drill. The cover protects electrical components and cables during the crane lift.')}
+${pwarn('💭','Why attach the cover <em>before</em> lifting? Once in the air, access is difficult and components are exposed to damage.')}
+</div>`,
+
+`<div class="stag">Slide 7 of ${T} · Step 5 — Place the sling</div><h2>Choose and place the correct sling</h2>
+<div class="story-layout">
+${storyImg('lifting-step5-sling.jpg','Sling placed around conveyor with sling colour options')}
+${leadp(['Alex selects a sling with a <strong>lifting capacity that matches this specific conveyor</strong>.','If the conveyor has sharp or protruding parts — such as option mounting brackets — these must be <strong>covered with a protective layer</strong> before the sling is placed.'])}
+${pwarn('⚠️','Using a sling with insufficient capacity is a serious safety risk. Always verify the capacity before lifting.')}
+</div>`,
+
+`<div class="stag">Slide 8 of ${T} · Step 6 — Centre the crane</div><h2>Find the centre of gravity</h2>
+<div class="story-layout">
+${storyImg('lifting-step6-crane.jpg','Crane hook centred over conveyor, slings adjusted for balance')}
+${leadp(['Alex lifts the conveyor <strong>just a few centimetres</strong> off the stand to test balance.','If it tilts, he lowers, adjusts the sling, and lifts again. He repeats until the conveyor hangs level. Bottom covers are then attached.'])}
+${pwarn('⚠️','Follow the <strong>Work Safety Instruction for working with a cargo crane</strong>. The conveyor must not be overleaning.')}
+</div>`,
+
+`<div class="stag">Slide 9 of ${T} · Step 7 — Move to trolley</div><h2>Move the conveyor onto the trolley</h2>
+<div class="story-layout">
+${storyImg('lifting-step7-trolley.jpg','Conveyor being lowered onto the trolley')}
+${lead('Before moving the conveyor, Alex <strong>warns all employees in the area</strong> and confirms the lifting zone is clear. He lowers the conveyor slowly onto the prepared trolley. The conveyor must be <strong>stable on both stands, not overleaning</strong>.')}
+${pwarn('⚠️','<strong>Warn all employees before lifting begins.</strong> No one may remain in the lifting zone.')}
+${pwarn('📌','<strong>Important Note:</strong> If it is planned to pack the conveyor right after the lifting works, place the first layer of the film on the trolley beforehand.')}
+</div>`,
+
+`<div class="stag">Slide 10 of ${T} · Step 8 — Gravity sticker · Critical moment</div><h2>The sticker rule — no exceptions</h2>
+<div class="two-col"><div class="col">
+${img('lifting-step8-sticker.jpg','Centre of gravity sticker applied to both sides of conveyor')}
+${narr('<strong>"DO NOT remove the crane before the sticker is on both sides. Not ever."</strong><br>Two stickers. Both sides. Below the crane hook. Then the crane comes down.')}
+</div><div class="col">
+${task('❓','Choose the correct answer.')}
+<p class="qt">One side has the sticker. The other does not. Alex is behind schedule. What does he do?</p>
+${q('q-m1s10','B','s7',1,10,['Remove the crane — one sticker is enough.','Apply the sticker to both sides, then remove the crane.','Leave it for someone else.'])}
+</div></div>`,
+
+`<div class="stag">Slide 11 of ${T} · Knowledge check</div><h2>Before you move on</h2>
+<div class="two-col">
+<div class="col">
+${task('❓','Choose the correct answer.')}
+<p class="qt">When can the crane be removed?</p>
+${q('q-m1kc1','C','kc1',1,11,['Once stable on the trolley.','When the supervisor signals.','Only after the gravity sticker is on both sides.'])}
+</div>
+<div class="col">
+${task('❓','Choose the correct answer.')}
+<p class="qt">Who may operate the overhead crane?</p>
+${q('q-m1kc2','B','kc2',1,11,['Any employee with a safety briefing.','Only employees with valid crane certification.','Any employee if a certified colleague supervises.'])}
+</div></div>`,
+
+`<div class="completion-slide">
+<div class="completion-icon">🏅</div><h2>Module 1 complete</h2>
+<p class="congrats">Congratulations!</p>
+<p>You have successfully completed the Lifting finished conveyors module. The conveyor is on the trolley, the centre of gravity sticker is placed on both sides, and the crane is removed.</p>
+</div>`
+];}
+
+/* ── MODULE 2 — 11 SLIDES ── */
+function getM2Slides(){
+const T=11;return[
+`<div class="stag">Slide 1 of ${T} · Continuation</div><h2>Where we left off</h2>
+<div class="story-layout">
+${storyImg('packing-intro-machine.jpg','Film melting machine — red trolley with gas cylinder')}
+${leadp(['Conveyor on trolley. Sticker on both sides. Crane removed.','Supervisor: <strong>"Nine steps. Follow them in order. Gas cylinder — minimum 5 metres from any flame. Thermal gloves when melting film. Always."</strong>'])}
+${pwarn('⚠️','Gas cylinder must be kept <strong>at least 5 metres from any flame source</strong> at all times.')}
+</div>`,
+
+`<div class="stag">Slide 2 of ${T} · Safety first</div><h2>Packing PPE</h2>
+<div class="story-layout" style="text-align:center;">
+<div class="ppe-g" id="ppe-m2">
+<div class="ppe" onclick="pickPPE6(this,'ppe-m2',true,2,2)"><span class="pi2">👟</span><span class="pl">Safety boots</span></div>
+<div class="ppe" onclick="pickPPE6(this,'ppe-m2',true,2,2)"><span class="pi2">🔥🧤</span><span class="pl">Thermal gloves</span></div>
+<div class="ppe" onclick="pickPPE6(this,'ppe-m2',true,2,2)"><span class="pi2">🥽</span><span class="pl">Safety glasses</span></div>
+<div class="ppe" onclick="pickPPE6(this,'ppe-m2',false,2,2)"><span class="pi2">⛑️</span><span class="pl">Hard hat</span></div>
+<div class="ppe" onclick="pickPPE6(this,'ppe-m2',false,2,2)"><span class="pi2">🎧</span><span class="pl">Ear protection</span></div>
+<div class="ppe" onclick="pickPPE6(this,'ppe-m2',false,2,2)"><span class="pi2">🧯</span><span class="pl">Fire extinguisher</span></div>
+</div>
+<div class="task-banner" style="justify-content:center;max-width:600px;margin:.75rem auto 0;">🖱️ Click every item required for packing operations. If all answers are correct, click Next.</div>
+<div class="fb" id="fb-ppe-m2" style="max-width:600px;margin:.5rem auto 0;"></div>
+<div class="premium-warn" id="thermal-warn-m2" style="display:none;max-width:600px;margin:.5rem auto 0;"><span>🔥</span><div><strong>Thermal gloves are mandatory</strong> when melting film. Regular gloves do not provide adequate heat protection.</div></div>
+</div>`,
+
+`<div class="stag">Slide 3 of ${T} · Step 1 — Film on trolley</div><h2>Prepare the trolley</h2>
+<div class="two-col"><div class="col">
+${img('packing-step1-trolley.jpg','Finished conveyors in production hall')}
+${narr('The <strong>first film layer goes on the trolley</strong> before or as the very first packing step.')}
+</div><div class="col">
+${task('↕️','Drag the steps into the correct order, then press Confirm.')}
+<div class="seq-wrap" id="seq-m2s3">
+<div class="seq-item" draggable="true" data-val="3"><span class="seq-handle">⠿</span><span class="seq-num">?</span>Collect protective paper and cardboard</div>
+<div class="seq-item" draggable="true" data-val="1"><span class="seq-handle">⠿</span><span class="seq-num">?</span>Place first film layer on the trolley</div>
+<div class="seq-item" draggable="true" data-val="2"><span class="seq-handle">⠿</span><span class="seq-num">?</span>Confirm centre of gravity sticker is applied</div>
+<div class="seq-item" draggable="true" data-val="4"><span class="seq-handle">⠿</span><span class="seq-num">?</span>Gather stickers, manual and adhesive tape</div>
+</div>
+<button type="button" class="btn-confirm" id="bc-seq-m2s3" onclick="checkSeq('seq-m2s3',[1,2,3,4],2,3)">Confirm</button>
+<div class="seq-fb" id="fb-seq-m2s3"></div>
+</div></div>`,
+
+`<div class="stag">Slide 4 of ${T} · Step 2 — Gravity sticker & materials</div><h2>Centre of gravity sticker and materials</h2>
+<div class="two-col"><div class="col">${img('packing-step2-sticker.jpg','Centre of gravity sticker on conveyor side and materials laid out')}</div>
+<div class="col">
+${narr('Make sure that the center of gravity label is applied to the conveyor after the lifting work is carried out and the layout is left on the conveyor.<br><br>Prepare all necessary materials:<ul style="margin-top:.5rem;padding-left:1.25rem;line-height:1.8;"><li>Stickers with lifting instructions</li><li>User guide for transporting and installing the conveyor</li><li>Protective paper and cardboard for belts</li><li>Adhesive tape for connection places</li></ul>')}
+</div></div>`,
+
+`<div class="stag">Slide 5 of ${T} · Step 3 — Protective paper & cardboard</div><h2>Protect the belt first</h2>
+<div class="two-col"><div class="col">${img('packing-step3-paper.jpg','Protective paper then cardboard on belt')}</div>
+<div class="col">
+${narr('Paper on the belt first, then cardboard on top. <strong>The paper and cardboard must cover the entire belt — no gaps.</strong>')}
+${task('❓','Choose the correct answer.')}
+<p class="qt">Alex notices a small section of belt isn\'t covered. What does he do?</p>
+${q('q-m2s5','B','p1',2,5,['Continue — a small gap won\'t matter.','Reposition until the full belt is covered.'])}
+</div></div>`,
+
+`<div class="stag">Slide 6 of ${T} · Step 4 — First film layer</div><h2>Melt the first film layer</h2>
+<div class="story-layout">
+${storyImg('packing-step4-film1.jpg','First film layer being melted over the conveyor')}
+${leadp(['Thermal gloves on. Alex picks up the film melting machine and melts the <strong>first film layer</strong> steadily from end to end.'])}
+${pwarn('🔥','<strong>Protective gloves against thermal risks must be worn during all film melting operations.</strong> Do not remove them until the machine is cooled.')}
+</div>`,
+
+`<div class="stag">Slide 7 of ${T} · Step 5 — Adhesive tape</div><h2>Cover the connection places</h2>
+<div class="two-col"><div class="col">${img('packing-step5-tape.jpg','Adhesive tape applied to film connection places')}</div>
+<div class="col">
+${narr('Once the first film layer is in place, Alex covers all <strong>connection places with adhesive tape</strong> to seal and secure them.')}
+${task('❓','Choose the correct answer.')}
+<p class="qt">What does Alex apply adhesive tape to?</p>
+${q('q-m2s7','B','m2tape',2,7,['The full surface for extra protection.','All connection places where the film meets or overlaps.','Only the corners and edges.'])}
+</div></div>`,
+
+`<div class="stag">Slide 8 of ${T} · Step 6 — Second film layer</div><h2>Melt the second film layer</h2>
+<div class="story-layout">
+${storyImg('packing-step6-film2.jpg','Second film layer being applied over the full conveyor')}
+${leadp(['Alex melts the <strong>second layer of film</strong> — this gives the conveyor double protection for transport.'])}
+${pwarn('🔥','<strong>Protective gloves against thermal risks must be worn</strong> when melting the second layer.')}
+</div>`,
+
+`<div class="stag">Slide 9 of ${T} · Step 7 — Project & serial numbers</div><h2>Mark the conveyor</h2>
+<div class="two-col"><div class="col">
+${img('packing-step7-numbers.jpg','Project number and serial number written on the film')}
+${narr('Alex writes identification directly on the outside of the film.<ul style="margin-top:.5rem;padding-left:1.25rem;line-height:1.8;"><li>Project number + Serial number on both sides</li><li>Serial number on both ends</li><li>Weight if specifically requested</li></ul>')}
+</div>
+<div class="col">
+${task('❓','Choose the correct answer.')}
+<p class="qt">Where does Alex write the serial number?</p>
+${q('q-m2s9','C','m2q6',2,9,['On the sides only.','On one side and one end.','Project number + serial number on both sides; serial number on both ends.'])}
+</div></div>`,
+
+`<div class="stag">Slide 10 of ${T} · Steps 8 & 9 — Stickers, manual & paint</div><h2>Final markings</h2>
+<div class="two-col"><div class="col">
+${img('packing-step8-stickers.jpg','Lifting stickers applied and manual attached')}
+${narr('Alex follows the assembly checklist for sticker placement, then marks hazardous parts.<ul style="margin-top:.5rem;padding-left:1.25rem;line-height:1.8;"><li>Two large lifting stickers — one on each side</li><li>Manual attached to one of the large stickers</li><li>Small sticker on one end</li><li>Hazardous parts painted with bright spray paint</li></ul>')}
+${warn('🥽','<strong>Eye protection required</strong> when using paint sprays.')}
+</div><div class="col">
+${task('❓','Choose the correct answer.')}
+<p class="qt">Where is the transportation and installation manual attached?</p>
+${q('q-m2s10','B','m2q7',2,10,['Placed inside the film wrapping.','Attached to one of the large lifting instruction stickers on the side.','Fixed to the small sticker on the end.'])}
+</div></div>`,
+
+`<div class="completion-slide">
+<div class="completion-icon">🏅</div><h2>Module 2 complete</h2>
+<p class="congrats">Congratulations!</p>
+<p>You have successfully completed the Packing finished conveyors module. The conveyor is double-wrapped, numbered, labelled and marked — ready for safe transportation.</p>
+</div>`
+];}
+
+/* ── MODULE 3 — BOSS LEVEL — 2 SLIDES + dynamic rendering ── */
+function getM3Slides(){
+const T=2;return[
+`<div class="stag">Slide 1 of 2 · Boss Level Introduction</div><h2>The final test</h2>
+<div class="story-layout">
+${storyImg('combined-start.jpg','Conveyor 221439 on production stand')}
+${leadp([
+  'Supervisor: <strong>"Conveyor #221439. Lift it, pack it, get it ready for dispatch today."</strong>',
+  'Alex knows both instructions. No mentor. No step-by-step guidance. This is the real thing.',
+  'You will face <strong>5 consecutive decisions</strong>. No feedback after each answer — your full performance score is revealed only at the end.'
+])}
+</div>`,
+
+`<div class="stag">Slide 2 of 2 · Preparation</div><h2>Getting ready for the job</h2>
+<div class="story-layout" style="text-align:center;">
+<div class="ppe-g" id="ppe-m3" style="max-width:600px;margin:0 auto;">
+<div class="ppe" onclick="pickPPE6(this,'ppe-m3',true,3,2)"><span class="pi2">👟</span><span class="pl">Safety boots</span></div>
+<div class="ppe" onclick="pickPPE6(this,'ppe-m3',true,3,2)"><span class="pi2">🔥🧤</span><span class="pl">Thermal gloves</span></div>
+<div class="ppe" onclick="pickPPE6(this,'ppe-m3',true,3,2)"><span class="pi2">🥽</span><span class="pl">Safety glasses</span></div>
+<div class="ppe" onclick="pickPPE6(this,'ppe-m3',true,3,2)"><span class="pi2">⛑️</span><span class="pl">Hard hat</span></div>
+<div class="ppe" onclick="pickPPE6(this,'ppe-m3',false,3,2)"><span class="pi2">🎧</span><span class="pl">Ear protection</span></div>
+<div class="ppe" onclick="pickPPE6(this,'ppe-m3',false,3,2)"><span class="pi2">🧯</span><span class="pl">Fire extinguisher</span></div>
+</div>
+<div class="task-banner" style="justify-content:center;max-width:600px;margin:.75rem auto 0;">🖱️ Select the PPE required for this operation. If all answers are correct, click Next.</div>
+<div class="fb" id="fb-ppe-m3" style="max-width:600px;margin:.5rem auto 0;"></div>
+</div>`
+];}
 </script>
 </body>
 </html>
